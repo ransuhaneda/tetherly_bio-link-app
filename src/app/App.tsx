@@ -5,6 +5,7 @@ export const App = () => {
     <>
       <div>App</div>
       <Button>Click me</Button>
+      <p>Add change</p>
     </>
   );
 };
