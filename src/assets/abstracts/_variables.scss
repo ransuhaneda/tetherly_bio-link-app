@@ -1,0 +1,116 @@
+// -----------------------------------------------------------------------------
+// This file contains all application-wide Sass variables.
+// -----------------------------------------------------------------------------
+@use "sass:map";
+
+// Typeface Map. connected to font picker _mixin
+$font-families: (
+  primary: (
+    "Hauora",
+  ),
+  secondary: (
+    "Perfectly Nineties",
+  ),
+  accent: (
+    "Piedmont",
+  ),
+) !default;
+$ff-fallback: monospace;
+
+// Custom for ABCDE Creative
+$text-sm: clamp(8px, 2.336px + 0.943vw, 12px); // Eyebrow | Footer
+$text-base: clamp(12px, 6.336px + 0.943vw, 16px); // Base | Headline 4
+$text-lg: clamp(20px, 8.672px + 1.887vw, 28px); // Heading 3
+$text-xl: clamp(24px, 12.672px + 1.887vw, 32px); // Contact Section
+$text-2xl: clamp(28px, 22.336px + 0.943vw, 32px); // Heading 2
+$text-3xl: clamp(30px, -9.968px + 5.66vw, 48px); // Heading 1
+
+/// Main brand color
+/// @type Color
+$clr-black: #0a0a0a;
+$clr-teal: #004346;
+$clr-lavender: #cab8ff;
+$clr-pastel-green: #d5eeb4;
+$clr-pastel-green-500: #b9d891;
+$clr-light-gray: #e5e5e5;
+$clr-off-white: #fcfff6;
+
+$clr-pastel-blue: #e6f2f1;
+$clr-pastel-red: #ff6b6b;
+
+$error: #f72585;
+$info: #f6c31c;
+$fallback: #ff00ff !default;
+
+/// Default Colors
+/// @type Color
+
+$light-grey: rgb(237, 237, 237) !default;
+$mid-grey: rgb(153, 153, 153) !default;
+$dark-grey: rgb(68, 68, 68) !default;
+
+// Color Palette Maps
+$colors: (
+  "text": $clr-black,
+  "text-accent": $clr-teal,
+  "text-inverse": $clr-off-white,
+  "background": $clr-off-white,
+  "background-accent": $clr-teal,
+  "background-lightblue": $clr-pastel-blue,
+  "background-pastel-red": $clr-pastel-red,
+  "background-dark": $clr-black,
+  "background-grey": $clr-light-gray,
+  "accent": $clr-lavender,
+  "accent-darker": $clr-pastel-green-500,
+  "accent-secondary": $clr-pastel-green,
+  "border": $clr-black,
+  "border-none": $clr-off-white,
+  "button-primary": $clr-teal,
+  "button-secondary": $clr-lavender,
+
+  "fallback": $fallback,
+  "error": $error,
+  "info": $info,
+  "light-grey": $light-grey,
+  "mid-grey": $mid-grey,
+  "dark-grey": $dark-grey,
+  "blue": #1919e6,
+  "red": #e61919,
+  "yellow": #e6e619,
+  "green": #19e635,
+  "orange": #ffa600,
+  "purple": #9900ff,
+  "black": #000,
+);
+
+// Margin
+$section-mb: clamp(2rem, -7.481rem + 47.403vw, 20.25rem);
+$section-mrml: clamp(1rem, -1.2696rem + 11.348vw, 6rem);
+$mr: clamp(1rem, calc(-0.364rem + 0.0682 * 100vw), 4.005rem);
+$ml: clamp(1rem, calc(-0.364rem + 0.0682 * 100vw), 4.005rem);
+
+//Gap
+$section-gap: clamp(2rem, -0.208rem + 11.039vw, 6.25rem);
+$header-gap: clamp(0rem, -5rem + 12.5vw, 6.25rem);
+
+// Transition
+$transition-ease: all 0.3s ease;
+
+/// Container's maximum width
+/// @type Length
+$max-width: 1312px !default;
+
+/// Breakpoints map
+/// @prop {String} keys - Keys are identifiers mapped to a given length
+/// @prop {Map} values - Values are actual breakpoints expressed in pixels
+$breakpoints: (
+  "small": 320px,
+  "medium": 768px,
+  "large": 1024px,
+) !default;
+
+/// Relative or absolute URL where all assets are served from
+/// @type String
+/// @example scss - When using a CDN
+///   $base-url: 'https://cdn.example.com/assets/';
+$base-url: "/assets/" !default;
