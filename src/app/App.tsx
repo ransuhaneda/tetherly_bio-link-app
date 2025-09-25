@@ -1,4 +1,5 @@
 import '@assets/styles/App.scss';
+
 import { LandingPage } from '@/pages/LandingPage';
 
 const App = () => {

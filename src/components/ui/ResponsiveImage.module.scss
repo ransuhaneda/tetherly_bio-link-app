@@ -1,0 +1,90 @@
+.responsiveImage {
+  display: block;
+  height: auto;
+  max-width: 100%;
+
+  // Prevent layout shift during loading
+  &[data-responsive-image] {
+    background-color: var(--lqip-color, #f0f0f0);
+    background-position: center;
+    background-size: cover;
+  }
+
+  // Smooth transition when image loads
+  img {
+    transition: opacity 0.3s ease-in-out;
+  }
+
+  // Object fit utilities
+  &.fitCover img {
+    object-fit: cover;
+  }
+
+  &.fitContain img {
+    object-fit: contain;
+  }
+
+  &.fitFill img {
+    object-fit: fill;
+  }
+
+  &.fitScaleDown img {
+    object-fit: scale-down;
+  }
+
+  &.fitNone img {
+    object-fit: none;
+  }
+
+  // Common aspect ratios
+  &.aspect169 {
+    aspect-ratio: 16/9;
+  }
+
+  &.aspect43 {
+    aspect-ratio: 4/3;
+  }
+
+  &.aspect11 {
+    aspect-ratio: 1/1;
+  }
+
+  &.aspect32 {
+    aspect-ratio: 3/2;
+  }
+
+  // Responsive behavior
+  // @media (max-width: 768px) {
+  //   border-radius: 8px;
+  // }
+
+  // @media (min-width: 769px) {
+  //   border-radius: 12px;
+  // }
+}
+
+// Loading state styles
+.responsiveImage[data-loading='true'] {
+  &::before {
+    animation: shimmer 1.5s infinite;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgb(255 255 255 / 40%),
+      transparent
+    );
+    content: '';
+    inset: 0;
+    position: absolute;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+
+  100% {
+    transform: translateX(100%);
+  }
+}

@@ -1,5 +1,8 @@
 import sty from './LandingPage.module.scss';
 
+import { ResponsiveImage } from '@/components/ui/ResponsiveImage';
+import heroImage from '@assets/images/ahmet-yuksek-zSiqe6j9Aao-unsplash.jpg?responsive';
+import motorcycleImage from '@assets/images/toa-heftiba-IrpBb-5YGZw-unsplash.jpg?responsive';
 import { SEOHelmet } from '@components/common/SEOHelmet';
 
 export const LandingPage = () => {
@@ -29,6 +32,15 @@ export const LandingPage = () => {
             </div>
           </div>
         </header>
+
+        <ResponsiveImage
+          src={heroImage}
+          alt="Hero banner showcasing our product"
+          priority={true}
+          aspectRatio="16:9"
+          sizes="100vw"
+          className="hero-image"
+        />
 
         <main className={sty.main}>
           <section className={sty.features}>
@@ -150,6 +162,14 @@ pnpm run build`}
               </pre>
             </div>
           </section>
+          <ResponsiveImage
+            src={motorcycleImage}
+            alt="Hero banner showcasing our product"
+            priority={true}
+            sizes="100vw"
+            objectFit="cover"
+            className="hero-image"
+          />
         </main>
 
         <footer className={sty.footer}>

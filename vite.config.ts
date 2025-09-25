@@ -9,10 +9,25 @@ import path from 'node:path';
 import autoprefixer from 'autoprefixer';
 import cssnano from 'cssnano';
 import { ASSET_CATEGORIES } from './src/constants/assets';
+import { setupPlugins } from '@responsive-image/vite-plugin';
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    react(),
+
+    ...setupPlugins({
+      include: /^[^?]+\.(jpg|jpeg|png|webp|avif).?responsive.*$/,
+      w: [500, 800, 1024, 1600, 2160],
+      format: ['original', 'webp'],
+      quality: 85,
+      lqip: {
+        type: 'inline',
+        targetPixels: 120,
+      },
+      name: '[name]-[width]w.[ext]',
+    }),
+  ],
 
   // SCSS CSS Support
   css: {
@@ -91,6 +106,7 @@ export default defineConfig({
               'react-dom',
               'react-router',
               '@dr.pogodin/react-helmet',
+              '@responsive-image/react',
             ];
             const match = libs.find(lib => id.includes(`/${lib}/`));
             return match ? `vendor-${match}-core` : 'vendor-other';
