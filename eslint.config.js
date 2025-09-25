@@ -27,7 +27,28 @@ export default defineConfig([
   eslint.configs.recommended,
   tseslint.configs.recommended,
   eslintPluginPrettierRecommended,
-  importX.flatConfigs.recommended,
+  {
+    files: ['**/*.{js,jsx,ts,tsx}'],
+    plugins: {
+      'import-x': importX,
+    },
+    rules: {
+      'import-x/first': 'error',
+      'import-x/order': [
+        'error',
+        { alphabetize: { order: 'asc' }, 'newlines-between': 'always' },
+      ],
+      'import-x/no-unresolved': 'off',
+    },
+    settings: {
+      'import-x/resolver': {
+        typescript: {
+          alwaysTryTypes: true,
+          project: './tsconfig.json',
+        },
+      },
+    },
+  },
   {
     files: ['**/*.{ts,tsx}'],
     plugins: {
@@ -37,23 +58,11 @@ export default defineConfig([
     },
     settings: {
       react: { version: 'detect' },
-      'import-x/resolver-next': [
-        createTypeScriptImportResolver({
-          alwaysTryTypes: true,
-          project: './tsconfig.json',
-        }),
-      ],
     },
     rules: {
-      'import-x/first': 'error',
-      'import-x/order': [
-        'error',
-        { alphabetize: { order: 'asc' }, 'newlines-between': 'always' },
-      ],
       'react-hooks/rules-of-hooks': 'error',
       'react-hooks/exhaustive-deps': 'warn',
     },
-    // Spread recommended flatConfigs if available from plugins
     ...reactHooks.flatConfigs?.recommended,
     ...reactRefresh.flatConfigs?.vite,
     languageOptions: {

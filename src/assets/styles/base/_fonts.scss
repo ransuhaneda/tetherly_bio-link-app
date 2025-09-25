@@ -11,11 +11,11 @@
   font-style: normal;
   font-weight: normal;
   src:
-    url('src/assets/fonts/ibm-plex-sans/IBMPlexSansCondensed-Regular.woff2')
+    url('@assets/fonts/ibm-plex-sans/IBMPlexSansCondensed-Regular.woff2')
       format('woff2'),
-    url('src/assets/fonts/ibm-plex-sans/IBMPlexSansCondensed-Regular.woff')
+    url('@assets/fonts/ibm-plex-sans/IBMPlexSansCondensed-Regular.woff')
       format('woff'),
-    url('src/assets/fonts/ibm-plex-sans/IBMPlexSansCondensed-Regular.ttf')
+    url('@assets/fonts/ibm-plex-sans/IBMPlexSansCondensed-Regular.ttf')
       format('truetype');
 }
 
@@ -25,11 +25,11 @@
   font-style: italic;
   font-weight: normal;
   src:
-    url('src/assets/fonts/ibm-plex-sans/IBMPlexSansCondensed-Italic.woff2')
+    url('@assets/fonts/ibm-plex-sans/IBMPlexSansCondensed-Italic.woff2')
       format('woff2'),
-    url('src/assets/fonts/ibm-plex-sans/IBMPlexSansCondensed-Italic.woff')
+    url('@assets/fonts/ibm-plex-sans/IBMPlexSansCondensed-Italic.woff')
       format('woff'),
-    url('src/assets/fonts/ibm-plex-sans/IBMPlexSansCondensed-Italic.ttf')
+    url('@assets/fonts/ibm-plex-sans/IBMPlexSansCondensed-Italic.ttf')
       format('truetype');
 }
 
@@ -39,11 +39,11 @@
   font-style: normal;
   font-weight: bold;
   src:
-    url('src/assets/fonts/ibm-plex-sans/IBMPlexSansCondensed-Bold.woff2')
+    url('@assets/fonts/ibm-plex-sans/IBMPlexSansCondensed-Bold.woff2')
       format('woff2'),
-    url('src/assets/fonts/ibm-plex-sans/IBMPlexSansCondensed-Bold.woff')
+    url('@assets/fonts/ibm-plex-sans/IBMPlexSansCondensed-Bold.woff')
       format('woff'),
-    url('src/assets/fonts/ibm-plex-sans/IBMPlexSansCondensed-Bold.ttf')
+    url('@assets/fonts/ibm-plex-sans/IBMPlexSansCondensed-Bold.ttf')
       format('truetype');
 }
 
@@ -54,9 +54,9 @@
   font-style: normal;
   font-weight: bold;
   src:
-    url('src/assets/fonts/orbitron/Orbitron-Bold.woff2') format('woff2'),
-    url('src/assets/fonts/orbitron/Orbitron-Bold.woff') format('woff'),
-    url('src/assets/fonts/orbitron/Orbitron-Bold.ttf') format('truetype');
+    url('@assets/fonts/orbitron/Orbitron-Bold.woff2') format('woff2'),
+    url('@assets/fonts/orbitron/Orbitron-Bold.woff') format('woff'),
+    url('@assets/fonts/orbitron/Orbitron-Bold.ttf') format('truetype');
 }
 
 @font-face {
@@ -65,7 +65,7 @@
   font-style: normal;
   font-weight: normal;
   src:
-    url('src/assets/fonts/orbitron/Orbitron-Regular.woff2') format('woff2'),
-    url('src/assets/fonts/orbitron/Orbitron-Regular.woff') format('woff'),
-    url('src/assets/fonts/orbitron/Orbitron-Regular.ttf') format('truetype');
+    url('@assets/fonts/orbitron/Orbitron-Regular.woff2') format('woff2'),
+    url('@assets/fonts/orbitron/Orbitron-Regular.woff') format('woff'),
+    url('@assets/fonts/orbitron/Orbitron-Regular.ttf') format('truetype');
 }

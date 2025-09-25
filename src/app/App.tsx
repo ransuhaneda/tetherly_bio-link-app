@@ -1,15 +1,10 @@
 import '@assets/styles/App.scss';
-
-import { Button } from '@components/ui/Button';
+import { LandingPage } from '@/pages/LandingPage';
 
 const App = () => {
   return (
     <>
-      <div>App</div>
-      <Button>Click me</Button>
-      <p>Add change</p>
-      <p>Add change</p> <p>Add change</p> <p>Add change</p> <p>Add change</p>
-      <p>Add change</p>
+      <LandingPage />
     </>
   );
 };

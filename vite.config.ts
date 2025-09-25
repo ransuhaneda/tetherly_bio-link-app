@@ -8,6 +8,7 @@ import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import autoprefixer from 'autoprefixer';
 import cssnano from 'cssnano';
+import { ASSET_CATEGORIES } from './src/constants/assets';
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -53,6 +54,11 @@ export default defineConfig({
   // Build config
   build: {
     minify: 'terser',
+    cssMinify: true,
+    sourcemap: false,
+    manifest: true,
+    chunkSizeWarningLimit: 1600,
+    emptyOutDir: true,
     terserOptions: {
       compress: {
         drop_console: true,
@@ -64,9 +70,31 @@ export default defineConfig({
     },
     rollupOptions: {
       output: {
-        manualChunks: {
-          vendor: ['react', 'react-dom'],
-          router: ['react-router-dom'],
+        compact: true,
+        chunkFileNames: 'assets/js/[name]-[hash].js',
+        entryFileNames: 'assets/js/[name]-[hash].js',
+        assetFileNames: assetInfo => {
+          const ext = assetInfo.name?.split('.').pop()?.toLowerCase();
+          if (!ext) return 'assets/misc/[name]-[hash][extname]';
+
+          const category =
+            Object.entries(ASSET_CATEGORIES).find(([_, exts]) =>
+              exts.includes(ext)
+            )?.[0] || 'misc';
+
+          return `assets/${category}/[name]-[hash][extname]`;
+        },
+        manualChunks: id => {
+          if (id.includes('node_modules')) {
+            const libs = [
+              'react',
+              'react-dom',
+              'react-router',
+              '@dr.pogodin/react-helmet',
+            ];
+            const match = libs.find(lib => id.includes(`/${lib}/`));
+            return match ? `vendor-${match}-core` : 'vendor-other';
+          }
         },
       },
     },
