@@ -24,8 +24,7 @@
 html {
   box-sizing: border-box;
   line-height: 1.15; /* 1 */
-  scroll-behavior: auto;
-  text-size-adjust: 100%; /* 2 */
+  scroll-behavior: auto; /* 2 */
   text-size-adjust: 100%;
 }
 
@@ -335,7 +334,6 @@ button,
 [type='button'],
 [type='reset'],
 [type='submit'] {
-  appearance: button;
   appearance: auto;
 }
 
@@ -428,7 +426,7 @@ textarea {
  */
 
 [type='search'] {
-  appearance: textfield; /* 1 */
+  /* 1 */
   appearance: textfield;
   outline-offset: -2px; /* 2 */
 }
@@ -447,7 +445,7 @@ textarea {
  */
 
 ::-webkit-file-upload-button {
-  appearance: button; /* 1 */
+  appearance: auto; /* 1 */
   font: inherit; /* 2 */
 }
 

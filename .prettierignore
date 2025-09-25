@@ -3,4 +3,5 @@ dist
 build
 coverage
 public
+pnpm-lock.yaml
 PROJECT_STRUCTURE.md
