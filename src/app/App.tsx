@@ -1,6 +1,8 @@
+import '@assets/styles/App.scss';
+
 import { Button } from '@components/ui/Button';
 
-export const App = () => {
+const App = () => {
   return (
     <>
       <div>App</div>
@@ -11,3 +13,4 @@ export const App = () => {
     </>
   );
 };
+export default App;

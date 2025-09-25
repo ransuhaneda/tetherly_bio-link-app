@@ -22,101 +22,101 @@
  */
 
 html {
-  -webkit-text-size-adjust: 100%; /* 2 */
-  line-height: 1.15; /* 1 */
-  text-size-adjust: 100%;
   box-sizing: border-box;
+  line-height: 1.15; /* 1 */
   scroll-behavior: auto;
+  text-size-adjust: 100%; /* 2 */
+  text-size-adjust: 100%;
 }
 
 /* Remove default margin/padding and inherit fonts */
 :where(
-    html,
-    body,
-    div,
-    span,
-    applet,
-    object,
-    iframe,
-    h1,
-    h2,
-    h3,
-    h4,
-    h5,
-    h6,
-    p,
-    blockquote,
-    pre,
-    a,
-    abbr,
-    acronym,
-    address,
-    big,
-    cite,
-    code,
-    del,
-    dfn,
-    em,
-    img,
-    ins,
-    kbd,
-    q,
-    s,
-    samp,
-    small,
-    strike,
-    strong,
-    sub,
-    sup,
-    tt,
-    var,
-    b,
-    u,
-    i,
-    center,
-    dl,
-    dt,
-    dd,
-    ol,
-    ul,
-    li,
-    fieldset,
-    form,
-    label,
-    legend,
-    table,
-    caption,
-    tbody,
-    tfoot,
-    thead,
-    tr,
-    th,
-    td,
-    article,
-    aside,
-    canvas,
-    details,
-    embed,
-    figure,
-    figcaption,
-    footer,
-    header,
-    hgroup,
-    menu,
-    nav,
-    output,
-    ruby,
-    section,
-    summary,
-    time,
-    mark,
-    audio,
-    video
-  ) {
-  margin: 0;
-  padding: 0;
+  html,
+  body,
+  div,
+  span,
+  applet,
+  object,
+  iframe,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p,
+  blockquote,
+  pre,
+  a,
+  abbr,
+  acronym,
+  address,
+  big,
+  cite,
+  code,
+  del,
+  dfn,
+  em,
+  img,
+  ins,
+  kbd,
+  q,
+  s,
+  samp,
+  small,
+  strike,
+  strong,
+  sub,
+  sup,
+  tt,
+  var,
+  b,
+  u,
+  i,
+  center,
+  dl,
+  dt,
+  dd,
+  ol,
+  ul,
+  li,
+  fieldset,
+  form,
+  label,
+  legend,
+  table,
+  caption,
+  tbody,
+  tfoot,
+  thead,
+  tr,
+  th,
+  td,
+  article,
+  aside,
+  canvas,
+  details,
+  embed,
+  figure,
+  figcaption,
+  footer,
+  header,
+  hgroup,
+  menu,
+  nav,
+  output,
+  ruby,
+  section,
+  summary,
+  time,
+  mark,
+  audio,
+  video
+) {
   border: 0;
   font: inherit;
+  margin: 0;
+  padding: 0;
   vertical-align: baseline;
 }
 
@@ -128,11 +128,12 @@ html {
  */
 
 body {
-  margin: 0;
+  -webkit-font-smoothing: antialiased;
+
   // font-family: system-ui, -apple-system, sans-serif;
   line-height: 1.5;
-  -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeSpeed;
+  margin: 0;
+  text-rendering: optimizespeed;
 }
 
 /**
@@ -145,8 +146,10 @@ main {
 
 :where(h1, h2, h3, h4, h5, h6) {
   line-height: 1.1;
+
   // text-wrap: balance;
 }
+
 /* Grouping content
    ========================================================================== */
 
@@ -156,12 +159,11 @@ main {
  */
 
 hr {
+  border: 0;
   box-sizing: content-box; /* 1 */
   height: 0; /* 1 */
-  overflow: visible; /* 2 */
-
-  border: 0;
   margin: 1rem 0;
+  overflow: visible; /* 2 */
 }
 
 /**
@@ -170,7 +172,7 @@ hr {
  */
 
 pre {
-  font-family: monospace, monospace; /* 1 */
+  font-family: monospace; /* 1 */
   font-size: 1em; /* 2 */
 }
 
@@ -191,12 +193,12 @@ a:visited,
 a:focus,
 a:hover,
 a:active,
-a:-webkit-any-link {
+a:any-link {
   background-color: transparent;
+  color: currentcolor;
+  cursor: pointer;
   text-decoration: none;
   text-underline-offset: 0.25em;
-  color: currentColor;
-  cursor: pointer;
 }
 
 /**
@@ -227,7 +229,7 @@ strong {
 code,
 kbd,
 samp {
-  font-family: monospace, monospace; /* 1 */
+  font-family: monospace; /* 1 */
   font-size: 1em; /* 2 */
 }
 
@@ -269,14 +271,14 @@ sup {
 
 /* Media defaults */
 :where(img, picture, video, canvas, svg) {
-  border-style: none; /* 1. */
-  max-width: 100%;
-  height: auto;
-  vertical-align: middle;
-  font-style: italic;
   background-repeat: no-repeat;
   background-size: cover;
+  border-style: none; /* 1. */
+  font-style: italic;
+  height: auto;
+  max-width: 100%;
   shape-margin: 0.75rem;
+  vertical-align: middle;
 }
 
 /* Forms
@@ -296,11 +298,11 @@ button {
 }
 
 :where(button, input, optgroup, select, textarea) {
+  color: inherit;
   font-family: inherit; /* 1 */
   font-size: 100%; /* 1 */
   line-height: 1.15; /* 1 */
   margin: 0; /* 2 */
-  color: inherit;
 }
 
 /**
@@ -333,8 +335,8 @@ button,
 [type='button'],
 [type='reset'],
 [type='submit'] {
-  -webkit-appearance: button;
   appearance: button;
+  appearance: auto;
 }
 
 /**
@@ -426,7 +428,7 @@ textarea {
  */
 
 [type='search'] {
-  -webkit-appearance: textfield; /* 1 */
+  appearance: textfield; /* 1 */
   appearance: textfield;
   outline-offset: -2px; /* 2 */
 }
@@ -436,7 +438,7 @@ textarea {
  */
 
 [type='search']::-webkit-search-decoration {
-  -webkit-appearance: none;
+  appearance: none;
 }
 
 /**
@@ -445,7 +447,7 @@ textarea {
  */
 
 ::-webkit-file-upload-button {
-  -webkit-appearance: button; /* 1 */
+  appearance: button; /* 1 */
   font: inherit; /* 2 */
 }
 
@@ -459,8 +461,8 @@ input[type='text'],
 input[type='button'],
 input[type='submit'],
 .input-checkbox {
+  appearance: none;
   appearance: unset;
-  -webkit-appearance: none;
   border-radius: 0;
 }
 
@@ -503,6 +505,7 @@ template {
 }
 
 #root,
+/* stylelint-disable-next-line selector-id-pattern */
 #__next {
   isolation: isolate;
   min-height: 100vh;

@@ -1,4 +1,5 @@
-@use '@styles/abstracts' as abst;
+@use '@assets/styles/abstracts' as abst;
+
 // -----------------------------------------------------------------------------
 // This file contains CSS helper classes.
 // -----------------------------------------------------------------------------
@@ -19,9 +20,9 @@
  * 3. Leave some space on the edges, especially valuable on small screens
  */
 .container {
-  max-width: abst.$max-width; /* 1 */
   margin-left: auto; /* 2 */
   margin-right: auto; /* 2 */
+  max-width: abst.$max-width; /* 1 */
   padding-left: 20px; /* 3 */
   padding-right: 20px; /* 3 */
   width: 100%; /* 1 */
@@ -46,13 +47,13 @@
  */
 .sr_only {
   border: 0;
-  clip: rect(0 0 0 0);
+  border-width: 0;
+  clip-path: inset(0 0 0 0);
   height: 1px;
   margin: -1px;
   overflow: hidden;
   padding: 0;
   position: absolute;
-  width: 1px;
   white-space: nowrap;
-  border-width: 0;
+  width: 1px;
 }

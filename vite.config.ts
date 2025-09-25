@@ -6,6 +6,8 @@ import react from '@vitejs/plugin-react';
 
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
+import autoprefixer from 'autoprefixer';
+import cssnano from 'cssnano';
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -20,16 +22,16 @@ export default defineConfig({
     preprocessorOptions: {
       scss: {
         additionalData: `
-        @use "@styles/abstracts/" as abst;
-        @use "@styles/abstracts/mixins" as mix;
+        @use '@assets/styles/abstracts/' as abst;
+        @use '@assets/styles/abstracts/mixins' as mix;
         `,
       },
     },
     postcss: {
       plugins: [
-        require('autoprefixer'),
+        autoprefixer,
         ...(process.env.NODE_ENV === 'production'
-          ? [require('cssnano')({ preset: 'default' })]
+          ? [cssnano({ preset: 'default' })]
           : []),
       ],
     },

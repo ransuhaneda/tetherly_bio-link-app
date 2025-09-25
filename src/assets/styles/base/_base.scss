@@ -1,18 +1,18 @@
 // -----------------------------------------------------------------------------
 // This file contains very basic styles.
 // -----------------------------------------------------------------------------
-@use "sass:map";
+@use 'sass:map';
 
 body {
   background-color: #fcfbf4;
 }
 
 ::selection {
-  color: #fcfbf4;
   background: #ebb01c;
+  color: #fcfbf4;
 }
 
-::-moz-selection {
-  color: #fcfbf4;
+::selection {
   background: #ebb01c;
+  color: #fcfbf4;
 }

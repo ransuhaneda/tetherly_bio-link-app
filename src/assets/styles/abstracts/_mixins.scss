@@ -1,10 +1,10 @@
 // -----------------------------------------------------------------------------
 // This file contains all application-wide Sass mixins.
 // -----------------------------------------------------------------------------
-@use "sass:map";
-@use "sass:list";
-@use "sass:math";
-@use "variables" as *;
+@use 'sass:map';
+@use 'sass:list';
+@use 'sass:math';
+@use 'variables' as *;
 
 /// Event wrapper
 /// @author Harry Roberts
@@ -44,20 +44,19 @@
 /// @param { String } $style - 'normal' | 'italic'
 /// @param { String } $spacing - 'normal' | 'static' | 'tight' | 'wide'
 /// @param { Number } $leading - 1.33 | 1.25 | 1.167 | 1.125 | 1
-@mixin font($family: "primary", $weight: 400, $style: normal) {
+@mixin font($family: 'primary', $weight: 400, $style: normal) {
+  $valid-weights: (300, 400, 500);
+  $valid-styles: (normal, italic);
+
   font-family: map.get($font-families, $family), $ff-fallback;
+  font-style: $style;
+  font-weight: $weight;
   @if not map.has-key($font-families, $family) {
     @error "Invalid Font Family: #{$family}. Available: #{map.keys($font-families)}";
   }
-
-  font-weight: $weight;
-  $valid-weights: (300, 400, 500);
   @if not list.index($valid-weights, $weight) {
     @error "Invalid Weight: #{$weight}. Use: #{$valid-weights}";
   }
-
-  font-style: $style;
-  $valid-styles: (normal, italic);
   @if not list.index($valid-styles, $style) {
     @error "Invalid Style: #{$style}";
   }

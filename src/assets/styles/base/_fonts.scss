@@ -1,0 +1,71 @@
+// -----------------------------------------------------------------------------
+// This file contains all @font-face declarations, if any.
+// https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display
+// @font-face generated on https://transfonter.org/
+// -----------------------------------------------------------------------------
+
+// IBM Plex Sans
+@font-face {
+  font-display: swap;
+  font-family: 'IBM Plex Sans Condensed';
+  font-style: normal;
+  font-weight: normal;
+  src:
+    url('src/assets/fonts/ibm-plex-sans/IBMPlexSansCondensed-Regular.woff2')
+      format('woff2'),
+    url('src/assets/fonts/ibm-plex-sans/IBMPlexSansCondensed-Regular.woff')
+      format('woff'),
+    url('src/assets/fonts/ibm-plex-sans/IBMPlexSansCondensed-Regular.ttf')
+      format('truetype');
+}
+
+@font-face {
+  font-display: swap;
+  font-family: 'IBM Plex Sans Condensed';
+  font-style: italic;
+  font-weight: normal;
+  src:
+    url('src/assets/fonts/ibm-plex-sans/IBMPlexSansCondensed-Italic.woff2')
+      format('woff2'),
+    url('src/assets/fonts/ibm-plex-sans/IBMPlexSansCondensed-Italic.woff')
+      format('woff'),
+    url('src/assets/fonts/ibm-plex-sans/IBMPlexSansCondensed-Italic.ttf')
+      format('truetype');
+}
+
+@font-face {
+  font-display: swap;
+  font-family: 'IBM Plex Sans Condensed';
+  font-style: normal;
+  font-weight: bold;
+  src:
+    url('src/assets/fonts/ibm-plex-sans/IBMPlexSansCondensed-Bold.woff2')
+      format('woff2'),
+    url('src/assets/fonts/ibm-plex-sans/IBMPlexSansCondensed-Bold.woff')
+      format('woff'),
+    url('src/assets/fonts/ibm-plex-sans/IBMPlexSansCondensed-Bold.ttf')
+      format('truetype');
+}
+
+// Orbitron
+@font-face {
+  font-display: swap;
+  font-family: Orbitron;
+  font-style: normal;
+  font-weight: bold;
+  src:
+    url('src/assets/fonts/orbitron/Orbitron-Bold.woff2') format('woff2'),
+    url('src/assets/fonts/orbitron/Orbitron-Bold.woff') format('woff'),
+    url('src/assets/fonts/orbitron/Orbitron-Bold.ttf') format('truetype');
+}
+
+@font-face {
+  font-display: swap;
+  font-family: Orbitron;
+  font-style: normal;
+  font-weight: normal;
+  src:
+    url('src/assets/fonts/orbitron/Orbitron-Regular.woff2') format('woff2'),
+    url('src/assets/fonts/orbitron/Orbitron-Regular.woff') format('woff'),
+    url('src/assets/fonts/orbitron/Orbitron-Regular.ttf') format('truetype');
+}

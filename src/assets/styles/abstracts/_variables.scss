@@ -1,18 +1,18 @@
 // -----------------------------------------------------------------------------
 // This file contains all application-wide Sass variables.
 // -----------------------------------------------------------------------------
-@use "sass:map";
+@use 'sass:map';
 
 // Typeface Map. connected to font picker _mixin
 $font-families: (
   primary: (
-    "Hauora",
+    'Hauora',
   ),
   secondary: (
-    "Perfectly Nineties",
+    'Perfectly Nineties',
   ),
   accent: (
-    "Piedmont",
+    'Piedmont',
   ),
 ) !default;
 $ff-fallback: monospace;
@@ -34,53 +34,51 @@ $clr-pastel-green: #d5eeb4;
 $clr-pastel-green-500: #b9d891;
 $clr-light-gray: #e5e5e5;
 $clr-off-white: #fcfff6;
-
 $clr-pastel-blue: #e6f2f1;
 $clr-pastel-red: #ff6b6b;
-
 $error: #f72585;
 $info: #f6c31c;
-$fallback: #ff00ff !default;
+$fallback: #f0f !default;
 
 /// Default Colors
 /// @type Color
 
-$light-grey: rgb(237, 237, 237) !default;
-$mid-grey: rgb(153, 153, 153) !default;
-$dark-grey: rgb(68, 68, 68) !default;
+$light-grey: rgb(237 237 237) !default;
+$mid-grey: rgb(153 153 153) !default;
+$dark-grey: rgb(68 68 68) !default;
 
 // Color Palette Maps
 $colors: (
-  "text": $clr-black,
-  "text-accent": $clr-teal,
-  "text-inverse": $clr-off-white,
-  "background": $clr-off-white,
-  "background-accent": $clr-teal,
-  "background-lightblue": $clr-pastel-blue,
-  "background-pastel-red": $clr-pastel-red,
-  "background-dark": $clr-black,
-  "background-grey": $clr-light-gray,
-  "accent": $clr-lavender,
-  "accent-darker": $clr-pastel-green-500,
-  "accent-secondary": $clr-pastel-green,
-  "border": $clr-black,
-  "border-none": $clr-off-white,
-  "button-primary": $clr-teal,
-  "button-secondary": $clr-lavender,
+  'text': $clr-black,
+  'text-accent': $clr-teal,
+  'text-inverse': $clr-off-white,
+  'background': $clr-off-white,
+  'background-accent': $clr-teal,
+  'background-lightblue': $clr-pastel-blue,
+  'background-pastel-red': $clr-pastel-red,
+  'background-dark': $clr-black,
+  'background-grey': $clr-light-gray,
+  'accent': $clr-lavender,
+  'accent-darker': $clr-pastel-green-500,
+  'accent-secondary': $clr-pastel-green,
+  'border': $clr-black,
+  'border-none': $clr-off-white,
+  'button-primary': $clr-teal,
+  'button-secondary': $clr-lavender,
 
-  "fallback": $fallback,
-  "error": $error,
-  "info": $info,
-  "light-grey": $light-grey,
-  "mid-grey": $mid-grey,
-  "dark-grey": $dark-grey,
-  "blue": #1919e6,
-  "red": #e61919,
-  "yellow": #e6e619,
-  "green": #19e635,
-  "orange": #ffa600,
-  "purple": #9900ff,
-  "black": #000,
+  'fallback': $fallback,
+  'error': $error,
+  'info': $info,
+  'light-grey': $light-grey,
+  'mid-grey': $mid-grey,
+  'dark-grey': $dark-grey,
+  'blue': #1919e6,
+  'red': #e61919,
+  'yellow': #e6e619,
+  'green': #19e635,
+  'orange': #ffa600,
+  'purple': #90f,
+  'black': #000,
 );
 
 // Margin
@@ -89,7 +87,7 @@ $section-mrml: clamp(1rem, -1.2696rem + 11.348vw, 6rem);
 $mr: clamp(1rem, calc(-0.364rem + 0.0682 * 100vw), 4.005rem);
 $ml: clamp(1rem, calc(-0.364rem + 0.0682 * 100vw), 4.005rem);
 
-//Gap
+// Gap
 $section-gap: clamp(2rem, -0.208rem + 11.039vw, 6.25rem);
 $header-gap: clamp(0rem, -5rem + 12.5vw, 6.25rem);
 
@@ -104,13 +102,13 @@ $max-width: 1312px !default;
 /// @prop {String} keys - Keys are identifiers mapped to a given length
 /// @prop {Map} values - Values are actual breakpoints expressed in pixels
 $breakpoints: (
-  "small": 320px,
-  "medium": 768px,
-  "large": 1024px,
+  'small': 320px,
+  'medium': 768px,
+  'large': 1024px,
 ) !default;
 
 /// Relative or absolute URL where all assets are served from
 /// @type String
 /// @example scss - When using a CDN
 ///   $base-url: 'https://cdn.example.com/assets/';
-$base-url: "/assets/" !default;
+$base-url: '/assets/' !default;
