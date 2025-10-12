@@ -1,0 +1,73 @@
+.wrapper {
+  height: 100vh;
+  @include abst.flex(row, center, center);
+}
+
+.error_boundary {
+  border: 2px solid abst.get-color('status', 'error');
+  border-radius: 8px;
+  padding: 2rem;
+}
+
+.error_content {
+  max-width: 500px;
+  text-align: center;
+
+  .error_title {
+    color: abst.get-color('status', 'error');
+  }
+
+  .error_desc {
+    color: #f8f9fa;
+  }
+
+  .error_details {
+    text-align: left;
+  }
+
+  .error_summary {
+    cursor: pointer;
+    font-weight: 700;
+  }
+
+  .error_stack {
+    background: #b6cf4f;
+    border-radius: 4px;
+    color: #161614;
+    font-size: 0.875rem;
+    overflow-x: auto;
+    padding: 0.5rem;
+  }
+}
+
+// refactor this after creating button component
+.error_actions {
+  .btn,
+  .btn_retry,
+  .btn_home {
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+  }
+
+  .btn_retry {
+    background: #b6cf4f;
+    color: #f8f9fa;
+
+    &:hover {
+      background: #92a63f;
+    }
+  }
+
+  .btn_home {
+    background: #6c757d;
+    color: #f8f9fa;
+
+    &:hover {
+      background: #545b62;
+    }
+  }
+  @include abst.flex(row, center, null, 1rem);
+}

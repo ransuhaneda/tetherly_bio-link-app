@@ -1,7 +1,6 @@
 // -----------------------------------------------------------------------------
 // This file contains all application-wide Sass variables.
 // -----------------------------------------------------------------------------
-@use 'sass:map';
 
 // Typeface Map. connected to font picker _mixin
 $font-families: (
@@ -24,62 +23,6 @@ $text-lg: clamp(20px, 8.672px + 1.887vw, 28px); // Heading 3
 $text-xl: clamp(24px, 12.672px + 1.887vw, 32px); // Contact Section
 $text-2xl: clamp(28px, 22.336px + 0.943vw, 32px); // Heading 2
 $text-3xl: clamp(30px, -9.968px + 5.66vw, 48px); // Heading 1
-
-/// Main brand color
-/// @type Color
-$clr-black: #0a0a0a;
-$clr-teal: #004346;
-$clr-lavender: #cab8ff;
-$clr-pastel-green: #d5eeb4;
-$clr-pastel-green-500: #b9d891;
-$clr-light-gray: #e5e5e5;
-$clr-off-white: #fcfff6;
-$clr-pastel-blue: #e6f2f1;
-$clr-pastel-red: #ff6b6b;
-$error: #f72585;
-$info: #f6c31c;
-$fallback: #f0f !default;
-
-/// Default Colors
-/// @type Color
-
-$light-grey: rgb(237 237 237) !default;
-$mid-grey: rgb(153 153 153) !default;
-$dark-grey: rgb(68 68 68) !default;
-
-// Color Palette Maps
-$colors: (
-  'text': $clr-black,
-  'text-accent': $clr-teal,
-  'text-inverse': $clr-off-white,
-  'background': $clr-off-white,
-  'background-accent': $clr-teal,
-  'background-lightblue': $clr-pastel-blue,
-  'background-pastel-red': $clr-pastel-red,
-  'background-dark': $clr-black,
-  'background-grey': $clr-light-gray,
-  'accent': $clr-lavender,
-  'accent-darker': $clr-pastel-green-500,
-  'accent-secondary': $clr-pastel-green,
-  'border': $clr-black,
-  'border-none': $clr-off-white,
-  'button-primary': $clr-teal,
-  'button-secondary': $clr-lavender,
-
-  'fallback': $fallback,
-  'error': $error,
-  'info': $info,
-  'light-grey': $light-grey,
-  'mid-grey': $mid-grey,
-  'dark-grey': $dark-grey,
-  'blue': #1919e6,
-  'red': #e61919,
-  'yellow': #e6e619,
-  'green': #19e635,
-  'orange': #ffa600,
-  'purple': #90f,
-  'black': #000,
-);
 
 // Margin
 $section-mb: clamp(2rem, -7.481rem + 47.403vw, 20.25rem);

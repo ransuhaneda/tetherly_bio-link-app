@@ -1,0 +1,140 @@
+@use 'sass:map';
+
+// Base color palette
+$colors-brand: (
+  'neutral': (
+    '100': #d0d0d0,
+    '200': #a2a2a1,
+    '300': #404040,
+    '400': #454543,
+    '500': #161614,
+    '600': #121210,
+    '700': #0d0d0c,
+    '800': #090908,
+    '900': #040404,
+  ),
+
+  'orange': (
+    '100': #fddfcf,
+    '200': #fdbfa8,
+    '300': #fe9e80,
+    '400': #fe7e59,
+    '500': #ff5e32,
+    '600': #cc4b28,
+    '700': #99381e,
+    '800': #662614,
+    '900': #33130a,
+  ),
+
+  'violet': (
+    '100': #e3ddfb,
+    '200': #c6bbf7,
+    '300': #aa98f3,
+    '400': #8d76ef,
+    '500': #7154eb,
+    '600': #5a43bc,
+    '700': #44328d,
+    '800': #2d225e,
+    '900': #17112f,
+  ),
+
+  'green': (
+    '100': #f0f5dc,
+    '200': #e2ecb9,
+    '300': #d3e295,
+    '400': #c5d972,
+    '500': #b6cf4f,
+    '600': #92a63f,
+    '700': #6d7c2f,
+    '800': #495320,
+    '900': #242910,
+    '5000': #198038,
+  ),
+
+  'red': (
+    '100': #ffdcdc,
+    '200': #feb9b9,
+    '300': #fe9797,
+    '400': #fd7474,
+    '500': #fd5151,
+    '600': #ca4141,
+    '700': #983131,
+    '800': #652020,
+    '900': #331010,
+    '5000': #da1e28,
+  ),
+
+  'yellow': (
+    '100': #fbefd2,
+    '200': #f7dfa4,
+    '300': #f3d077,
+    '400': #efc049,
+    '500': #ebb01c,
+    '600': #bc8d16,
+    '700': #8d6a11,
+    '800': #5e460b,
+    '900': #2f2306,
+    '5000': #f1c21b,
+  ),
+
+  'blue': (
+    '5000': #0043ce,
+  ),
+
+  // Foudation Colors
+  'white': (
+      '500': #fcfff6,
+    ),
+
+  'black': (
+    '500': #040404,
+  ),
+
+  'gray': (
+    '100': #e8eae3,
+    '200': #d4d5d1,
+    '300': #c1c1be,
+    '400': #adacac,
+    '500': #999799,
+    '600': #7a797a,
+    '700': #5c5b5c,
+    '800': #3d3c3d,
+    '900': #1f1e1f,
+  ),
+);
+$colors-alias: (
+  'text': (
+    'primary': map.get($colors-brand, 'neutral', '500'),
+    'secondary': map.get($colors-brand, 'green', '500'),
+    'accent': map.get($colors-brand, 'orange', '500'),
+    'inverse': map.get($colors-brand, 'white', '500'),
+  ),
+  'background': (
+    'primary': map.get($colors-brand, 'green', '500'),
+    // 'secondary': map.get($colors-brand, 'green', '500'),
+    // 'accent': map.get($colors-brand, 'green', '500'), UNDECIDED
+    'light': map.get($colors-brand, 'white', '500'),
+    'dark': map.get($colors-brand, 'neutral', '500'),
+  ),
+  'surface': (
+    'primary': map.get($colors-brand, 'green', '500'),
+    // 'secondary': map.get($colors-brand, 'green', '500'), UNDECIDED
+    // 'accent': map.get($colors-brand, 'green', '500'), UNDECIDED
+    'dark': map.get($colors-brand, 'neutral', '500'),
+  ),
+  'border': (
+    'primary': map.get($colors-brand, 'gray', '500'),
+    'subtle': map.get($colors-brand, 'neutral', '200'),
+  ),
+  'action': (
+    // 'primary': map.get($colors-brand, 'orange', '500'), UNDECIDED
+    'secondary': map.get($colors-brand, 'green', '600'),
+    'accent': map.get($colors-brand, 'orange', '600'),
+  ),
+  'status': (
+    'info': map.get($colors-brand, 'blue', '5000'),
+    'warning': map.get($colors-brand, 'yellow', '5000'),
+    'error': map.get($colors-brand, 'error', '5000'),
+    'success': map.get($colors-brand, 'success', '5000'),
+  ),
+);

@@ -1,9 +1,9 @@
 import sty from './LandingPage.module.scss';
 
-import { ResponsiveImage } from '@/components/ui/ResponsiveImage';
 import heroImage from '@assets/images/ahmet-yuksek-zSiqe6j9Aao-unsplash.jpg?responsive';
-import motorcycleImage from '@assets/images/toa-heftiba-IrpBb-5YGZw-unsplash.jpg?responsive';
 import { SEOHelmet } from '@components/common/SEOHelmet';
+import { Link } from '@components/ui/Link';
+import { ResponsiveImage } from '@components/ui/ResponsiveImage';
 
 export const LandingPage = () => {
   return (
@@ -12,18 +12,16 @@ export const LandingPage = () => {
         title="Modern React Boilerplate | Vite + React 19 + TypeScript"
         description="Production-ready React boilerplate with TypeScript, SCSS modules, testing, and seamless Laravel integration"
         keywords="react, typescript, vite, boilerplate, template, laravel, scss modules"
+        url="https://example.com/"
       />
 
       <div className={sty.container}>
         <header className={sty.hero}>
           <div className={sty.heroContent}>
             <h1 className={sty.title}>
-              Modern React <span className={sty.highlight}>Boilerplate</span>
+              <span className={sty.highlight}>Front-End Boilerplate</span>
             </h1>
-            <p className={sty.subtitle}>
-              Production-ready React 19 + TypeScript + Vite template with all
-              modern tooling
-            </p>
+            <p className={sty.subtitle}>React 19 + TypeScript + Vite</p>
             <div className={sty.badges}>
               <span className={sty.badge}>React 19</span>
               <span className={sty.badge}>TypeScript</span>
@@ -32,7 +30,6 @@ export const LandingPage = () => {
             </div>
           </div>
         </header>
-
         <ResponsiveImage
           src={heroImage}
           alt="Hero banner showcasing our product"
@@ -48,15 +45,14 @@ export const LandingPage = () => {
 
             <div className={sty.featureGrid}>
               <div className={sty.featureCard}>
-                <h3 className={sty.featureTitle}>Lightning Fast</h3>
+                <h3 className={sty.featureTitle}>Fast</h3>
                 <p className={sty.featureDescription}>
-                  Vite dev server with HMR, optimized builds with Terser
-                  minification
+                  Vite dev server, optimized builds with Terser
                 </p>
               </div>
 
               <div className={sty.featureCard}>
-                <h3 className={sty.featureTitle}>Developer Tools</h3>
+                <h3 className={sty.featureTitle}>Dev Tools</h3>
                 <p className={sty.featureDescription}>
                   ESLint, Prettier, Stylelint, Husky git hooks, and Commitlint
                   configured
@@ -64,14 +60,14 @@ export const LandingPage = () => {
               </div>
 
               <div className={sty.featureCard}>
-                <h3 className={sty.featureTitle}>Testing Ready</h3>
+                <h3 className={sty.featureTitle}>Testing</h3>
                 <p className={sty.featureDescription}>
                   Vitest + React Testing Library setup with coverage reporting
                 </p>
               </div>
 
               <div className={sty.featureCard}>
-                <h3 className={sty.featureTitle}>Styling Solutions</h3>
+                <h3 className={sty.featureTitle}>Styling</h3>
                 <p className={sty.featureDescription}>
                   SCSS modules, PostCSS, cssnano optimization, and variables
                   support
@@ -79,7 +75,7 @@ export const LandingPage = () => {
               </div>
 
               <div className={sty.featureCard}>
-                <h3 className={sty.featureTitle}>SEO Optimized</h3>
+                <h3 className={sty.featureTitle}>SEO</h3>
                 <p className={sty.featureDescription}>
                   React Helmet integration for meta tags and social media
                   optimization
@@ -89,15 +85,14 @@ export const LandingPage = () => {
               <div className={sty.featureCard}>
                 <h3 className={sty.featureTitle}>Laravel Ready</h3>
                 <p className={sty.featureDescription}>
-                  Pre-configured API service with Axios for seamless backend
-                  integration
+                  Configured API service with Axios for backend integration
                 </p>
               </div>
             </div>
           </section>
 
           <section className={sty.techStack}>
-            <h2 className={sty.sectionTitle}>Tech Stack</h2>
+            <h2 className={sty.sectionTitle}>Technologies Used</h2>
             <div className={sty.stackList}>
               <div className={sty.stackCategory}>
                 <h3 className={sty.stackTitle}>Core</h3>
@@ -140,40 +135,13 @@ export const LandingPage = () => {
               </div>
             </div>
           </section>
-
-          <section className={sty.quickStart}>
-            <h2 className={sty.sectionTitle}>Quick Start</h2>
-            <div className={sty.codeBlock}>
-              <pre className={sty.code}>
-                {`# Clone the boilerplate
-git clone <your-repo-url>
-
-# Install dependencies with PNPM
-pnpm install
-
-# Start development server
-pnpm run dev
-
-# Run tests
-pnpm test
-
-# Build for production
-pnpm run build`}
-              </pre>
-            </div>
-          </section>
-          <ResponsiveImage
-            src={motorcycleImage}
-            alt="Hero banner showcasing our product"
-            priority={true}
-            sizes="100vw"
-            objectFit="cover"
-            className="hero-image"
-          />
         </main>
 
         <footer className={sty.footer}>
-          <p className={sty.footerText}>React development</p>
+          <p className={sty.footerText}>
+            Made by{' '}
+            <Link to={'https://linktr.ee/ransuhaneda'}>ransuhaneda</Link>
+          </p>
         </footer>
       </div>
     </>

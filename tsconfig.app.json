@@ -33,5 +33,5 @@
       "@types/*": ["./src/types/*"]
     }
   },
-  "include": ["src", "src/**/*.ts", "src/**/*.tsx", "./src/test/setup.ts"]
+  "include": ["src", "src/**/*.ts", "src/**/*.tsx", "src/tests/setup.ts"]
 }

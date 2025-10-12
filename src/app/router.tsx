@@ -1,0 +1,66 @@
+import { createBrowserRouter, type RouteObject } from 'react-router-dom';
+
+import App from './App';
+
+import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
+import { RouteErrorBoundary } from '@/components/ui/errorHandling/RouteErrorBoundary';
+import { ErrorNotFound } from '@pages/NotFound';
+
+const withHydrateFallback = (route: RouteObject): RouteObject => ({
+  hydrateFallbackElement: <LoadingSpinner />,
+  ...route,
+});
+
+export const router = createBrowserRouter([
+  withHydrateFallback({
+    path: '/',
+    element: <App />,
+    errorElement: <RouteErrorBoundary />,
+    children: [
+      { path: '*', element: <ErrorNotFound /> },
+      withHydrateFallback({
+        index: true,
+        lazy: async () => {
+          const module = await import('@/pages/LandingPage');
+          return { Component: module.LandingPage };
+        },
+      }),
+
+      withHydrateFallback({
+        path: 'samplepage',
+        lazy: async () => {
+          // error display test
+          throw new Response('Not Found', {
+            status: 500,
+            statusText: 'Not Found',
+          });
+
+          const module = await import('@/pages/boilerplatePages/SamplePage');
+          return {
+            Component: module.SamplePage,
+          };
+        },
+        // can add route-specific error handling
+        // errorElement: <DashboardError />,
+      }),
+
+      withHydrateFallback({
+        path: 'mockapi',
+        lazy: async () => {
+          // error display test
+          // throw new Response('Not Found', {
+          //   status: 500,
+          //   statusText: 'Not Found',
+          // });
+
+          const module = await import('@/pages/boilerplatePages/MockApi');
+          return {
+            Component: module.MockApi,
+            loader: module.MockLoader,
+            errorElement: <RouteErrorBoundary />,
+          };
+        },
+      }),
+    ],
+  }),
+]);
