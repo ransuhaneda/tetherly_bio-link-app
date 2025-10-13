@@ -4,7 +4,9 @@
     "stylelint-config-prettier-scss",
     "stylelint-prettier/recommended"
   ],
-  "plugins": ["stylelint-order"],
+  "plugins": [
+    "stylelint-order"
+  ],
   "rules": {
     "selector-class-pattern": null,
     "scss/at-rule-no-unknown": [
@@ -15,7 +17,9 @@
           "apply",
           "variants",
           "responsive",
-          "screen"
+          "screen",
+          "layer",
+          "config"
         ]
       }
     ],
@@ -32,6 +36,13 @@
       {
         "message": "The animation name must use the camelCase naming convention."
       }
-    ]
+    ],
+    "declaration-block-no-duplicate-properties": true,
+    "color-no-invalid-hex": true,
+    "font-family-no-duplicate-names": true,
+    "function-calc-no-unspaced-operator": true,
+    "unit-no-unknown": true,
+    "property-no-unknown": true,
+    "no-duplicate-at-import-rules": true
   }
 }

@@ -1,0 +1,9 @@
+#!/usr/bin/env sh
+
+pnpm run type-check
+
+pnpm run lint
+pnpm run lint:styles
+pnpm run format:check
+
+pnpm test
