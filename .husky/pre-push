@@ -6,5 +6,4 @@ pnpm run lint
 pnpm run lint:styles
 pnpm run format:check
 
-pnpm test
-pnpm format:check
+pnpm run test

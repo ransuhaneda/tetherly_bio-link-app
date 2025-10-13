@@ -45,8 +45,8 @@ export default defineConfig([
             'internal',
             'parent',
             'sibling',
-            'index'
-          ]
+            'index',
+          ],
         },
       ],
       'import-x/no-unresolved': 'off',
@@ -75,7 +75,7 @@ export default defineConfig([
       '@typescript-eslint/no-unused-vars': 'error',
       '@typescript-eslint/consistent-type-imports': [
         'error',
-        { prefer: 'type-imports', fixStyle: 'inline-type-imports' }
+        { prefer: 'type-imports', fixStyle: 'inline-type-imports' },
       ],
       '@typescript-eslint/no-explicit-any': 'warn',
       '@/prefer-const': 'error',
@@ -85,7 +85,7 @@ export default defineConfig([
 
       'react-refresh/only-export-components': [
         'warn',
-        { allowConstantExport: true }
+        { allowConstantExport: true },
       ],
 
       'prettier/prettier': 'error',
@@ -111,7 +111,10 @@ export default defineConfig([
   },
 
   {
-    files: ['**/*.{test,spec}.{js,jsx,ts,tsx}', '**/tests/**/*.{js,jsx,ts,tsx}'],
+    files: [
+      '**/*.{test,spec}.{js,jsx,ts,tsx}',
+      '**/tests/**/*.{js,jsx,ts,tsx}',
+    ],
     languageOptions: {
       globals: {
         ...globals.jest,
