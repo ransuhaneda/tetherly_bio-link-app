@@ -2,10 +2,10 @@
 
 // import { useEffect } from 'react';
 
-import sty from '../LandingPage.module.scss';
-
 import { ResponsiveImage } from '@/components/ui/ResponsiveImage';
 import motorcycleImage from '@assets/images/toa-heftiba-IrpBb-5YGZw-unsplash.jpg?responsive';
+
+import sty from '../LandingPage.module.scss';
 
 export const SamplePage = () => {
   // error display test

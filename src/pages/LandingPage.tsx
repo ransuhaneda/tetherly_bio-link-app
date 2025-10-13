@@ -1,9 +1,9 @@
-import sty from './LandingPage.module.scss';
-
 import heroImage from '@assets/images/ahmet-yuksek-zSiqe6j9Aao-unsplash.jpg?responsive';
 import { SEOHelmet } from '@components/common/SEOHelmet';
 import { Link } from '@components/ui/Link';
 import { ResponsiveImage } from '@components/ui/ResponsiveImage';
+
+import sty from './LandingPage.module.scss';
 
 export const LandingPage = () => {
   return (

@@ -90,7 +90,7 @@ export default defineConfig([
 
       'prettier/prettier': 'error',
 
-      'no-console': 'warn',
+      // 'no-console': 'warn',
       'no-debugger': 'error',
       'prefer-const': 'error',
       'no-var': 'error',
