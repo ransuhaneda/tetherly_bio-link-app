@@ -20,6 +20,11 @@
     "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
+    /* Strictness */
+    "exactOptionalPropertyTypes": true,
+    "noImplicitReturns": true,
+    "noImplicitOverride": true,
+    "noUncheckedIndexedAccess": true,
     /* Added Rules */
     "types": ["vite/client", "vitest/globals", "@testing-library/jest-dom"],
     "baseUrl": ".",
@@ -33,5 +38,12 @@
       "@types/*": ["./src/types/*"]
     }
   },
-  "include": ["src", "src/**/*.ts", "src/**/*.tsx", "./src/test/setup.ts"]
+  "include": [
+    "src",
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "src/tests/setup.ts",
+    "**/*.d.ts"
+  ],
+  "exclude": ["node_modules", "dist", "build"]
 }

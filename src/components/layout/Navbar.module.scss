@@ -1,0 +1,27 @@
+.navigation {
+  background: abst.get-color('background', 'dark');
+  box-shadow: 0 4px 16px 0 rgb(10 10 10 / 4%);
+  padding: 20px 0;
+  position: sticky;
+  top: 0;
+  z-index: 9998;
+}
+
+.wrapper {
+  @include abst.flex(row, center, center);
+}
+
+.navbar__main {
+  padding: 5px 0;
+  @include abst.flex(row, null, null, 15px, nowrap);
+}
+
+.link {
+  color: abst.get-color('text', 'inverse');
+  font-size: abst.$text-base;
+  @include abst.font('primary', 300, normal);
+}
+
+.link:hover {
+  color: abst.get-color('text', 'accent');
+}

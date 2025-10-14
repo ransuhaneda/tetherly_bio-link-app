@@ -1,1 +1,8 @@
+/assets/* /assets/:splat 200
+/*.css /*.css 200
+/*.js /*.js 200
+/*.png /*.png 200
+/*.jpg /*.jpg 200
+
+
 /* /index.html 200

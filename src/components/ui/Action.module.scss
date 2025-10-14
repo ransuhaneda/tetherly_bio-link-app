@@ -1,0 +1,79 @@
+// -----------------------------------------------------------------------------
+// Combined Styles for action components. (Buttons, Links, etc.)
+// -----------------------------------------------------------------------------
+
+%action-base {
+  border: 1px solid transparent;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: abst.$text-base;
+  transition: all 0.5s;
+  @include abst.font('primary', 300, normal);
+}
+
+.btn {
+  background: transparent;
+  border: none;
+  padding: 0;
+  @extend %action-base;
+}
+
+.link {
+  background: transparent;
+  border: none;
+  padding: 0;
+
+  &:hover {
+    background: transparent;
+    text-decoration: underline;
+  }
+  @extend %action-base;
+}
+
+.variant__primary {
+  background: abst.get-color('surface', 'primary');
+  color: abst.get-color('text', 'primary');
+
+  &:hover {
+    background: abst.get-color('action', 'secondary');
+  }
+}
+
+.variant__secondary {
+  background: abst.get-color('surface', 'dark');
+  color: abst.get-color('text', 'inverse');
+
+  &:hover {
+    background: abst.get-color('action', 'secondary');
+  }
+}
+
+.variant__tertiary {
+  background: transparent;
+  border: 1px solid abst.get-color('border', 'primary');
+  color: abst.get-color('text', 'primary');
+  padding: 7px 19px;
+
+  &:hover {
+    background: abst.get-color('action', 'accent');
+    border: 1px solid transparent;
+    color: abst.get-color('text', 'inverse');
+  }
+}
+
+.size {
+  &__sm {
+    font-size: 0.875rem;
+    padding: 6px 16px;
+  }
+
+  &__md {
+    font-size: 1rem;
+    padding: clamp(8px, 2.336px + 0.943vw, 12px) 20px;
+  }
+
+  &__lg {
+    font-size: 1.125rem;
+    padding: 10px 24px;
+  }
+}

@@ -2,7 +2,8 @@
 // This file contains all application-wide Sass functions.
 // -----------------------------------------------------------------------------
 
-@use '@assets/styles/abstracts/variables' as var;
+@use 'sass:map';
+@use '../base/colors' as clr;
 
 /// Native `url(..)` function wrapper
 /// @param {String} $base - base URL for the asset
@@ -29,4 +30,22 @@
 /// @require $base-url
 @function font($path, $base: $base-url) {
   @return asset($base, 'fonts/', $path);
+}
+
+/// Returns brand color from the base _colors
+/// @param {String} $color - Base color name
+/// @param {String} [$shade='500'] - Color shade/variant
+/// @return {color} - return color
+@function get-color-brand($color, $shade: '500') {
+  $map: map.get(clr.$colors-brand, $color);
+  @return map.get($map, $shade);
+}
+
+/// Returns alias color from base _colors
+/// @param {String} $category - Category of color
+/// @param {String} $variant ['primary'] - Variant of color within the category
+/// @return {get-color} - return color
+@function get-color($category, $variant: 'primary') {
+  $map: map.get(clr.$colors-alias, $category);
+  @return map.get($map, $variant);
 }

@@ -18,8 +18,8 @@ export default defineConfig({
 
     ...setupPlugins({
       include: /^[^?]+\.(jpg|jpeg|png|webp|avif).?responsive.*$/,
-      w: [500, 800, 1024, 1600, 2160],
-      format: ['original', 'webp'],
+      w: [500, 800, 1024, 1600],
+      format: ['webp'],
       quality: 85,
       lqip: {
         type: 'inline',
@@ -38,9 +38,15 @@ export default defineConfig({
     preprocessorOptions: {
       scss: {
         additionalData: `
-        @use '@assets/styles/abstracts/' as abst;
-        @use '@assets/styles/abstracts/mixins' as mix;
+        @use 'sass:map';
+        @use '@assets/styles/abstracts' as abst;
         `,
+        silenceDeprecations: [
+          'import',
+          'color-functions',
+          'global-builtin',
+          'legacy-js-api',
+        ],
       },
     },
     postcss: {
@@ -67,6 +73,7 @@ export default defineConfig({
   },
 
   // Build config
+  base: '/',
   build: {
     minify: 'terser',
     cssMinify: true,
@@ -126,7 +133,7 @@ export default defineConfig({
 
   // Server Config (Will use Laravel)
   server: {
-    port: 5173,
+    port: 3000,
     proxy: {
       '/api': {
         target: 'http://localhost:8000',

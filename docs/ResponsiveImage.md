@@ -1,4 +1,6 @@
-Usage Instructions
+Responsive Image Usage Instructions
+
+Path: /src/components/ui/ResponsiveImage
 
 1. Basic Local Image Usage
 

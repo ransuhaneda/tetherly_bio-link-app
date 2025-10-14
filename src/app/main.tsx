@@ -1,14 +1,15 @@
+import '@assets/styles/reset.scss';
 import { HelmetProvider } from '@dr.pogodin/react-helmet';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import '@assets/styles/reset.scss';
+import { RouterProvider } from 'react-router-dom';
 
-import App from './App';
+import { router } from './router';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <HelmetProvider>
-      <App />
+      <RouterProvider router={router} />
     </HelmetProvider>
   </StrictMode>
 );

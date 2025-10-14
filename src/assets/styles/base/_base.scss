@@ -4,10 +4,15 @@
 @use 'sass:map';
 
 body {
-  background-color: #fcfbf4;
+  background: #161614;
+
+  // color: #f8f9fa;
 }
 
 ::selection {
-  background: #ebb01c;
-  color: #fcfbf4;
+  background: #b6cf4f;
+  color: #f8f9fa;
 }
+
+// @media (prefers-color-scheme: dark) {
+// }

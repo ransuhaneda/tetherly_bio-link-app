@@ -206,8 +206,7 @@ a:any-link {
  */
 
 abbr[title] {
-  border-bottom: none; /* 1 */
-  text-decoration: underline; /* 2 */
+  border-bottom: none; /* 1 */ /* 2 */
   text-decoration: underline dotted; /* 2 */
 }
 
@@ -459,7 +458,6 @@ input[type='text'],
 input[type='button'],
 input[type='submit'],
 .input-checkbox {
-  appearance: none;
   appearance: unset;
   border-radius: 0;
 }
