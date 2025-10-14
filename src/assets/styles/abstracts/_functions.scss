@@ -2,8 +2,12 @@
 // This file contains all application-wide Sass functions.
 // -----------------------------------------------------------------------------
 
+<<<<<<< HEAD
 @use 'sass:map';
 @use '../base/colors' as clr;
+=======
+@use '@assets/styles/abstracts/variables' as var;
+>>>>>>> repo2/main
 
 /// Native `url(..)` function wrapper
 /// @param {String} $base - base URL for the asset
