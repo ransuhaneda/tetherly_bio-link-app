@@ -1,9 +1,9 @@
 import { Link } from 'react-router-dom';
 
-import sty from './NotFound.module.scss';
-
 import { SEOHelmet } from '@components/common/SEOHelmet';
 import { Button } from '@components/ui/Button';
+
+import sty from './NotFound.module.scss';
 
 export const ErrorNotFound = () => {
   return (

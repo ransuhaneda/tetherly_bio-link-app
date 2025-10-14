@@ -1,6 +1,6 @@
-import sty from './LandingPage.module.scss';
-
 import { SEOHelmet } from '@components/common/SEOHelmet';
+
+import sty from './LandingPage.module.scss';
 
 export const LandingPage = () => {
   return (

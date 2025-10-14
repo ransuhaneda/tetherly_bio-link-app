@@ -24,6 +24,11 @@
     "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
+    /* Strictness */
+    "exactOptionalPropertyTypes": true,
+    "noImplicitReturns": true,
+    "noImplicitOverride": true,
+    "noUncheckedIndexedAccess": true,
     /* Added Rules */
     "types": [
       "vite/client",
@@ -59,6 +64,12 @@
     "src",
     "src/**/*.ts",
     "src/**/*.tsx",
-    "./src/test/setup.ts"
+    "src/tests/setup.ts",
+    "**/*.d.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "build"
   ]
 }
