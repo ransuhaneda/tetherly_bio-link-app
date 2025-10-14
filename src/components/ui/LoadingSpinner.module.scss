@@ -1,0 +1,224 @@
+.wrapper {
+  background-color: abst.get-color('background', 'dark');
+  inset: 0;
+  position: fixed;
+  z-index: 9999;
+  @include abst.flex(row, center, center);
+}
+
+/* From Uiverse.io by Nawsome */
+.pl {
+  height: 6em;
+  width: 6em;
+}
+
+.pl__ring {
+  animation: ringA 2s linear infinite;
+}
+
+.pl__ring_a {
+  stroke: #fd5151;
+}
+
+.pl__ring_b {
+  animation-name: ringB;
+  stroke: #b6cf4f;
+}
+
+.pl__ring_c {
+  animation-name: ringC;
+  stroke: #ff5e32;
+}
+
+.pl__ring_d {
+  animation-name: ringD;
+  stroke: #7154eb;
+}
+
+/* Animations */
+@keyframes ringA {
+  0%,
+  4% {
+    stroke-dasharray: 0 660;
+    stroke-dashoffset: -330;
+    stroke-width: 20;
+  }
+
+  12% {
+    stroke-dasharray: 60 600;
+    stroke-dashoffset: -335;
+    stroke-width: 30;
+  }
+
+  32% {
+    stroke-dasharray: 60 600;
+    stroke-dashoffset: -595;
+    stroke-width: 30;
+  }
+
+  40%,
+  54% {
+    stroke-dasharray: 0 660;
+    stroke-dashoffset: -660;
+    stroke-width: 20;
+  }
+
+  62% {
+    stroke-dasharray: 60 600;
+    stroke-dashoffset: -665;
+    stroke-width: 30;
+  }
+
+  82% {
+    stroke-dasharray: 60 600;
+    stroke-dashoffset: -925;
+    stroke-width: 30;
+  }
+
+  90%,
+  100% {
+    stroke-dasharray: 0 660;
+    stroke-dashoffset: -990;
+    stroke-width: 20;
+  }
+}
+
+@keyframes ringB {
+  0%,
+  12% {
+    stroke-dasharray: 0 220;
+    stroke-dashoffset: -110;
+    stroke-width: 20;
+  }
+
+  20% {
+    stroke-dasharray: 20 200;
+    stroke-dashoffset: -115;
+    stroke-width: 30;
+  }
+
+  40% {
+    stroke-dasharray: 20 200;
+    stroke-dashoffset: -195;
+    stroke-width: 30;
+  }
+
+  48%,
+  62% {
+    stroke-dasharray: 0 220;
+    stroke-dashoffset: -220;
+    stroke-width: 20;
+  }
+
+  70% {
+    stroke-dasharray: 20 200;
+    stroke-dashoffset: -225;
+    stroke-width: 30;
+  }
+
+  90% {
+    stroke-dasharray: 20 200;
+    stroke-dashoffset: -305;
+    stroke-width: 30;
+  }
+
+  98%,
+  100% {
+    stroke-dasharray: 0 220;
+    stroke-dashoffset: -330;
+    stroke-width: 20;
+  }
+}
+
+@keyframes ringC {
+  0% {
+    stroke-dasharray: 0 440;
+    stroke-dashoffset: 0;
+    stroke-width: 20;
+  }
+
+  8% {
+    stroke-dasharray: 40 400;
+    stroke-dashoffset: -5;
+    stroke-width: 30;
+  }
+
+  28% {
+    stroke-dasharray: 40 400;
+    stroke-dashoffset: -175;
+    stroke-width: 30;
+  }
+
+  36%,
+  58% {
+    stroke-dasharray: 0 440;
+    stroke-dashoffset: -220;
+    stroke-width: 20;
+  }
+
+  66% {
+    stroke-dasharray: 40 400;
+    stroke-dashoffset: -225;
+    stroke-width: 30;
+  }
+
+  86% {
+    stroke-dasharray: 40 400;
+    stroke-dashoffset: -395;
+    stroke-width: 30;
+  }
+
+  94%,
+  100% {
+    stroke-dasharray: 0 440;
+    stroke-dashoffset: -440;
+    stroke-width: 20;
+  }
+}
+
+@keyframes ringD {
+  0%,
+  8% {
+    stroke-dasharray: 0 440;
+    stroke-dashoffset: 0;
+    stroke-width: 20;
+  }
+
+  16% {
+    stroke-dasharray: 40 400;
+    stroke-dashoffset: -5;
+    stroke-width: 30;
+  }
+
+  36% {
+    stroke-dasharray: 40 400;
+    stroke-dashoffset: -175;
+    stroke-width: 30;
+  }
+
+  44%,
+  50% {
+    stroke-dasharray: 0 440;
+    stroke-dashoffset: -220;
+    stroke-width: 20;
+  }
+
+  58% {
+    stroke-dasharray: 40 400;
+    stroke-dashoffset: -225;
+    stroke-width: 30;
+  }
+
+  78% {
+    stroke-dasharray: 40 400;
+    stroke-dashoffset: -395;
+    stroke-width: 30;
+  }
+
+  86%,
+  100% {
+    stroke-dasharray: 0 440;
+    stroke-dashoffset: -440;
+    stroke-width: 20;
+  }
+}

@@ -1,0 +1,67 @@
+// Refactor needed
+
+.container {
+  min-height: 100vh;
+  padding: 2rem;
+  @include abst.flex(row, center, center);
+}
+
+.content {
+  backdrop-filter: blur(10px);
+  background: rgb(255 255 255 / 95%);
+  border-radius: 16px;
+  box-shadow: 0 20px 40px rgb(0 0 0 / 10%);
+  max-width: 500px;
+  padding: 3rem 2rem;
+  text-align: center;
+}
+
+.errorCode {
+  color: #667eea;
+  font-size: 8rem;
+  font-weight: 900;
+  line-height: 1;
+  margin: 0;
+  text-shadow: 2px 2px 4px rgb(0 0 0 / 10%);
+
+  @media (width <= 768px) {
+    font-size: 6rem;
+  }
+
+  @media (width <= 480px) {
+    font-size: 4rem;
+  }
+}
+
+.title {
+  color: #2d3748;
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin: 1rem 0;
+
+  @media (width <= 768px) {
+    font-size: 2rem;
+  }
+
+  @media (width <= 480px) {
+    font-size: 1.5rem;
+  }
+}
+
+.description {
+  color: #4a5568;
+  font-size: 1.125rem;
+  line-height: 1.6;
+  margin: 1.5rem 0 2.5rem;
+
+  @media (width <= 480px) {
+    font-size: 1rem;
+  }
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+}

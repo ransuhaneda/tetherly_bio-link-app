@@ -1,0 +1,5 @@
+.container {
+  background: abst.get-color('background', 'light');
+  color: abst.get-color('text', 'primary');
+  min-height: 100vh;
+}
