@@ -3,11 +3,7 @@
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
     "target": "ES2022",
     "useDefineForClassFields": true,
-    "lib": [
-      "ES2022",
-      "DOM",
-      "DOM.Iterable"
-    ],
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
     "module": "ESNext",
     "skipLibCheck": true,
     /* Bundler mode */
@@ -30,34 +26,16 @@
     "noImplicitOverride": true,
     "noUncheckedIndexedAccess": true,
     /* Added Rules */
-    "types": [
-      "vite/client",
-      "vitest/globals",
-      "@testing-library/jest-dom"
-    ],
+    "types": ["vite/client", "vitest/globals", "@testing-library/jest-dom"],
     "baseUrl": ".",
     "paths": {
-      "@/*": [
-        "./src/*"
-      ],
-      "@assets/*": [
-        "./src/assets/*"
-      ],
-      "@components/*": [
-        "./src/components/*"
-      ],
-      "@pages/*": [
-        "./src/pages/*"
-      ],
-      "@hooks/*": [
-        "./src/hooks/*"
-      ],
-      "@helper/*": [
-        "./src/helper/*"
-      ],
-      "@types/*": [
-        "./src/types/*"
-      ]
+      "@/*": ["./src/*"],
+      "@assets/*": ["./src/assets/*"],
+      "@components/*": ["./src/components/*"],
+      "@pages/*": ["./src/pages/*"],
+      "@hooks/*": ["./src/hooks/*"],
+      "@helper/*": ["./src/helper/*"],
+      "@types/*": ["./src/types/*"]
     }
   },
   "include": [
@@ -67,9 +45,5 @@
     "src/tests/setup.ts",
     "**/*.d.ts"
   ],
-  "exclude": [
-    "node_modules",
-    "dist",
-    "build"
-  ]
+  "exclude": ["node_modules", "dist", "build"]
 }

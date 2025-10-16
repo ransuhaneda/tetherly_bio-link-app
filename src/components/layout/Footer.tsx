@@ -1,6 +1,6 @@
-import sty from './Footer.module.scss';
-
 import { Link } from '@components/ui/Link';
+
+import sty from './Footer.module.scss';
 
 export const Footer = () => {
   return (
