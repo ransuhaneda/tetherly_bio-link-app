@@ -118,7 +118,7 @@ $colors-alias: (
   ),
   'surface': (
     'primary': map.get($colors-brand, 'green', '500'),
-    // 'secondary': map.get($colors-brand, 'green', '500'), UNDECIDED
+    'secondary': map.get($colors-brand, 'orange', '500'),
     // 'accent': map.get($colors-brand, 'green', '500'), UNDECIDED
     'dark': map.get($colors-brand, 'neutral', '500'),
   ),

@@ -27,6 +27,22 @@ export const router = createBrowserRouter([
       }),
 
       withHydrateFallback({
+        path: 'login',
+        lazy: async () => {
+          const module = await import('@/pages/auth/Login');
+          return { Component: module.Login };
+        },
+      }),
+
+      withHydrateFallback({
+        path: 'signup',
+        lazy: async () => {
+          const module = await import('@/pages/auth/Signup');
+          return { Component: module.Signup };
+        },
+      }),
+
+      withHydrateFallback({
         path: 'samplepage',
         lazy: async () => {
           // error display test

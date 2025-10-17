@@ -1,18 +1,22 @@
 import { NavLink } from 'react-router-dom';
 
+import { Link } from '@components/ui/Link';
+
 import sty from './Navbar.module.scss';
 
 const NAV_LINKS = [
-  { id: '01', name: 'Home', href: '/' },
-  { id: '02', name: 'Samplepage', href: '/samplepage' },
-  { id: '03', name: 'Mockapi', href: '/mockapi' },
+  { id: '01', name: 'Tetherly', href: '/' },
+  { id: '02', name: 'About', href: '/about' },
+  { id: '03', name: 'Pricing', href: '/pricing' },
+  { id: '04', name: 'Contact', href: '/contact' },
+  { id: '05', name: 'Mockapi', href: '/mockapi' },
 ];
 
 export const Navbar = () => {
   const isMobile = ''; // Mobile nav implementation
 
   return (
-    <header className={sty.navigation}>
+    <header className={`lg-wrapper ${sty.navigation}`}>
       <nav className={sty.wrapper}>
         <ul className={sty.navbar__main}>
           {NAV_LINKS.map(link => (
@@ -32,6 +36,20 @@ export const Navbar = () => {
             </li>
           ))}
         </ul>
+
+        <div className={sty.wrapper__auth}>
+          <Link
+            to="/login"
+            variant="tertiary"
+            size="md"
+            customClass={sty.link__auth ?? ''}
+          >
+            Log In
+          </Link>
+          <Link to="/signup" variant="primary" size="md">
+            Create an Account
+          </Link>
+        </div>
       </nav>
     </header>
   );

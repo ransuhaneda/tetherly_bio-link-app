@@ -8,12 +8,20 @@
 }
 
 .wrapper {
-  @include abst.flex(row, center, center);
+  @include abst.flex(row, space-between, center);
+}
+
+.wrapper__auth {
+  @include abst.flex(row, null, null, 16px);
 }
 
 .navbar__main {
   padding: 5px 0;
-  @include abst.flex(row, null, null, 15px, nowrap);
+  @include abst.flex(row, null, null, 16px, nowrap);
+}
+
+.link__auth {
+  color: abst.get-color('text', 'inverse');
 }
 
 .link {
