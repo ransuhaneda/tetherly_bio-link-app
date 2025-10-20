@@ -8,12 +8,7 @@ interface Props extends LinkProps {
   customClass?: string;
 }
 
-export function Link({
-  variant = 'underline',
-  size,
-  customClass,
-  ...props
-}: Props) {
+export function Link({ variant, size, customClass, ...props }: Props) {
   const linkClass = [
     sty[`link`],
     sty[`variant__${variant}`],

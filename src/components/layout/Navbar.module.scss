@@ -20,6 +20,16 @@
   @include abst.flex(row, null, null, 16px, nowrap);
 }
 
+.logo {
+  font-size: abst.$text-2xl;
+  @include abst.font('primary', 700, normal);
+  color: abst.get-color('text', 'accent');
+
+  &:hover {
+    text-decoration: none;
+  }
+}
+
 .link__auth {
   color: abst.get-color('text', 'inverse');
 }
