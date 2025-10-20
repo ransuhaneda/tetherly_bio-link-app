@@ -1,0 +1,11 @@
+@use '@assets/styles/abstracts' as abst;
+
+/**
+ * Basic typography style for copy text
+ */
+body {
+  // color: abstracts.$text-color;
+  // font: normal 125% / 1.4 abstracts.$text-font-stack;
+  @include abst.font('primary', 300, normal);
+  color: abst.get-color('status', 'info');
+}
