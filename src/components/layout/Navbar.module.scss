@@ -21,13 +21,13 @@
 }
 
 .logo {
-  font-size: abst.$text-2xl;
-  @include abst.font('primary', 700, normal);
   color: abst.get-color('text', 'accent');
+  font-size: abst.$text-2xl;
 
   &:hover {
     text-decoration: none;
   }
+  @include abst.font('primary', 700, normal);
 }
 
 .link__auth {

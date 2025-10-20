@@ -3,7 +3,6 @@
 // -----------------------------------------------------------------------------
 
 %action-base {
-  @include abst.font('primary', 300, normal);
   border: 1px solid transparent;
   border-radius: 4px;
   cursor: pointer;
