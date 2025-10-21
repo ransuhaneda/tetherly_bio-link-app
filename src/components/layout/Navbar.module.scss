@@ -18,10 +18,14 @@
 .navbar__main {
   padding: 5px 0;
   @include abst.flex(row, null, null, 16px, nowrap);
+
+  @media (width <= 768px) {
+    display: none;
+  }
 }
 
 .logo {
-  color: abst.get-color('text', 'secondary');
+  color: abst.get-color('text', 'accent');
   font-size: abst.$text-2xl;
 
   &:hover {
@@ -38,9 +42,9 @@
 .link {
   color: abst.get-color('text', 'inverse');
   font-size: abst.$text-md;
-  @include abst.font('primary', 300, normal);
-}
 
-.link:hover {
-  color: abst.get-color('text', 'accent');
+  &:hover {
+    color: abst.get-color('text', 'accent');
+  }
+  @include abst.font('primary', 300, normal);
 }

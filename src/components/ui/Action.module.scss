@@ -27,11 +27,11 @@
 }
 
 .variant__primary {
-  background: abst.get-color('surface', 'primary');
-  color: abst.get-color('text', 'primary');
+  background: abst.get-color('action', 'secondary');
+  color: abst.get-color('text', 'inverse');
 
   &:hover {
-    background: abst.get-color('action', 'secondary');
+    background: abst.get-color('action', 'secondary-on-hover');
   }
 }
 
@@ -51,7 +51,7 @@
   padding: 7px 19px;
 
   &:hover {
-    background: abst.get-color('action', 'accent');
+    background: abst.get-color('action', 'secondary');
     border: 1px solid transparent;
     color: abst.get-color('text', 'inverse');
   }

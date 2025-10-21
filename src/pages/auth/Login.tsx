@@ -1,7 +1,9 @@
+import sty from './Login.module.scss';
+
 export const Login = () => {
   return (
-    <>
-      <div>Login</div>
-    </>
+    <section>
+      <div className={sty.container}>Login</div>
+    </section>
   );
 };

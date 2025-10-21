@@ -178,6 +178,7 @@ $colors-alias: (
   'action': (
     'primary': map.get($colors-brand, 'green', '500'),
     'secondary': map.get($colors-brand, 'orange', '500'),
+    'secondary-on-hover': map.get($colors-brand, 'orange', '600'),
     'accent': map.get($colors-brand, 'yellow', '500'),
   ),
   'status': (
