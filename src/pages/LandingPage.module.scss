@@ -1,5 +1,53 @@
 .container {
-  background: abst.get-color('background', 'light');
+  background: abst.get-color('background', 'inverse');
   color: abst.get-color('text', 'primary');
-  min-height: 100vh;
+  padding: 64px 0;
+}
+
+.wrapper__hero {
+  display: grid;
+  gap: 16px;
+  max-width: 512px;
+}
+
+.hero {
+  font-size: abst.$text-5xl;
+  line-height: 70px;
+  @include abst.font('secondary', 700, normal);
+}
+
+.subheading {
+  color: abst.get-color-brand('neutral', '400');
+  font-size: abst.$text-md;
+  line-height: 20px;
+  @include abst.font('primary', 400, normal);
+}
+
+.cta__form {
+  align-items: center;
+  display: inline-flex;
+  margin-top: 16px;
+}
+
+.cta__wrapper {
+  border: 2px solid abst.get-color('border', 'primary');
+}
+
+.cta__link {
+  color: abst.get-color('text', 'primary');
+  padding: 12px 0 12px 12px;
+}
+
+.form__input {
+  border: none;
+  padding: 12px 12px 12px 0;
+
+  &:focus-visible {
+    outline: none;
+  }
+}
+
+.btn__submit {
+  border-radius: 0;
+  padding: 14px;
 }

@@ -14,12 +14,15 @@ $font-families: (
 $ff-fallback: monospace;
 
 // Typescale
-$text-sm: clamp(8px, 2.336px + 0.943vw, 12px);
-$text-base: clamp(12px, 6.336px + 0.943vw, 16px);
+$text-xs: 12px;
+$text-sm: 14px;
+$text-md: clamp(12px, 6.336px + 0.943vw, 16px);
 $text-lg: clamp(20px, 8.672px + 1.887vw, 28px);
 $text-xl: clamp(24px, 12.672px + 1.887vw, 32px);
 $text-2xl: clamp(28px, 22.336px + 0.943vw, 32px);
 $text-3xl: clamp(30px, -9.968px + 5.66vw, 48px);
+$text-4xl: 48px;
+$text-5xl: 60px;
 
 // Transition
 $transition-ease: all 0.3s ease;

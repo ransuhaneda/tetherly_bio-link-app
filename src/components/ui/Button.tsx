@@ -3,7 +3,9 @@ import sty from './Action.module.scss';
 interface ButtonProps {
   variant?: 'primary' | 'secondary' | 'tertiary';
   size?: 'sm' | 'md' | 'lg';
+  customClass?: string | undefined;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
+  type?: 'submit' | 'reset' | 'button' | undefined;
   children: React.ReactNode;
   disabled?: boolean;
 }
@@ -11,7 +13,9 @@ interface ButtonProps {
 export function Button({
   variant = 'primary',
   size = 'md',
+  customClass,
   onClick,
+  type,
   children,
   disabled,
 }: ButtonProps) {
@@ -23,7 +27,8 @@ export function Button({
 
   return (
     <button
-      className={`${sty.btn} ${buttonClass}`}
+      className={`${sty.btn} ${buttonClass} ${customClass}`}
+      type={type}
       onClick={onClick}
       disabled={disabled}
       role="button"

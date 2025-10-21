@@ -21,12 +21,13 @@
 }
 
 .logo {
-  color: abst.get-color('text', 'accent');
+  color: abst.get-color('text', 'secondary');
   font-size: abst.$text-2xl;
 
   &:hover {
     text-decoration: none;
   }
+  @include abst.font('primary', 700, normal);
   @include abst.font('primary', 700, normal);
 }
 
@@ -36,7 +37,7 @@
 
 .link {
   color: abst.get-color('text', 'inverse');
-  font-size: abst.$text-base;
+  font-size: abst.$text-md;
   @include abst.font('primary', 300, normal);
 }
 

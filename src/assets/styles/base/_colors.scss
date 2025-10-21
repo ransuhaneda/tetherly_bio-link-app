@@ -162,7 +162,7 @@ $colors-alias: (
     'primary': map.get($colors-brand, 'green', '500'),
     'secondary': map.get($colors-brand, 'yellow', '500'),
     'accent': map.get($colors-brand, 'orange', '500'),
-    'light': map.get($colors-foundations, 'white'),
+    'inverse': map.get($colors-foundations, 'white'),
     'dark': map.get($colors-brand, 'neutral', '500'),
     'overlay': rgba(map.get($colors-brand, 'neutral', '500'), 0.8),
   ),
@@ -177,8 +177,8 @@ $colors-alias: (
   ),
   'action': (
     'primary': map.get($colors-brand, 'green', '500'),
-    'secondary': map.get($colors-brand, 'yellow', '500'),
-    'accent': map.get($colors-brand, 'orange', '600'),
+    'secondary': map.get($colors-brand, 'orange', '500'),
+    'accent': map.get($colors-brand, 'yellow', '500'),
   ),
   'status': (
     'info': map.get($colors-semantic, 'blue', '500'),
