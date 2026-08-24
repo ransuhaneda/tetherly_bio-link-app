@@ -35,6 +35,14 @@ export const router = createBrowserRouter([
       }),
 
       withHydrateFallback({
+        path: 'forgot-password',
+        lazy: async () => {
+          const module = await import('@/pages/auth/ForgotPassword');
+          return { Component: module.ForgotPassword };
+        },
+      }),
+
+      withHydrateFallback({
         path: 'signup',
         lazy: async () => {
           const module = await import('@/pages/auth/Signup');
