@@ -29,4 +29,5 @@ These are project-specific additions to the global `/home/ransu/.codex/AGENTS.md
 - Read `docs/DESIGN-SYSTEM.md` before making visual or interaction changes. Treat it as the canonical reference for tokens, typography, color, spacing, components, icon usage, and motion direction.
 - Use `docs/DESIGN-BRIEF.md` for the approved product direction, content constraints, assets, and named interactions.
 - Use `docs/PROJECT_STRUCTURE.md` to preserve the project's source and feature organization when adding or moving files.
+- Use `docs/PROJECT-OVERVIEW.md` for the project purpose, audience, competitive context, design direction, and final product goal.
 - Keep implementation aligned with these documents; update the relevant document when an intentional design-system decision changes.
