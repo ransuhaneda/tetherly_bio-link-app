@@ -29,6 +29,11 @@ export const Footer = () => (
             <a href="https://youtube.com" aria-label="YouTube"><FiYoutube /></a>
           </div>
         </div>
+        <div className={sty.footerColumn}>
+          <span className={sty.columnLabel}>The details</span>
+          <Link to="/privacy">Privacy policy</Link>
+          <Link to="/terms">Terms of service</Link>
+        </div>
       </div>
       <div className={sty.footerBottom}>
         <span>© {new Date().getFullYear()} Tetherly</span>

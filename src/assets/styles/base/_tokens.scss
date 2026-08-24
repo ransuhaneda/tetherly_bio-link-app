@@ -21,19 +21,13 @@
   --space-xl: 2rem;
   --space-2xl: 3rem;
   --space-section: clamp(3rem, 8vw, 7rem);
-  --radius-none: 0;
-  --radius-sm: 0.25rem;
-  --radius-md: 0.75rem;
-  --radius-pill: 999px;
   --motion-fast: 180ms;
   --motion-standard: 300ms;
   --motion-ease-standard: ease;
   --target-min-size: 44px;
   --button-min-block-size: var(--target-min-size);
   --button-padding-inline: var(--space-lg);
-  --button-radius: var(--radius-sm);
   --card-padding: var(--space-lg);
-  --card-radius: var(--radius-sm);
   --form-field-min-block-size: var(--target-min-size);
 }
 

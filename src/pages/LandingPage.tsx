@@ -37,6 +37,13 @@ const steps = [
   ],
 ];
 
+const faqs = [
+  ['Can I start for free?', 'Yes. You can create a Starter page with your essential links at no cost. Upgrade only when you need more customization or team tools.'],
+  ['Can I change my links later?', 'Absolutely. Update, reorder, schedule, or remove links whenever your work changes. Your Tetherly URL stays the same.'],
+  ['What can I add to my page?', 'Add links to your work, shop, newsletter, social profiles, playlists, community spaces, and anywhere else you want your audience to go.'],
+  ['Do I need a custom domain?', 'No. Every account includes a Tetherly URL. Paid plans also let you connect a custom domain you already own.'],
+];
+
 export const LandingPage = () => {
   const [username, setUsername] = useState('');
   const [status, setStatus] = useState('');
@@ -226,6 +233,18 @@ export const LandingPage = () => {
                 <FiArrowUpRight aria-hidden="true" />
               </div>
             </article>
+            <article className={`${sty.featureCard} ${sty.featureSignal}`}>
+              <span className={sty.cardIndex}>05 / Measure</span>
+              <h3>Know what earns attention.</h3>
+              <p>
+                See which links get clicked so you can keep your page useful,
+                current, and easy to trust.
+              </p>
+              <div className={sty.signalValue}>
+                <strong>24%</strong>
+                <span>click-through lift</span>
+              </div>
+            </article>
           </div>
         </section>
 
@@ -329,6 +348,22 @@ export const LandingPage = () => {
                 changing.
               </p>
             </div>
+          </div>
+        </section>
+
+        <section className={`lg-wrapper ${sty.faqSection}`}>
+          <div className={sty.faqIntro}>
+            <p className={sty.kicker}>Good to know</p>
+            <h2>Questions, answered.</h2>
+            <p>A few useful details before you make your corner of the internet.</p>
+          </div>
+          <div className={sty.faqList}>
+            {faqs.map(([question, answer]) => (
+              <details key={question}>
+                <summary>{question}</summary>
+                <p>{answer}</p>
+              </details>
+            ))}
           </div>
         </section>
 

@@ -67,6 +67,22 @@ export const router = createBrowserRouter([
       }),
 
       withHydrateFallback({
+        path: 'privacy',
+        lazy: async () => {
+          const module = await import('@/pages/LegalPage');
+          return { Component: () => <module.LegalPage type="privacy" /> };
+        },
+      }),
+
+      withHydrateFallback({
+        path: 'terms',
+        lazy: async () => {
+          const module = await import('@/pages/LegalPage');
+          return { Component: () => <module.LegalPage type="terms" /> };
+        },
+      }),
+
+      withHydrateFallback({
         path: 'samplepage',
         lazy: async () => {
           // error display test
