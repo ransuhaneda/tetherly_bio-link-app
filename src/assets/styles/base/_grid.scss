@@ -1,5 +1,5 @@
 %grid-system {
-  --padding-inline: clamp(1rem, -2.429rem + 7.143vw, 4rem);
+  --padding-inline: max(24px, 4vw);
 
   display: grid;
 }
@@ -27,7 +27,7 @@
 }
 
 .lg-wrapper {
-  --max-width: 1440px;
+  --max-width: 1312px;
 
   grid-template-columns:
     [full-width-start] minmax(var(--padding-inline), 1fr)

@@ -5,13 +5,13 @@
 // Typeface Map. connected to font picker _mixin
 $font-families: (
   primary: (
-    'Inter',
+    'Nunito',
   ),
   secondary: (
     'Oswald',
   ),
 ) !default;
-$ff-fallback: monospace;
+$ff-fallback: sans-serif;
 
 // Typescale
 $text-xs: 12px;

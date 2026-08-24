@@ -8,17 +8,15 @@ interface Props extends LinkProps {
   customClass?: string;
 }
 
-export function Link({ variant, size, customClass, ...props }: Props) {
-  const linkClass = [
-    sty[`link`],
-    sty[`variant__${variant}`],
-    sty[`size__${size}`],
-  ].join(' ');
+export function Link({ variant, size = 'md', customClass, ...props }: Props) {
+  const linkClass = variant
+    ? [sty.link, sty[`variant__${variant}`], sty[`size__${size}`]].join(' ')
+    : '';
 
   return (
     <RouterLink
       {...props}
-      className={`${customClass} ${linkClass}`}
+      className={[customClass, linkClass].filter(Boolean).join(' ')}
       role="link"
     >
       {props.children}

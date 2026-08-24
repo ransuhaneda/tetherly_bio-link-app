@@ -6,11 +6,13 @@
   --color-text-primary: #{abst.get-color('text', 'primary')};
   --color-text-inverse: #{abst.get-color('text', 'inverse')};
   --color-text-muted: #{abst.get-color-brand('gray', '600')};
-  --color-background-page: #{abst.get-color('background', 'inverse')};
+  --color-background-page: #{abst.get-color-brand('neutral', '900')};
   --color-background-surface: #{abst.get-color('surface', 'dark')};
   --color-action-primary: #{abst.get-color('action', 'primary')};
   --color-action-secondary: #{abst.get-color('action', 'secondary')};
   --color-border-default: #{abst.get-color('border', 'primary')};
+  --color-border-subtle: #{abst.get-color-brand('neutral', '300')};
+  --color-action-secondary-hover: #{abst.get-color-brand('orange', '600')};
   --space-2xs: 0.25rem;
   --space-xs: 0.5rem;
   --space-sm: 0.75rem;
@@ -21,7 +23,7 @@
   --space-section: clamp(3rem, 8vw, 7rem);
   --radius-none: 0;
   --radius-sm: 0.25rem;
-  --radius-md: 0.5rem;
+  --radius-md: 0.75rem;
   --radius-pill: 999px;
   --motion-fast: 180ms;
   --motion-standard: 300ms;
@@ -29,9 +31,9 @@
   --target-min-size: 44px;
   --button-min-block-size: var(--target-min-size);
   --button-padding-inline: var(--space-lg);
-  --button-radius: var(--radius-none);
+  --button-radius: var(--radius-sm);
   --card-padding: var(--space-lg);
-  --card-radius: var(--radius-none);
+  --card-radius: var(--radius-sm);
   --form-field-min-block-size: var(--target-min-size);
 }
 

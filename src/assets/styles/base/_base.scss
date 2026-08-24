@@ -4,9 +4,11 @@
 @use 'sass:map';
 
 body {
-  background: #66660e;
-  color: #0f88ad;
-  font-family: monospace;
+  background: var(--color-background-page);
+  color: var(--color-text-primary);
+  font-family: Nunito, sans-serif;
+  font-size: 1rem;
+  line-height: 1.5;
 }
 
 ::selection {
@@ -21,18 +23,18 @@ body {
 
 /* Track */
 ::-webkit-scrollbar-track {
-  background: #161614;
-  box-shadow: inset 0 0 3px #999799;
+  background: var(--color-background-surface);
+  box-shadow: inset 0 0 3px var(--color-border-subtle);
 }
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: #99381e;
+  background: var(--color-action-secondary);
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: #cc4b28;
+  background: var(--color-action-secondary-hover);
 }
 
 // @media (prefers-color-scheme: dark) {

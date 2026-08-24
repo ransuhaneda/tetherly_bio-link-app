@@ -1,23 +1,20 @@
+import type { ButtonHTMLAttributes, ReactNode } from 'react';
 import sty from './Action.module.scss';
 
-interface ButtonProps {
+export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: 'primary' | 'secondary' | 'tertiary';
   size?: 'sm' | 'md' | 'lg';
   customClass?: string | undefined;
-  onClick?: React.MouseEventHandler<HTMLButtonElement>;
-  type?: 'submit' | 'reset' | 'button' | undefined;
-  children: React.ReactNode;
-  disabled?: boolean;
+  children: ReactNode;
 }
 
 export function Button({
   variant = 'primary',
   size = 'md',
   customClass,
-  onClick,
-  type,
   children,
-  disabled,
+  className,
+  ...props
 }: ButtonProps) {
   const buttonClass = [
     sty[`btn`],
@@ -26,15 +23,7 @@ export function Button({
   ].join(' ');
 
   return (
-    <button
-      className={`${sty.btn} ${buttonClass} ${customClass}`}
-      type={type}
-      onClick={onClick}
-      disabled={disabled}
-      role="button"
-      aria-disabled={disabled}
-      tabIndex={disabled ? -1 : 0}
-    >
+    <button className={[buttonClass, customClass, className].filter(Boolean).join(' ')} {...props}>
       {children}
     </button>
   );
