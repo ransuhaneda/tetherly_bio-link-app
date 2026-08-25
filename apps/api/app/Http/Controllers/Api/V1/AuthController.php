@@ -17,6 +17,16 @@ class AuthController extends Controller
 {
     public function register(RegisterRequest $request, RegisterUser $registerUser): JsonResponse
     {
+        if (Auth::check()) {
+            return response()->json(['message' => 'You are already logged in.'], 409);
+        }
+
+        if (Auth::check()) {
+            return response()->json([
+                'message' => 'You are already logged in.'
+            ], 409);
+        }
+
         $user = $registerUser->handle($request->validated());
         Auth::login($user);
         $request->session()->regenerate();
@@ -24,8 +34,18 @@ class AuthController extends Controller
         return (new UserResource($user))->response()->setStatusCode(201);
     }
 
-    public function login(LoginRequest $request): UserResource
+    public function login(LoginRequest $request): UserResource|JsonResponse
     {
+        if (Auth::check()) {
+            return response()->json(['message' => 'You are already logged in.'], 409);
+        }
+
+        if (Auth::check()) {
+            return response()->json([
+                'message' => 'You are already logged in.'
+            ], 409);
+        }
+
         $key = strtolower((string) $request->input('email')).'|'.$request->ip();
         if (RateLimiter::tooManyAttempts($key, 5)) {
             throw ValidationException::withMessages(['email' => ['Too many login attempts. Please try again later.']]);

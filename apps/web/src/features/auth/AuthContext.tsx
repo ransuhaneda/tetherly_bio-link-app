@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState, type ReactNode } from 'react';
 
 import { authApi } from './authApi';
+import { AuthContext } from './authContextValue';
 
 import type { User } from '@/types/api';
 

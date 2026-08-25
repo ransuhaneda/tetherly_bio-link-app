@@ -1,6 +1,6 @@
 import { Button } from '@components/ui/Button';
 import { Link } from '@components/ui/Link';
-import { useState, type FormEvent } from 'react';
+import { useEffect, useState, type FormEvent } from 'react';
 import { FcGoogle } from 'react-icons/fc';
 import { FiArrowRight, FiEye, FiEyeOff } from 'react-icons/fi';
 import { useNavigate, useSearchParams } from 'react-router-dom';
@@ -14,7 +14,7 @@ import { getApiError } from '@/services/api';
 export const Signup = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const { setUser } = useAuth();
+  const { user, isLoading, setUser } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [form, setForm] = useState({
     name: '',
@@ -26,8 +26,16 @@ export const Signup = () => {
   const [error, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  useEffect(() => {
+    if (!isLoading && user) navigate('/');
+  }, [isLoading, navigate, user]);
+
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    if (isLoading || user) {
+      navigate('/');
+      return;
+    }
     setError('');
     setIsSubmitting(true);
     try {
@@ -174,7 +182,7 @@ export const Signup = () => {
               type="submit"
               variant="primary"
               customClass={sty.submitButton}
-              disabled={isSubmitting}
+              disabled={isSubmitting || isLoading}
             >
               {isSubmitting ? (
                 'Creating your account…'

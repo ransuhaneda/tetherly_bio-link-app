@@ -5,11 +5,18 @@ namespace Tests\Feature;
 use App\Models\Profile;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Http\Middleware\ValidateCsrfToken;
 use Tests\TestCase;
 
 class AuthApiTest extends TestCase
 {
     use RefreshDatabase;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->withoutMiddleware(ValidateCsrfToken::class);
+    }
 
     public function test_user_can_register_with_a_profile(): void
     {
@@ -50,5 +57,46 @@ class AuthApiTest extends TestCase
         $this->postJson('/api/v1/auth/logout')->assertNoContent();
         $this->app['auth']->forgetGuards();
         $this->getJson('/api/v1/auth/me')->assertUnauthorized();
+    }
+
+    public function test_authenticated_user_cannot_login_as_another_user(): void
+    {
+        $currentUser = User::factory()->create([
+            'email' => 'current@example.com',
+            'password' => 'password-password',
+        ]);
+        $otherUser = User::factory()->create([
+            'email' => 'other@example.com',
+            'password' => 'password-password',
+        ]);
+
+        $this->actingAs($currentUser)
+            ->postJson('/api/v1/auth/login', [
+                'email' => $otherUser->email,
+                'password' => 'password-password',
+            ])
+            ->assertStatus(409)
+            ->assertJson(['message' => 'You are already logged in.']);
+
+        $this->assertAuthenticatedAs($currentUser);
+    }
+
+    public function test_authenticated_user_cannot_register_another_account(): void
+    {
+        $currentUser = User::factory()->create();
+
+        $this->actingAs($currentUser)
+            ->postJson('/api/v1/auth/register', [
+                'name' => 'Another User',
+                'email' => 'another@example.com',
+                'username' => 'another-user',
+                'password' => 'password-password',
+                'password_confirmation' => 'password-password',
+            ])
+            ->assertStatus(409)
+            ->assertJson(['message' => 'You are already logged in.']);
+
+        $this->assertAuthenticatedAs($currentUser);
+        $this->assertDatabaseMissing('users', ['email' => 'another@example.com']);
     }
 }
