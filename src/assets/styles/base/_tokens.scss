@@ -1,0 +1,39 @@
+// Runtime design tokens. Values intentionally reference the existing palette;
+// this layer standardises structure without changing the project's colours.
+@use '@assets/styles/abstracts' as abst;
+
+:root {
+  --color-text-primary: #{abst.get-color('text', 'primary')};
+  --color-text-inverse: #{abst.get-color('text', 'inverse')};
+  --color-text-muted: #{abst.get-color-brand('gray', '600')};
+  --color-background-page: #{abst.get-color-brand('neutral', '900')};
+  --color-background-surface: #{abst.get-color('surface', 'dark')};
+  --color-action-primary: #{abst.get-color('action', 'primary')};
+  --color-action-secondary: #{abst.get-color('action', 'secondary')};
+  --color-border-default: #{abst.get-color('border', 'primary')};
+  --color-border-subtle: #{abst.get-color-brand('neutral', '300')};
+  --color-action-secondary-hover: #{abst.get-color-brand('orange', '600')};
+  --space-2xs: 0.25rem;
+  --space-xs: 0.5rem;
+  --space-sm: 0.75rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+  --space-section: clamp(3rem, 8vw, 7rem);
+  --motion-fast: 180ms;
+  --motion-standard: 300ms;
+  --motion-ease-standard: ease;
+  --target-min-size: 44px;
+  --button-min-block-size: var(--target-min-size);
+  --button-padding-inline: var(--space-lg);
+  --card-padding: var(--space-lg);
+  --form-field-min-block-size: var(--target-min-size);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --motion-fast: 1ms;
+    --motion-standard: 1ms;
+  }
+}

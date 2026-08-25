@@ -1,0 +1,40 @@
+.page { background: abst.get-color('background', 'inverse'); color: abst.get-color('text', 'primary'); min-height: 70vh; }
+.shell { width: min(calc(100% - 48px), 1312px); margin-inline: auto; padding: clamp(72px, 10vw, 144px) 0; }
+.eyebrow { color: abst.get-color-brand('orange', '500'); font: 600 .75rem/1.2 Oswald, sans-serif; letter-spacing: .12em; text-transform: uppercase; }
+.hero { display: grid; grid-template-columns: repeat(12, 1fr); gap: 32px; align-items: end; padding-bottom: 80px; border-bottom: 1px solid abst.get-color-brand('neutral', '300'); }
+.heroCopy { grid-column: span 8; max-width: 760px; }
+.hero h1 { margin: 16px 0 24px; font: 700 clamp(3rem, 8vw, 6.5rem)/.92 Oswald, sans-serif; letter-spacing: -.04em; }
+.hero h1 em { color: abst.get-color-brand('orange', '500'); font-style: normal; }
+.lede { max-width: 570px; color: abst.get-color-brand('neutral', '400'); font-size: 1.1rem; line-height: 1.6; }
+.heroMeta { grid-column: span 4; padding: 24px; background: abst.get-color-brand('neutral', '100'); }
+.heroMeta strong { display: block; margin-bottom: 10px; font: 600 1.4rem/1 Oswald, sans-serif; }
+.heroMeta p { color: abst.get-color-brand('neutral', '400'); line-height: 1.5; }
+.section { padding: 80px 0; border-bottom: 1px solid abst.get-color-brand('neutral', '300'); }
+.section h2 { margin: 0 0 20px; font: 600 clamp(2rem, 4vw, 3.4rem)/1 Oswald, sans-serif; }
+.twoCol { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; }
+.body p { color: abst.get-color-brand('neutral', '400'); line-height: 1.65; }
+.list { display: grid; gap: 14px; padding: 0; margin: 0; list-style: none; }
+.list li { padding: 18px 0 18px 28px; border-top: 1px solid abst.get-color-brand('neutral', '300'); position: relative; font-weight: 700; }
+.list li::before { content: '↗'; position: absolute; left: 0; color: abst.get-color-brand('orange', '500'); }
+.cta { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 24px; padding: 32px; background: abst.get-color-brand('violet', '500'); color: abst.get-color('text', 'inverse'); }
+.cta h2 { margin: 0; }
+.cta p { max-width: 440px; color: abst.get-color-brand('violet', '100'); }
+.cta a { color: abst.get-color('text', 'inverse'); }
+.plans { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 48px; }
+.plan { display: flex; flex-direction: column; min-height: 440px; padding: 28px; background: abst.get-color-brand('neutral', '100'); }
+.plan.featured { background: abst.get-color-brand('neutral', '500'); color: abst.get-color('text', 'inverse'); box-shadow: 10px 10px 0 abst.get-color-brand('orange', '500'); }
+.planTag { color: abst.get-color-brand('orange', '500'); font: 600 .7rem Oswald, sans-serif; letter-spacing: .12em; text-transform: uppercase; }
+.plan h3 { margin: 20px 0 8px; font: 600 2rem Oswald, sans-serif; }
+.price { margin: 0 0 16px; font: 700 3.4rem/.9 Oswald, sans-serif; }
+.price small { font: 400 .85rem Nunito, sans-serif; }
+.plan p { color: abst.get-color-brand('neutral', '400'); line-height: 1.5; }
+.featured p { color: abst.get-color-brand('neutral', '100'); }
+.features { margin: 24px 0; padding: 0; list-style: none; display: grid; gap: 10px; color: abst.get-color-brand('neutral', '400'); }
+.featured .features { color: abst.get-color-brand('neutral', '100'); }
+.features li::before { content: '✓'; margin-right: 10px; color: abst.get-color-brand('green', '600'); }
+.plan a { margin-top: auto; }
+.faq { display: grid; grid-template-columns: 1fr 1fr; gap: 16px 64px; }
+.faq details { padding: 20px 0; border-top: 1px solid abst.get-color-brand('neutral', '300'); }
+.faq summary { cursor: pointer; font-weight: 700; }
+.faq p { color: abst.get-color-brand('neutral', '400'); line-height: 1.55; }
+@media (max-width: 767px) { .shell { width: calc(100% - 32px); } .hero { display: block; padding-bottom: 56px; } .heroMeta { margin-top: 40px; } .twoCol, .plans, .faq { grid-template-columns: 1fr; gap: 24px; } .section { padding: 56px 0; } .plan.featured { box-shadow: 6px 6px 0 abst.get-color-brand('orange', '500'); } }

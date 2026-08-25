@@ -8,20 +8,43 @@
 }
 
 .wrapper {
-  @include abst.flex(row, center, center);
+  @include abst.flex(row, space-between, center);
+}
+
+.wrapper__auth {
+  @include abst.flex(row, null, null, 16px);
 }
 
 .navbar__main {
   padding: 5px 0;
-  @include abst.flex(row, null, null, 15px, nowrap);
+  @include abst.flex(row, null, null, 16px, nowrap);
+
+  @media (width <= 768px) {
+    display: none;
+  }
+}
+
+.logo {
+  color: abst.get-color('text', 'accent');
+  font-size: abst.$text-2xl;
+
+  &:hover {
+    text-decoration: none;
+  }
+  @include abst.font('primary', 700, normal);
+  @include abst.font('primary', 700, normal);
+}
+
+.link__auth {
+  color: abst.get-color('text', 'inverse');
 }
 
 .link {
   color: abst.get-color('text', 'inverse');
-  font-size: abst.$text-base;
-  @include abst.font('primary', 300, normal);
-}
+  font-size: abst.$text-md;
 
-.link:hover {
-  color: abst.get-color('text', 'accent');
+  &:hover {
+    color: abst.get-color('text', 'accent');
+  }
+  @include abst.font('primary', 300, normal);
 }

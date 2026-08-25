@@ -1,0 +1,9 @@
+@use '@assets/styles/abstracts' as abst;
+
+/**
+ * Basic typography style for copy text
+ */
+body {
+  color: var(--color-text-primary);
+  @include abst.font('primary', 400, normal);
+}

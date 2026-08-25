@@ -45,7 +45,7 @@
 /// @param { String } $spacing - 'normal' | 'static' | 'tight' | 'wide'
 /// @param { Number } $leading - 1.33 | 1.25 | 1.167 | 1.125 | 1
 @mixin font($family: 'primary', $weight: 400, $style: normal) {
-  $valid-weights: (300, 400, 500);
+  $valid-weights: (300, 400, 600, 700);
   $valid-styles: (normal, italic);
 
   font-family: map.get($font-families, $family), $ff-fallback;
