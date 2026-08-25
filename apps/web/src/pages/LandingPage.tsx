@@ -7,8 +7,11 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useLayoutEffect, useRef, useState } from 'react';
 import { FiArrowUpRight, FiMoreHorizontal } from 'react-icons/fi';
+import { useNavigate } from 'react-router-dom';
 
 import sty from './LandingPage.module.scss';
+
+import { authApi } from '@/features/auth/authApi';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -56,8 +59,10 @@ const faqs = [
 ];
 
 export const LandingPage = () => {
+  const navigate = useNavigate();
   const [username, setUsername] = useState('');
   const [status, setStatus] = useState('');
+  const [isChecking, setIsChecking] = useState(false);
   const pageRef = useRef<HTMLElement>(null);
 
   useLayoutEffect(() => {
@@ -93,13 +98,27 @@ export const LandingPage = () => {
     return () => context.revert();
   }, []);
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (!username.trim()) {
+    const normalizedUsername = username.trim().toLowerCase();
+    if (!normalizedUsername) {
       setStatus('Choose a username to get started.');
       return;
     }
-    setStatus(`Your tether is ready for ${username.trim()}.`);
+    setIsChecking(true);
+    setStatus('Checking that handle…');
+    try {
+      const available = await authApi.usernameAvailability(normalizedUsername);
+      if (!available) {
+        setStatus('That handle is already taken. Try another one.');
+        return;
+      }
+      navigate(`/signup?username=${encodeURIComponent(normalizedUsername)}`);
+    } catch {
+      setStatus('Use 3–30 letters, numbers, hyphens, or underscores.');
+    } finally {
+      setIsChecking(false);
+    }
   };
 
   return (
@@ -141,7 +160,7 @@ export const LandingPage = () => {
                 variant="primary"
                 customClass={sty.submitButton}
               >
-                Create Your Tether
+                {isChecking ? 'Checking…' : 'Create Your Tether'}
               </Button>
             </form>
             <p className={sty.formStatus} role="status">

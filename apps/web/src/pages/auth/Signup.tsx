@@ -3,16 +3,50 @@ import { Link } from '@components/ui/Link';
 import { useState, type FormEvent } from 'react';
 import { FcGoogle } from 'react-icons/fc';
 import { FiArrowRight, FiEye, FiEyeOff } from 'react-icons/fi';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import sty from './Signup.module.scss';
 
+import { authApi } from '@/features/auth/authApi';
+import { useAuth } from '@/features/auth/useAuth';
+import { getApiError } from '@/services/api';
+
 export const Signup = () => {
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const { setUser } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const [form, setForm] = useState({
+    name: '',
+    email: '',
+    username: searchParams.get('username') ?? '',
+    password: '',
+    password_confirmation: '',
+  });
+  const [error, setError] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setSubmitted(true);
+    setError('');
+    setIsSubmitting(true);
+    try {
+      setUser(await authApi.register(form));
+      navigate('/');
+    } catch (submissionError) {
+      const payload = getApiError(submissionError);
+      setError(
+        payload.errors
+          ? (Object.values(payload.errors).flat()[0] ??
+              payload.message ??
+              'Unable to create your account.')
+          : (payload.message ?? 'Unable to create your account.')
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
   };
+
   return (
     <section className={sty.page}>
       <div className={sty.shell}>
@@ -38,9 +72,11 @@ export const Signup = () => {
             type="button"
             variant="tertiary"
             customClass={sty.googleButton}
+            disabled
+            title="Google sign-up is coming soon"
           >
             <FcGoogle className={sty.googleIcon} aria-hidden="true" />
-            Continue with Google
+            Continue with Google (coming soon)
           </Button>
           <div className={sty.divider}>
             <span>or sign up with email</span>
@@ -54,6 +90,24 @@ export const Signup = () => {
               autoComplete="name"
               required
               placeholder="What should we call you?"
+              value={form.name}
+              onChange={event => setForm({ ...form, name: event.target.value })}
+            />
+            <label htmlFor="signup-username">Your username</label>
+            <input
+              id="signup-username"
+              name="username"
+              type="text"
+              autoComplete="username"
+              required
+              minLength={3}
+              maxLength={30}
+              pattern="[a-zA-Z0-9_-]+"
+              placeholder="your-handle"
+              value={form.username}
+              onChange={event =>
+                setForm({ ...form, username: event.target.value.toLowerCase() })
+              }
             />
             <label htmlFor="signup-email">Email address</label>
             <input
@@ -63,6 +117,10 @@ export const Signup = () => {
               autoComplete="email"
               required
               placeholder="you@example.com"
+              value={form.email}
+              onChange={event =>
+                setForm({ ...form, email: event.target.value })
+              }
             />
             <label htmlFor="signup-password">Create a password</label>
             <div className={sty.passwordWrap}>
@@ -74,6 +132,10 @@ export const Signup = () => {
                 minLength={8}
                 required
                 placeholder="At least 8 characters"
+                value={form.password}
+                onChange={event =>
+                  setForm({ ...form, password: event.target.value })
+                }
               />
               <button
                 type="button"
@@ -88,17 +150,39 @@ export const Signup = () => {
                 )}
               </button>
             </div>
-            {submitted && (
-              <p className={sty.feedback} role="status">
-                Your account details are ready to send.
+            <label htmlFor="signup-password-confirmation">
+              Confirm your password
+            </label>
+            <input
+              id="signup-password-confirmation"
+              name="password_confirmation"
+              type="password"
+              autoComplete="new-password"
+              required
+              placeholder="Repeat your password"
+              value={form.password_confirmation}
+              onChange={event =>
+                setForm({ ...form, password_confirmation: event.target.value })
+              }
+            />
+            {error && (
+              <p className={sty.feedback} role="alert">
+                {error}
               </p>
             )}
             <Button
               type="submit"
               variant="primary"
               customClass={sty.submitButton}
+              disabled={isSubmitting}
             >
-              Create your account <FiArrowRight aria-hidden="true" />
+              {isSubmitting ? (
+                'Creating your account…'
+              ) : (
+                <>
+                  Create your account <FiArrowRight aria-hidden="true" />
+                </>
+              )}
             </Button>
           </form>
           <p className={sty.terms}>

@@ -6,10 +6,14 @@ import { RouterProvider } from 'react-router-dom';
 
 import { router } from './router';
 
+import { AuthProvider } from '@/features/auth/AuthContext';
+
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <HelmetProvider>
-      <RouterProvider router={router} />
+      <AuthProvider>
+        <RouterProvider router={router} />
+      </AuthProvider>
     </HelmetProvider>
   </StrictMode>
 );

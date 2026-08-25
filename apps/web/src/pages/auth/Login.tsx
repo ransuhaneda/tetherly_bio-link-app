@@ -3,16 +3,43 @@ import { Link } from '@components/ui/Link';
 import { useState, type FormEvent } from 'react';
 import { FcGoogle } from 'react-icons/fc';
 import { FiArrowRight, FiEye, FiEyeOff } from 'react-icons/fi';
+import { useNavigate } from 'react-router-dom';
 
 import sty from './Login.module.scss';
 
+import { authApi } from '@/features/auth/authApi';
+import { useAuth } from '@/features/auth/useAuth';
+import { getApiError } from '@/services/api';
+
 export const Login = () => {
+  const navigate = useNavigate();
+  const { setUser } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const [form, setForm] = useState({ email: '', password: '' });
+  const [error, setError] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setSubmitted(true);
+    setError('');
+    setIsSubmitting(true);
+    try {
+      setUser(await authApi.login(form));
+      navigate('/');
+    } catch (submissionError) {
+      const payload = getApiError(submissionError);
+      setError(
+        payload.errors
+          ? (Object.values(payload.errors).flat()[0] ??
+              payload.message ??
+              'Unable to log in.')
+          : (payload.message ?? 'Unable to log in.')
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
   };
+
   return (
     <section className={sty.page}>
       <div className={sty.shell}>
@@ -37,9 +64,11 @@ export const Login = () => {
             type="button"
             variant="tertiary"
             customClass={sty.googleButton}
+            disabled
+            title="Google sign-in is coming soon"
           >
             <FcGoogle className={sty.googleIcon} aria-hidden="true" />
-            Continue with Google
+            Continue with Google (coming soon)
           </Button>
           <div className={sty.divider}>
             <span>or continue with email</span>
@@ -53,12 +82,14 @@ export const Login = () => {
               autoComplete="email"
               required
               placeholder="you@example.com"
+              value={form.email}
+              onChange={event =>
+                setForm({ ...form, email: event.target.value })
+              }
             />
             <div className={sty.passwordLabel}>
               <label htmlFor="login-password">Password</label>
-              <Link to="/forgot-password" customClass={sty.forgot}>
-                Forgot password?
-              </Link>
+              <span className={sty.forgot}>Password reset coming soon</span>
             </div>
             <div className={sty.passwordWrap}>
               <input
@@ -68,6 +99,10 @@ export const Login = () => {
                 autoComplete="current-password"
                 required
                 placeholder="Enter your password"
+                value={form.password}
+                onChange={event =>
+                  setForm({ ...form, password: event.target.value })
+                }
               />
               <button
                 type="button"
@@ -82,17 +117,24 @@ export const Login = () => {
                 )}
               </button>
             </div>
-            {submitted && (
-              <p className={sty.feedback} role="status">
-                Ready to connect your Tether.
+            {error && (
+              <p className={sty.feedback} role="alert">
+                {error}
               </p>
             )}
             <Button
               type="submit"
               variant="primary"
               customClass={sty.submitButton}
+              disabled={isSubmitting}
             >
-              Log in <FiArrowRight aria-hidden="true" />
+              {isSubmitting ? (
+                'Logging in…'
+              ) : (
+                <>
+                  Log in <FiArrowRight aria-hidden="true" />
+                </>
+              )}
             </Button>
           </form>
           <p className={sty.switch}>
