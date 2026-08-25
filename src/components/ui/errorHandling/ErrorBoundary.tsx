@@ -1,5 +1,6 @@
 import React, { Component, type ReactNode } from 'react';
 import { useLocation } from 'react-router-dom';
+
 import { Button } from '../Button';
 
 import sty from './ErrorHandling.module.scss';

@@ -1,4 +1,5 @@
 import type { ButtonHTMLAttributes, ReactNode } from 'react';
+
 import sty from './Action.module.scss';
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -23,7 +24,12 @@ export function Button({
   ].join(' ');
 
   return (
-    <button className={[buttonClass, customClass, className].filter(Boolean).join(' ')} {...props}>
+    <button
+      className={[buttonClass, customClass, className]
+        .filter(Boolean)
+        .join(' ')}
+      {...props}
+    >
       {children}
     </button>
   );
