@@ -5,34 +5,24 @@
 // Typeface Map. connected to font picker _mixin
 $font-families: (
   primary: (
-    'Hauora',
+    'Nunito',
   ),
   secondary: (
-    'Perfectly Nineties',
-  ),
-  accent: (
-    'Piedmont',
+    'Oswald',
   ),
 ) !default;
-$ff-fallback: monospace;
+$ff-fallback: sans-serif;
 
-// Custom for ABCDE Creative
-$text-sm: clamp(8px, 2.336px + 0.943vw, 12px); // Eyebrow | Footer
-$text-base: clamp(12px, 6.336px + 0.943vw, 16px); // Base | Headline 4
-$text-lg: clamp(20px, 8.672px + 1.887vw, 28px); // Heading 3
-$text-xl: clamp(24px, 12.672px + 1.887vw, 32px); // Contact Section
-$text-2xl: clamp(28px, 22.336px + 0.943vw, 32px); // Heading 2
-$text-3xl: clamp(30px, -9.968px + 5.66vw, 48px); // Heading 1
-
-// Margin
-$section-mb: clamp(2rem, -7.481rem + 47.403vw, 20.25rem);
-$section-mrml: clamp(1rem, -1.2696rem + 11.348vw, 6rem);
-$mr: clamp(1rem, calc(-0.364rem + 0.0682 * 100vw), 4.005rem);
-$ml: clamp(1rem, calc(-0.364rem + 0.0682 * 100vw), 4.005rem);
-
-// Gap
-$section-gap: clamp(2rem, -0.208rem + 11.039vw, 6.25rem);
-$header-gap: clamp(0rem, -5rem + 12.5vw, 6.25rem);
+// Typescale
+$text-xs: 12px;
+$text-sm: 14px;
+$text-md: clamp(12px, 6.336px + 0.943vw, 16px);
+$text-lg: clamp(20px, 8.672px + 1.887vw, 28px);
+$text-xl: clamp(24px, 12.672px + 1.887vw, 32px);
+$text-2xl: clamp(28px, 22.336px + 0.943vw, 32px);
+$text-3xl: clamp(30px, -9.968px + 5.66vw, 48px);
+$text-4xl: 48px;
+$text-5xl: 60px;
 
 // Transition
 $transition-ease: all 0.3s ease;

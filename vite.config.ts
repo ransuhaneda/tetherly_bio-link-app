@@ -41,12 +41,7 @@ export default defineConfig({
         @use 'sass:map';
         @use '@assets/styles/abstracts' as abst;
         `,
-        silenceDeprecations: [
-          'import',
-          'color-functions',
-          'global-builtin',
-          'legacy-js-api',
-        ],
+        silenceDeprecations: ['import', 'color-functions', 'global-builtin'],
       },
     },
     postcss: {

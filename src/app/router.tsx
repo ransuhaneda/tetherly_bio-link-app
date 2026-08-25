@@ -27,6 +27,62 @@ export const router = createBrowserRouter([
       }),
 
       withHydrateFallback({
+        path: 'login',
+        lazy: async () => {
+          const module = await import('@/pages/auth/Login');
+          return { Component: module.Login };
+        },
+      }),
+
+      withHydrateFallback({
+        path: 'forgot-password',
+        lazy: async () => {
+          const module = await import('@/pages/auth/ForgotPassword');
+          return { Component: module.ForgotPassword };
+        },
+      }),
+
+      withHydrateFallback({
+        path: 'signup',
+        lazy: async () => {
+          const module = await import('@/pages/auth/Signup');
+          return { Component: module.Signup };
+        },
+      }),
+
+      withHydrateFallback({
+        path: 'about',
+        lazy: async () => {
+          const module = await import('@/pages/About');
+          return { Component: module.About };
+        },
+      }),
+
+      withHydrateFallback({
+        path: 'pricing',
+        lazy: async () => {
+          const module = await import('@/pages/Pricing');
+          return { Component: module.Pricing };
+        },
+      }),
+
+      withHydrateFallback({
+        path: 'privacy',
+        lazy: async () => {
+          const module = await import('@/pages/LegalPage');
+          return { Component: () => <module.LegalPage type="privacy" /> };
+        },
+      }),
+
+      withHydrateFallback({
+        path: 'terms',
+        lazy: async () => {
+          const module = await import('@/pages/LegalPage');
+          return { Component: () => <module.LegalPage type="terms" /> };
+        },
+      }),
+
+      withHydrateFallback({
         path: 'samplepage',
         lazy: async () => {
           // error display test

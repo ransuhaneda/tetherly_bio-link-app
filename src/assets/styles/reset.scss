@@ -186,16 +186,16 @@ pre {
  * Remove the gray background on active links in IE 10.
  */
 
-a,
-a:link,
-a:visited,
-a:focus,
-a:hover,
-a:active,
-a:any-link {
+a {
+  background-color: transparent;
+  color: inherit;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+:where(a:link, a:visited, a:focus, a:hover, a:active, a:any-link) {
   background-color: transparent;
   color: currentcolor;
-  cursor: pointer;
   text-decoration: none;
   text-underline-offset: 0.25em;
 }
@@ -459,7 +459,6 @@ input[type='button'],
 input[type='submit'],
 .input-checkbox {
   appearance: unset;
-  border-radius: 0;
 }
 
 /* Interactive

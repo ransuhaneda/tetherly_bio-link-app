@@ -1,5 +1,6 @@
 import React, { Component, type ReactNode } from 'react';
 import { useLocation } from 'react-router-dom';
+import { Button } from '../Button';
 
 import sty from './ErrorHandling.module.scss';
 
@@ -97,15 +98,16 @@ const DefaultErrorFallback: React.FC<{ error: Error; retry: () => void }> = ({
             </details>
           )}
           <div className={sty.error_actions}>
-            <button className={sty.btn_retry} onClick={retry}>
+            <Button variant="primary" size="sm" onClick={retry}>
               Try Again
-            </button>
-            <button
-              className={sty.btn_home}
+            </Button>
+            <Button
+              variant="secondary"
+              size="sm"
               onClick={() => (window.location.href = '/')}
             >
               Go Home
-            </button>
+            </Button>
           </div>
         </div>
       </div>

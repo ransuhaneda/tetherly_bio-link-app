@@ -1,11 +1,21 @@
 import '@assets/styles/App.scss';
-import { Suspense } from 'react';
-import { Outlet, useNavigation } from 'react-router-dom';
+import { Suspense, useEffect } from 'react';
+import { Outlet, useLocation, useNavigation } from 'react-router-dom';
 
 import { Footer } from '@components/layout/Footer';
 import { Navbar } from '@components/layout/Navbar';
 import { LoadingSpinner } from '@components/ui/LoadingSpinner';
 import { ErrorBoundary } from '@components/ui/errorHandling/ErrorBoundary';
+
+const ScrollToTop = () => {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+  }, [pathname]);
+
+  return null;
+};
 
 const App = () => {
   const navigation = useNavigation();
@@ -19,6 +29,7 @@ const App = () => {
 
   return (
     <>
+      <ScrollToTop />
       <ErrorBoundary>
         <Suspense fallback={<LoadingSpinner />}>
           <Navbar />
