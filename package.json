@@ -14,7 +14,9 @@
     "lint": "pnpm --filter @tetherly/web lint",
     "lint:styles": "pnpm --filter @tetherly/web lint:styles",
     "format:check": "prettier --check .",
-    "prepare": "husky"
+    "prepare": "husky",
+    "dev:api": "cd apps/api && php artisan serve --host=localhost --port=8000",
+    "test:api": "cd apps/api && php artisan test"
   },
   "devDependencies": {
     "@commitlint/cli": "19.8.1",

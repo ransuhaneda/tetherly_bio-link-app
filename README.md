@@ -1,96 +1,114 @@
-# Tetherly Bio Link
+# Tetherly
 
-Tetherly is a React landing page for a creator bio-link product: one considered URL for a creator’s work, community, and other online destinations.
+Tetherly is an editorial creator bio-link product. This repository contains a React web application and a Laravel REST API backed by MySQL.
 
-> **Status:** private, actively developed frontend prototype.
+> **Status:** private, actively developed foundation. Account authentication and username reservation are connected; profile editing, links, publishing, analytics, Google OAuth, and password reset are not implemented yet.
 
-## What is included
+## Architecture
 
-- Responsive Tetherly landing page with username form and profile preview
-- Lazy-loaded routes for `/`, `/login`, `/signup`, `/about`, and `/pricing`
-- Responsive local image processing through the Vite responsive-image plugin
-- Shared layout, UI components, SEO metadata, Sass styles, and Vitest setup
-- Development `/api` proxy targeting `http://localhost:8000`
+```text
+apps/web     Vite + React + TypeScript frontend
+apps/api     Laravel 12 REST API
+MySQL        Primary database
+```
 
-The login, signup, content, and API-related screens are frontend scaffolding. This repository does not include a backend service or production authentication implementation.
+The browser communicates with Laravel through versioned JSON endpoints under `/api/v1`. The frontend never connects directly to MySQL. Sanctum provides cookie-based SPA authentication with CSRF protection; no bearer token is stored in local storage.
+
+See [`docs/architecture.md`](docs/architecture.md) and [`docs/openapi.yaml`](docs/openapi.yaml) for the boundary and API contract.
 
 ## Requirements
 
-- Node.js compatible with the versions supported by the current Vite and TypeScript dependencies
-- pnpm
+- Node.js 24 and pnpm 11
+- PHP 8.2 or newer with `pdo_mysql`, `mbstring`, `openssl`, `xml`, and `curl`
+- Composer 2
+- MySQL 8
 
 ## Install
 
 ```bash
 pnpm install
+cd apps/api
+composer install
+cd ../..
 ```
 
-## Configure environment variables
+## Configure
 
-Copy the example file when you need to override the defaults:
+Copy the environment examples:
 
 ```bash
 cp .env.example .env.local
+cp apps/web/.env.example apps/web/.env.local
+cp apps/api/.env.example apps/api/.env
 ```
 
-The Vite client reads variables prefixed with `VITE_`. The example file documents the available application, mode, public-path, and API URL settings. Do not put secrets in client-exposed `VITE_` variables or commit `.env.local`.
+Set the MySQL database name, username, and password in `apps/api/.env`, then generate the Laravel key:
+
+```bash
+cd apps/api
+php artisan key:generate
+php artisan migrate
+cd ../..
+```
+
+Do not commit `.env`, `.env.local`, credentials, application keys, or any other secrets.
 
 ## Run locally
 
-Start the Vite development server on port `3000`:
+Start the API in one terminal:
 
 ```bash
-pnpm dev
+cd apps/api
+php artisan serve --host=localhost --port=8000
 ```
 
-Open [http://localhost:3000](http://localhost:3000). Requests to `/api` are proxied to `http://localhost:8000` by the Vite configuration; the frontend can still run without that backend while using the prototype screens.
-
-## Build and preview
-
-Create the production bundle:
+Start the web app in another:
 
 ```bash
-pnpm build
+pnpm dev:web
 ```
 
-The generated site is written to `dist/`. Preview that bundle locally with:
+Open [http://localhost:3000](http://localhost:3000). Vite proxies `/api` and `/sanctum` to the Laravel server.
 
-```bash
-pnpm preview
-```
+## Verify
 
-## Verify changes
-
-Run the checks relevant to your change:
+Frontend checks:
 
 ```bash
 pnpm type-check
 pnpm lint
 pnpm lint:styles
 pnpm test:run
-pnpm format:check
+pnpm build
 ```
 
-Useful development commands include `pnpm test` for watch mode, `pnpm test:ui` for the Vitest UI, and `pnpm coverage` for a coverage report.
+API checks:
 
-## Project structure
+```bash
+cd apps/api
+php artisan test
+```
+
+The API tests require a configured MySQL test database. CI provisions MySQL 8 automatically.
+
+## Repository structure
 
 ```text
-src/
-├── app/                 Router and application shell
-├── assets/              Local images and Sass design tokens
-├── components/          Shared layout and UI components
-├── pages/               Route-level pages, including auth screens
-├── services/            API client boundary
-├── types/               Environment and API types
-└── test/                Vitest setup
+apps/
+├── web/                 React application, assets, routes, API client
+└── api/                 Laravel application, migrations, API routes, tests
+docs/
+├── architecture.md     Runtime boundaries and ownership
+└── openapi.yaml        Versioned API contract
+.github/workflows/ci.yml Continuous integration for web and API
 ```
 
-See [`docs/PROJECT_STRUCTURE.md`](docs/PROJECT_STRUCTURE.md) for the repository’s fuller source tree and [`docs/DESIGN-BRIEF.md`](docs/DESIGN-BRIEF.md) for the product and visual direction.
+## Development conventions
 
-## Contributing
-
-Keep changes focused, preserve the existing content and design tokens, and run the relevant verification commands before opening a change. Husky hooks and lint-staged are configured for local commits.
+- Keep UI and feature state in `apps/web`; centralize network calls in its API client and feature modules.
+- Keep validation in Laravel FormRequests, response shaping in API Resources, and business logic in focused services/actions.
+- Add schema changes as Laravel migrations and update the OpenAPI contract with endpoint changes.
+- Preserve Tetherly's existing design tokens, typography, assets, motion language, and responsive behavior.
 
 ## License
 

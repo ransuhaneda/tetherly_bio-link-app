@@ -1,0 +1,148 @@
+openapi: 3.0.3
+info:
+  title: Tetherly API
+  version: 1.0.0
+  description: First-party API for Tetherly account and username foundation flows.
+servers:
+  - url: http://localhost:8000
+paths:
+  /sanctum/csrf-cookie:
+    get:
+      summary: Establish the CSRF cookie
+      responses:
+        '204': { description: CSRF cookie set }
+  /api/v1/usernames/{username}/availability:
+    get:
+      summary: Check username availability
+      parameters:
+        - in: path
+          name: username
+          required: true
+          schema: { type: string, minLength: 3, maxLength: 30, pattern: '^[a-zA-Z0-9](?:[a-zA-Z0-9_-]{1,28}[a-zA-Z0-9])?$' }
+      responses:
+        '200':
+          description: Availability result
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/AvailabilityResponse' }
+        '422': { $ref: '#/components/responses/ValidationError' }
+        '429': { $ref: '#/components/responses/RateLimited' }
+  /api/v1/auth/register:
+    post:
+      summary: Register a user and reserve a username
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/RegisterRequest' }
+      responses:
+        '201':
+          description: User created and authenticated
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/UserResponse' }
+        '422': { $ref: '#/components/responses/ValidationError' }
+  /api/v1/auth/login:
+    post:
+      summary: Authenticate with email and password
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/LoginRequest' }
+      responses:
+        '200':
+          description: Authenticated user
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/UserResponse' }
+        '422': { $ref: '#/components/responses/ValidationError' }
+        '429': { $ref: '#/components/responses/RateLimited' }
+  /api/v1/auth/me:
+    get:
+      summary: Get the current user
+      security: [{ sanctumCookie: [] }]
+      responses:
+        '200':
+          description: Current user
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/UserResponse' }
+        '401': { $ref: '#/components/responses/Unauthenticated' }
+  /api/v1/auth/logout:
+    post:
+      summary: End the current session
+      security: [{ sanctumCookie: [] }]
+      responses:
+        '204': { description: Session invalidated }
+        '401': { $ref: '#/components/responses/Unauthenticated' }
+components:
+  securitySchemes:
+    sanctumCookie:
+      type: apiKey
+      in: cookie
+      name: laravel_session
+  schemas:
+    RegisterRequest:
+      type: object
+      required: [name, email, username, password, password_confirmation]
+      properties:
+        name: { type: string, maxLength: 120 }
+        email: { type: string, format: email }
+        username: { type: string, minLength: 3, maxLength: 30 }
+        password: { type: string, minLength: 8, format: password }
+        password_confirmation: { type: string, format: password }
+    LoginRequest:
+      type: object
+      required: [email, password]
+      properties:
+        email: { type: string, format: email }
+        password: { type: string, format: password }
+    Profile:
+      type: object
+      required: [id, username]
+      properties:
+        id: { type: integer, format: int64 }
+        username: { type: string }
+    User:
+      type: object
+      required: [id, name, email, profile]
+      properties:
+        id: { type: integer, format: int64 }
+        name: { type: string }
+        email: { type: string, format: email }
+        profile: { $ref: '#/components/schemas/Profile' }
+    UserResponse:
+      type: object
+      required: [data]
+      properties:
+        data: { $ref: '#/components/schemas/User' }
+    AvailabilityResponse:
+      type: object
+      required: [data]
+      properties:
+        data:
+          type: object
+          required: [username, available]
+          properties:
+            username: { type: string }
+            available: { type: boolean }
+    ErrorResponse:
+      type: object
+      properties:
+        message: { type: string }
+        errors:
+          type: object
+          additionalProperties:
+            type: array
+            items: { type: string }
+  responses:
+    Unauthenticated:
+      description: Unauthenticated
+      content: { application/json: { schema: { $ref: '#/components/schemas/ErrorResponse' } } }
+    ValidationError:
+      description: Validation failed
+      content: { application/json: { schema: { $ref: '#/components/schemas/ErrorResponse' } } }
+    RateLimited:
+      description: Rate limited
+      content: { application/json: { schema: { $ref: '#/components/schemas/ErrorResponse' } } }
