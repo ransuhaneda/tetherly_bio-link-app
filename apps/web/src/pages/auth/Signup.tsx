@@ -1,13 +1,12 @@
+import { Button } from '@components/ui/Button';
+import { Link } from '@components/ui/Link';
 import { useState, type FormEvent } from 'react';
 import { FcGoogle } from 'react-icons/fc';
 import { FiArrowRight, FiEye, FiEyeOff } from 'react-icons/fi';
 
-import { Button } from '@components/ui/Button';
-import { Link } from '@components/ui/Link';
+import sty from './Signup.module.scss';
 
-import sty from './Login.module.scss';
-
-export const Login = () => {
+export const Signup = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -18,10 +17,11 @@ export const Login = () => {
     <section className={sty.page}>
       <div className={sty.shell}>
         <div className={sty.intro}>
-          <span className={sty.kicker}>Welcome back</span>
-          <h1>Pick up where you left off.</h1>
+          <span className={sty.kicker}>Start with your name</span>
+          <h1>Make your corner of the internet feel like you.</h1>
           <p>
-            Sign in to keep your links, audience, and next idea in one place.
+            Create one memorable home for everything you make, share, and care
+            about.
           </p>
           <div className={sty.signal} aria-hidden="true">
             <span />
@@ -31,8 +31,8 @@ export const Login = () => {
         </div>
         <div className={sty.card}>
           <div className={sty.cardHeader}>
-            <p className={sty.cardKicker}>Your Tether</p>
-            <h2>Log in</h2>
+            <p className={sty.cardKicker}>Join Tetherly</p>
+            <h2>Create an account</h2>
           </div>
           <Button
             type="button"
@@ -43,32 +43,37 @@ export const Login = () => {
             Continue with Google
           </Button>
           <div className={sty.divider}>
-            <span>or continue with email</span>
+            <span>or sign up with email</span>
           </div>
           <form onSubmit={handleSubmit} className={sty.form}>
-            <label htmlFor="login-email">Email address</label>
+            <label htmlFor="signup-name">Your name</label>
             <input
-              id="login-email"
+              id="signup-name"
+              name="name"
+              type="text"
+              autoComplete="name"
+              required
+              placeholder="What should we call you?"
+            />
+            <label htmlFor="signup-email">Email address</label>
+            <input
+              id="signup-email"
               name="email"
               type="email"
               autoComplete="email"
               required
               placeholder="you@example.com"
             />
-            <div className={sty.passwordLabel}>
-              <label htmlFor="login-password">Password</label>
-              <Link to="/forgot-password" customClass={sty.forgot}>
-                Forgot password?
-              </Link>
-            </div>
+            <label htmlFor="signup-password">Create a password</label>
             <div className={sty.passwordWrap}>
               <input
-                id="login-password"
+                id="signup-password"
                 name="password"
                 type={showPassword ? 'text' : 'password'}
-                autoComplete="current-password"
+                autoComplete="new-password"
+                minLength={8}
                 required
-                placeholder="Enter your password"
+                placeholder="At least 8 characters"
               />
               <button
                 type="button"
@@ -85,7 +90,7 @@ export const Login = () => {
             </div>
             {submitted && (
               <p className={sty.feedback} role="status">
-                Ready to connect your Tether.
+                Your account details are ready to send.
               </p>
             )}
             <Button
@@ -93,11 +98,16 @@ export const Login = () => {
               variant="primary"
               customClass={sty.submitButton}
             >
-              Log in <FiArrowRight aria-hidden="true" />
+              Create your account <FiArrowRight aria-hidden="true" />
             </Button>
           </form>
+          <p className={sty.terms}>
+            By continuing, you agree to our{' '}
+            <Link to="/terms">Terms of Service</Link> and{' '}
+            <Link to="/privacy">Privacy Policy</Link>.
+          </p>
           <p className={sty.switch}>
-            New to Tetherly? <Link to="/signup">Create an account</Link>
+            Already have an account? <Link to="/login">Log in</Link>
           </p>
         </div>
       </div>

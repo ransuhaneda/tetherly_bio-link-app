@@ -2,8 +2,9 @@
 
 // import { useEffect } from 'react';
 
-import { ResponsiveImage } from '@/components/ui/ResponsiveImage';
 import motorcycleImage from '@assets/images/toa-heftiba-IrpBb-5YGZw-unsplash.jpg?responsive';
+
+import { ResponsiveImage } from '@/components/ui/ResponsiveImage';
 
 export const SamplePage = () => {
   // error display test

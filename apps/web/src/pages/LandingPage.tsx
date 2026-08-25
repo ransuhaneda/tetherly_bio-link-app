@@ -1,13 +1,12 @@
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { useLayoutEffect, useRef, useState } from 'react';
-import { FiArrowUpRight, FiMoreHorizontal } from 'react-icons/fi';
-
 import studioImage from '@assets/images/ahmet-yuksek-zSiqe6j9Aao-unsplash.jpg';
 import portraitImage from '@assets/images/toa-heftiba-IrpBb-5YGZw-unsplash.jpg';
 import { SEOHelmet } from '@components/common/SEOHelmet';
 import { Button } from '@components/ui/Button';
 import { Link } from '@components/ui/Link';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useLayoutEffect, useRef, useState } from 'react';
+import { FiArrowUpRight, FiMoreHorizontal } from 'react-icons/fi';
 
 import sty from './LandingPage.module.scss';
 

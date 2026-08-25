@@ -1,11 +1,11 @@
 import '@assets/styles/App.scss';
-import { Suspense, useEffect } from 'react';
-import { Outlet, useLocation, useNavigation } from 'react-router-dom';
 
 import { Footer } from '@components/layout/Footer';
 import { Navbar } from '@components/layout/Navbar';
 import { LoadingSpinner } from '@components/ui/LoadingSpinner';
 import { ErrorBoundary } from '@components/ui/errorHandling/ErrorBoundary';
+import { Suspense, useEffect } from 'react';
+import { Outlet, useLocation, useNavigation } from 'react-router-dom';
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();

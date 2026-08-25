@@ -1,10 +1,10 @@
+import { ErrorNotFound } from '@pages/NotFound';
 import { createBrowserRouter, type RouteObject } from 'react-router-dom';
+
+import App from './App';
 
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
 import { RouteErrorBoundary } from '@/components/ui/errorHandling/RouteErrorBoundary';
-import { ErrorNotFound } from '@pages/NotFound';
-
-import App from './App';
 
 const withHydrateFallback = (route: RouteObject): RouteObject => ({
   hydrateFallbackElement: <LoadingSpinner />,
