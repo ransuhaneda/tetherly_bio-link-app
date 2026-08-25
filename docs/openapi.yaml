@@ -18,7 +18,13 @@ paths:
         - in: path
           name: username
           required: true
-          schema: { type: string, minLength: 3, maxLength: 30, pattern: '^[a-zA-Z0-9](?:[a-zA-Z0-9_-]{1,28}[a-zA-Z0-9])?$' }
+          schema:
+            {
+              type: string,
+              minLength: 3,
+              maxLength: 30,
+              pattern: '^[a-zA-Z0-9](?:[a-zA-Z0-9_-]{1,28}[a-zA-Z0-9])?$',
+            }
       responses:
         '200':
           description: Availability result
@@ -139,10 +145,22 @@ components:
   responses:
     Unauthenticated:
       description: Unauthenticated
-      content: { application/json: { schema: { $ref: '#/components/schemas/ErrorResponse' } } }
+      content:
+        {
+          application/json:
+            { schema: { $ref: '#/components/schemas/ErrorResponse' } },
+        }
     ValidationError:
       description: Validation failed
-      content: { application/json: { schema: { $ref: '#/components/schemas/ErrorResponse' } } }
+      content:
+        {
+          application/json:
+            { schema: { $ref: '#/components/schemas/ErrorResponse' } },
+        }
     RateLimited:
       description: Rate limited
-      content: { application/json: { schema: { $ref: '#/components/schemas/ErrorResponse' } } }
+      content:
+        {
+          application/json:
+            { schema: { $ref: '#/components/schemas/ErrorResponse' } },
+        }
