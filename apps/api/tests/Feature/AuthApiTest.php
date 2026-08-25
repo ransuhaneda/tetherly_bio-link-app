@@ -48,6 +48,7 @@ class AuthApiTest extends TestCase
         $this->postJson('/api/v1/auth/login', ['email' => 'sol@example.com', 'password' => 'password-password'])->assertOk();
         $this->getJson('/api/v1/auth/me')->assertOk()->assertJsonPath('data.email', 'sol@example.com');
         $this->postJson('/api/v1/auth/logout')->assertNoContent();
+        $this->app['auth']->forgetGuards();
         $this->getJson('/api/v1/auth/me')->assertUnauthorized();
     }
 }
