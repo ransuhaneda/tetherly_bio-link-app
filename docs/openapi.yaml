@@ -1,166 +1,885 @@
 openapi: 3.0.3
 info:
   title: Tetherly API
-  version: 1.0.0
-  description: First-party API for Tetherly account and username foundation flows.
+  version: 1.1.0
+  description:
+    First-party API. Public web profiles use `/@username`; API lookup paths
+    omit `@`. JSON success uses `data` (and mutation `message`); errors use `message`
+    and optional field-level `errors`.
+  license:
+    name: Proprietary
 servers:
   - url: http://localhost:8000
 paths:
   /sanctum/csrf-cookie:
     get:
-      summary: Establish the CSRF cookie
       responses:
-        '204': { description: CSRF cookie set }
+        '204':
+          description: CSRF cookie set
+      summary: GET /sanctum/csrf-cookie
+      operationId: getSanctumCsrf-cookie
   /api/v1/usernames/{username}/availability:
     get:
-      summary: Check username availability
       parameters:
-        - in: path
-          name: username
-          required: true
-          schema:
-            {
-              type: string,
-              minLength: 3,
-              maxLength: 30,
-              pattern: '^[a-zA-Z0-9](?:[a-zA-Z0-9_-]{1,28}[a-zA-Z0-9])?$',
-            }
+        - $ref: '#/components/parameters/Username'
       responses:
         '200':
-          description: Availability result
+          description: Availability
           content:
             application/json:
-              schema: { $ref: '#/components/schemas/AvailabilityResponse' }
-        '422': { $ref: '#/components/responses/ValidationError' }
-        '429': { $ref: '#/components/responses/RateLimited' }
+              schema:
+                $ref: '#/components/schemas/AvailabilityResponse'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+      summary: GET /api/v1/usernames/{username}/availability
+      operationId: getApiV1UsernamesUsernameAvailability
   /api/v1/auth/register:
     post:
-      summary: Register a user and reserve a username
       requestBody:
         required: true
         content:
           application/json:
-            schema: { $ref: '#/components/schemas/RegisterRequest' }
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
       responses:
         '201':
-          description: User created and authenticated
+          description: Created
           content:
             application/json:
-              schema: { $ref: '#/components/schemas/UserResponse' }
-        '422': { $ref: '#/components/responses/ValidationError' }
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+      summary: POST /api/v1/auth/register
+      operationId: postApiV1AuthRegister
   /api/v1/auth/login:
     post:
-      summary: Authenticate with email and password
       requestBody:
         required: true
         content:
           application/json:
-            schema: { $ref: '#/components/schemas/LoginRequest' }
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
       responses:
         '200':
-          description: Authenticated user
+          description: Authenticated
           content:
             application/json:
-              schema: { $ref: '#/components/schemas/UserResponse' }
-        '422': { $ref: '#/components/responses/ValidationError' }
-        '429': { $ref: '#/components/responses/RateLimited' }
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+      summary: POST /api/v1/auth/login
+      operationId: postApiV1AuthLogin
   /api/v1/auth/me:
     get:
-      summary: Get the current user
-      security: [{ sanctumCookie: [] }]
+      security:
+        - sanctumCookie: []
       responses:
         '200':
           description: Current user
           content:
             application/json:
-              schema: { $ref: '#/components/schemas/UserResponse' }
-        '401': { $ref: '#/components/responses/Unauthenticated' }
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+      summary: GET /api/v1/auth/me
+      operationId: getApiV1AuthMe
   /api/v1/auth/logout:
     post:
-      summary: End the current session
-      security: [{ sanctumCookie: [] }]
+      security:
+        - sanctumCookie: []
       responses:
-        '204': { description: Session invalidated }
-        '401': { $ref: '#/components/responses/Unauthenticated' }
+        '204':
+          description: Session invalidated
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+      summary: POST /api/v1/auth/logout
+      operationId: postApiV1AuthLogout
+  /api/v1/profile:
+    get:
+      security:
+        - sanctumCookie: []
+      responses:
+        '200':
+          description: Draft profile
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProfileResponse'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+      summary: GET /api/v1/profile
+      operationId: getApiV1Profile
+    patch:
+      security:
+        - sanctumCookie: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateProfileRequest'
+      responses:
+        '200':
+          description: Updated draft profile
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProfileMutationResponse'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+      summary: PATCH /api/v1/profile
+      operationId: patchApiV1Profile
+  /api/v1/profile/avatar:
+    put:
+      security:
+        - sanctumCookie: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - avatar
+              properties:
+                avatar:
+                  type: string
+                  format: binary
+                  description: JPEG, PNG, or WebP up to 5 MiB.
+      responses:
+        '200':
+          description: Avatar replaced
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProfileMutationResponse'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '413':
+          $ref: '#/components/responses/PayloadTooLarge'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+      summary: PUT /api/v1/profile/avatar
+      operationId: putApiV1ProfileAvatar
+    delete:
+      security:
+        - sanctumCookie: []
+      responses:
+        '200':
+          description: Avatar removed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProfileMutationResponse'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+      summary: DELETE /api/v1/profile/avatar
+      operationId: deleteApiV1ProfileAvatar
+  /api/v1/profile/links:
+    get:
+      security:
+        - sanctumCookie: []
+      responses:
+        '200':
+          description: Ordered links
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LinkCollectionResponse'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+      summary: GET /api/v1/profile/links
+      operationId: getApiV1ProfileLinks
+    post:
+      security:
+        - sanctumCookie: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateLinkRequest'
+      responses:
+        '201':
+          description: Created link
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LinkMutationResponse'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+      summary: POST /api/v1/profile/links
+      operationId: postApiV1ProfileLinks
+  /api/v1/profile/links/order:
+    put:
+      security:
+        - sanctumCookie: []
+      description:
+        '`ordered_link_ids` must contain every current link exactly once;
+        positions become contiguous zero-based values transactionally.'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReorderLinksRequest'
+      responses:
+        '200':
+          description: Reordered links
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LinkCollectionMutationResponse'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+      summary: PUT /api/v1/profile/links/order
+      operationId: putApiV1ProfileLinksOrder
+  /api/v1/profile/links/{linkId}:
+    parameters:
+      - $ref: '#/components/parameters/LinkId'
+    get:
+      security:
+        - sanctumCookie: []
+      responses:
+        '200':
+          description: Link
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LinkResponse'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+      summary: GET /api/v1/profile/links/{linkId}
+      operationId: getApiV1ProfileLinksLinkid
+    patch:
+      security:
+        - sanctumCookie: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateLinkRequest'
+      responses:
+        '200':
+          description: Updated link
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LinkMutationResponse'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+      summary: PATCH /api/v1/profile/links/{linkId}
+      operationId: patchApiV1ProfileLinksLinkid
+    delete:
+      security:
+        - sanctumCookie: []
+      responses:
+        '200':
+          description: Deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteResponse'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+      summary: DELETE /api/v1/profile/links/{linkId}
+      operationId: deleteApiV1ProfileLinksLinkid
+  /api/v1/profile/publish:
+    post:
+      security:
+        - sanctumCookie: []
+      description:
+        Creates the next immutable snapshot; later draft edits never alter
+        the currently served public snapshot.
+      responses:
+        '200':
+          description: Published
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProfileMutationResponse'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+      summary: POST /api/v1/profile/publish
+      operationId: postApiV1ProfilePublish
+  /api/v1/profile/unpublish:
+    post:
+      security:
+        - sanctumCookie: []
+      responses:
+        '200':
+          description: Unpublished
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProfileMutationResponse'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '409':
+          $ref: '#/components/responses/Conflict'
+      summary: POST /api/v1/profile/unpublish
+      operationId: postApiV1ProfileUnpublish
+  /api/v1/profiles/{username}:
+    get:
+      parameters:
+        - $ref: '#/components/parameters/Username'
+      description:
+        Public lookup receives username without `@` and returns only the
+        selected published snapshot and links enabled in that snapshot.
+      responses:
+        '200':
+          description: Published profile
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicProfileResponse'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+      summary: GET /api/v1/profiles/{username}
+      operationId: getApiV1ProfilesUsername
 components:
   securitySchemes:
     sanctumCookie:
       type: apiKey
       in: cookie
       name: laravel_session
+  parameters:
+    Username:
+      in: path
+      name: username
+      required: true
+      schema:
+        $ref: '#/components/schemas/Username'
+    LinkId:
+      in: path
+      name: linkId
+      required: true
+      schema:
+        type: integer
+        format: int64
+        minimum: 1
   schemas:
+    Username:
+      type: string
+      minLength: 3
+      maxLength: 30
+      pattern: ^[a-zA-Z0-9](?:[a-zA-Z0-9_-]{1,28}[a-zA-Z0-9])?$
+      description: Case-insensitive input; stored and returned lowercase.
+    Theme:
+      type: string
+      enum:
+        - editorial-bento
+    PublicationState:
+      type: string
+      enum:
+        - draft
+        - published
     RegisterRequest:
       type: object
-      required: [name, email, username, password, password_confirmation]
+      required:
+        - name
+        - email
+        - username
+        - password
+        - password_confirmation
       properties:
-        name: { type: string, maxLength: 120 }
-        email: { type: string, format: email }
-        username: { type: string, minLength: 3, maxLength: 30 }
-        password: { type: string, minLength: 8, format: password }
-        password_confirmation: { type: string, format: password }
+        name:
+          type: string
+          minLength: 1
+          maxLength: 120
+        email:
+          type: string
+          format: email
+          maxLength: 255
+        username:
+          $ref: '#/components/schemas/Username'
+        password:
+          type: string
+          minLength: 8
+          format: password
+        password_confirmation:
+          type: string
+          format: password
     LoginRequest:
       type: object
-      required: [email, password]
+      required:
+        - email
+        - password
       properties:
-        email: { type: string, format: email }
-        password: { type: string, format: password }
-    Profile:
-      type: object
-      required: [id, username]
-      properties:
-        id: { type: integer, format: int64 }
-        username: { type: string }
+        email:
+          type: string
+          format: email
+          maxLength: 255
+        password:
+          type: string
+          format: password
     User:
       type: object
-      required: [id, name, email, profile]
+      required:
+        - id
+        - name
+        - email
+        - profile
       properties:
-        id: { type: integer, format: int64 }
-        name: { type: string }
-        email: { type: string, format: email }
-        profile: { $ref: '#/components/schemas/Profile' }
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        email:
+          type: string
+          format: email
+        profile:
+          $ref: '#/components/schemas/ProfileSummary'
+    ProfileSummary:
+      type: object
+      required:
+        - id
+        - username
+      properties:
+        id:
+          type: integer
+          format: int64
+        username:
+          $ref: '#/components/schemas/Username'
+    Profile:
+      type: object
+      required:
+        - id
+        - username
+        - display_name
+        - bio
+        - avatar_url
+        - theme
+        - publication_state
+        - published_at
+        - published_version
+        - created_at
+        - updated_at
+      properties:
+        id:
+          type: integer
+          format: int64
+        username:
+          $ref: '#/components/schemas/Username'
+        display_name:
+          type: string
+          maxLength: 80
+          nullable: true
+        bio:
+          type: string
+          maxLength: 280
+          nullable: true
+        avatar_url:
+          type: string
+          format: uri
+          nullable: true
+          readOnly: true
+        theme:
+          $ref: '#/components/schemas/Theme'
+        publication_state:
+          $ref: '#/components/schemas/PublicationState'
+        published_at:
+          type: string
+          format: date-time
+          nullable: true
+        published_version:
+          type: integer
+          minimum: 1
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+    Link:
+      type: object
+      required:
+        - id
+        - label
+        - url
+        - icon
+        - category
+        - enabled
+        - position
+        - created_at
+        - updated_at
+      properties:
+        id:
+          type: integer
+          format: int64
+        label:
+          type: string
+          minLength: 1
+          maxLength: 80
+        url:
+          type: string
+          format: uri
+          maxLength: 2048
+          pattern: ^https?://
+          description: Absolute HTTP or HTTPS URL without embedded credentials.
+        icon:
+          type: string
+          maxLength: 64
+          nullable: true
+        category:
+          type: string
+          maxLength: 40
+          nullable: true
+        enabled:
+          type: boolean
+        position:
+          type: integer
+          minimum: 0
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+    PublicLink:
+      type: object
+      required:
+        - id
+        - label
+        - url
+        - icon
+        - category
+        - position
+      properties:
+        id:
+          type: integer
+          format: int64
+        label:
+          type: string
+          minLength: 1
+          maxLength: 80
+        url:
+          type: string
+          format: uri
+          maxLength: 2048
+          pattern: ^https?://
+        icon:
+          type: string
+          maxLength: 64
+          nullable: true
+        category:
+          type: string
+          maxLength: 40
+          nullable: true
+        position:
+          type: integer
+          minimum: 0
+    PublicProfile:
+      type: object
+      required:
+        - username
+        - display_name
+        - bio
+        - avatar_url
+        - theme
+        - version
+        - published_at
+        - links
+      properties:
+        username:
+          $ref: '#/components/schemas/Username'
+        display_name:
+          type: string
+          minLength: 1
+          maxLength: 80
+        bio:
+          type: string
+          maxLength: 280
+          nullable: true
+        avatar_url:
+          type: string
+          format: uri
+          nullable: true
+        theme:
+          $ref: '#/components/schemas/Theme'
+        version:
+          type: integer
+          minimum: 1
+        published_at:
+          type: string
+          format: date-time
+        links:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicLink'
+    UpdateProfileRequest:
+      type: object
+      minProperties: 1
+      properties:
+        username:
+          $ref: '#/components/schemas/Username'
+        display_name:
+          type: string
+          minLength: 1
+          maxLength: 80
+          nullable: true
+        bio:
+          type: string
+          maxLength: 280
+          nullable: true
+        theme:
+          $ref: '#/components/schemas/Theme'
+    CreateLinkRequest:
+      type: object
+      required:
+        - label
+        - url
+      properties:
+        label:
+          type: string
+          minLength: 1
+          maxLength: 80
+        url:
+          type: string
+          format: uri
+          maxLength: 2048
+          pattern: ^https?://
+        icon:
+          type: string
+          maxLength: 64
+          nullable: true
+        category:
+          type: string
+          maxLength: 40
+          nullable: true
+        enabled:
+          type: boolean
+          default: true
+    UpdateLinkRequest:
+      type: object
+      minProperties: 1
+      properties:
+        label:
+          type: string
+          minLength: 1
+          maxLength: 80
+        url:
+          type: string
+          format: uri
+          maxLength: 2048
+          pattern: ^https?://
+        icon:
+          type: string
+          maxLength: 64
+          nullable: true
+        category:
+          type: string
+          maxLength: 40
+          nullable: true
+        enabled:
+          type: boolean
+    ReorderLinksRequest:
+      type: object
+      required:
+        - ordered_link_ids
+      properties:
+        ordered_link_ids:
+          type: array
+          uniqueItems: true
+          items:
+            type: integer
+            format: int64
+            minimum: 1
+    Availability:
+      type: object
+      required:
+        - username
+        - available
+      properties:
+        username:
+          $ref: '#/components/schemas/Username'
+        available:
+          type: boolean
     UserResponse:
       type: object
-      required: [data]
-      properties:
-        data: { $ref: '#/components/schemas/User' }
-    AvailabilityResponse:
-      type: object
-      required: [data]
+      required:
+        - data
       properties:
         data:
-          type: object
-          required: [username, available]
-          properties:
-            username: { type: string }
-            available: { type: boolean }
+          $ref: '#/components/schemas/User'
+    AvailabilityResponse:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          $ref: '#/components/schemas/Availability'
+    ProfileResponse:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          $ref: '#/components/schemas/Profile'
+    ProfileMutationResponse:
+      type: object
+      required:
+        - data
+        - message
+      properties:
+        data:
+          $ref: '#/components/schemas/Profile'
+        message:
+          type: string
+    LinkResponse:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          $ref: '#/components/schemas/Link'
+    LinkMutationResponse:
+      type: object
+      required:
+        - data
+        - message
+      properties:
+        data:
+          $ref: '#/components/schemas/Link'
+        message:
+          type: string
+    LinkCollectionResponse:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Link'
+    LinkCollectionMutationResponse:
+      type: object
+      required:
+        - data
+        - message
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Link'
+        message:
+          type: string
+    PublicProfileResponse:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          $ref: '#/components/schemas/PublicProfile'
+    DeleteResponse:
+      type: object
+      required:
+        - data
+        - message
+      properties:
+        data:
+          type: string
+          nullable: true
+        message:
+          type: string
     ErrorResponse:
       type: object
+      required:
+        - message
       properties:
-        message: { type: string }
+        message:
+          type: string
         errors:
           type: object
           additionalProperties:
             type: array
-            items: { type: string }
+            items:
+              type: string
   responses:
     Unauthenticated:
       description: Unauthenticated
       content:
-        {
-          application/json:
-            { schema: { $ref: '#/components/schemas/ErrorResponse' } },
-        }
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    NotFound:
+      description: Not found or unpublished
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Conflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
     ValidationError:
       description: Validation failed
       content:
-        {
-          application/json:
-            { schema: { $ref: '#/components/schemas/ErrorResponse' } },
-        }
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
     RateLimited:
       description: Rate limited
       content:
-        {
-          application/json:
-            { schema: { $ref: '#/components/schemas/ErrorResponse' } },
-        }
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    PayloadTooLarge:
+      description: Avatar exceeds 5 MiB
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+security: []
