@@ -30,4 +30,5 @@ These are project-specific additions to the global `/home/ransu/.codex/AGENTS.md
 - Use `docs/DESIGN-BRIEF.md` for the approved product direction, content constraints, assets, and named interactions.
 - Use `docs/PROJECT_STRUCTURE.md` to preserve the project's source and feature organization when adding or moving files.
 - Use `docs/PROJECT-OVERVIEW.md` for the project purpose, audience, competitive context, design direction, and final product goal.
+- Use `docs/frontend/spec.md` and `docs/backend/spec.md` as the implementation specifications for the frontend and backend product goals, boundaries, contracts, and definition of done. Keep them synchronized when those requirements intentionally change.
 - Keep implementation aligned with these documents; update the relevant document when an intentional design-system decision changes.
