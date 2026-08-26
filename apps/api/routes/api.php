@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\V1\AuthController;
+use App\Http\Controllers\Api\V1\LinkController;
 use App\Http\Controllers\Api\V1\UsernameController;
 use App\Http\Controllers\Api\V1\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -23,5 +24,13 @@ Route::prefix('v1')->group(function (): void {
         Route::post('/profile/avatar', [ProfileController::class, 'avatar']);
         Route::put('/profile/avatar', [ProfileController::class, 'avatar']);
         Route::delete('/profile/avatar', [ProfileController::class, 'deleteAvatar']);
+    });
+
+    Route::middleware(['web', 'auth:sanctum'])->prefix('profile/links')->group(function (): void {
+        Route::get('/', [LinkController::class, 'index']);
+        Route::post('/', [LinkController::class, 'store']);
+        Route::put('/order', [LinkController::class, 'reorder']);
+        Route::patch('/{link}', [LinkController::class, 'update']);
+        Route::delete('/{link}', [LinkController::class, 'destroy']);
     });
 });
