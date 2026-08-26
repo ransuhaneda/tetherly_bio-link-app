@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\LinkController;
 use App\Http\Controllers\Api\V1\ProfileController;
+use App\Http\Controllers\Api\V1\PublicationController;
 use App\Http\Controllers\Api\V1\UsernameController;
 use Illuminate\Support\Facades\Route;
 
@@ -18,12 +19,16 @@ Route::prefix('v1')->group(function (): void {
             Route::post('/logout', [AuthController::class, 'logout']);
         });
     });
+    Route::get('/profiles/{username}', [PublicationController::class, 'showPublic'])->where('username', '[A-Za-z0-9_-]+');
+
     Route::middleware(['web', 'auth:sanctum'])->group(function (): void {
         Route::get('/profile', [ProfileController::class, 'show']);
         Route::patch('/profile', [ProfileController::class, 'update']);
         Route::post('/profile/avatar', [ProfileController::class, 'avatar']);
         Route::put('/profile/avatar', [ProfileController::class, 'avatar']);
         Route::delete('/profile/avatar', [ProfileController::class, 'deleteAvatar']);
+        Route::post('/profile/publish', [PublicationController::class, 'publish']);
+        Route::post('/profile/unpublish', [PublicationController::class, 'unpublish']);
     });
 
     Route::middleware(['web', 'auth:sanctum'])->prefix('profile/links')->group(function (): void {
