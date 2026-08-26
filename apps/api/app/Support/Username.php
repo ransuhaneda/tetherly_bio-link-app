@@ -29,15 +29,20 @@ final class Username
     /**
      * @return array<int, mixed>
      */
-    public static function validationRules(): array
+    public static function validationRules(bool $required = true): array
     {
-        return [
-            'required',
+        $rules = [
             'string',
             'regex:/^[a-z0-9](?:[a-z0-9_-]{1,28}[a-z0-9])?$/',
             'min:3',
             'max:30',
             Rule::notIn(self::RESERVED),
         ];
+
+        if ($required) {
+            array_unshift($rules, 'required');
+        }
+
+        return $rules;
     }
 }
