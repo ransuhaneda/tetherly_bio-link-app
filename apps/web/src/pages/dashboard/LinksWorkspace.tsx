@@ -1,10 +1,10 @@
 import { useState } from 'react';
 
-import sty from './WorkspacePage.module.scss';
-
 import { linksApi } from '@/features/creator-workspace/linksApi';
 import { useCreatorWorkspace } from '@/features/creator-workspace/useCreatorWorkspace';
 import type { CreatorLink } from '@/types/api';
+
+import sty from './WorkspacePage.module.scss';
 
 export function LinksWorkspace() {
   const { links, runMutation } = useCreatorWorkspace();

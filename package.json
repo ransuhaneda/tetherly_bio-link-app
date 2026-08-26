@@ -30,7 +30,7 @@
   "lint-staged": {
     "apps/web/**/*.{ts,tsx}": [
       "prettier --write",
-      "eslint --fix --max-warnings=0 --no-warn-ignored"
+      "pnpm --filter @tetherly/web exec eslint --fix --max-warnings=0 --no-warn-ignored"
     ],
     "apps/web/**/*.{css,scss}": [
       "stylelint --fix",

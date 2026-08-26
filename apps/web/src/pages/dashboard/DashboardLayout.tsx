@@ -1,8 +1,8 @@
 import { NavLink, Outlet } from 'react-router-dom';
 
-import sty from './DashboardLayout.module.scss';
-
 import { useCreatorWorkspace } from '@/features/creator-workspace/useCreatorWorkspace';
+
+import sty from './DashboardLayout.module.scss';
 
 const DASHBOARD_LINKS = [
   { label: 'Profile', to: '/dashboard/profile' },

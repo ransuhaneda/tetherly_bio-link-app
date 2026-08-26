@@ -1,12 +1,12 @@
-import { Button } from '@components/ui/Button';
-import { Link } from '@components/ui/Link';
 import { useEffect, useState } from 'react';
 import { FiMenu, FiX } from 'react-icons/fi';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-import sty from './Navbar.module.scss';
-
 import { useAuth } from '@/features/auth/useAuth';
+import { Button } from '@components/ui/Button';
+import { Link } from '@components/ui/Link';
+
+import sty from './Navbar.module.scss';
 
 const NAV_LINKS = [
   { id: '01', name: 'About', href: '/about' },

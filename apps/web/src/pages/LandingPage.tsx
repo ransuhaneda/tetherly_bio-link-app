@@ -1,19 +1,19 @@
-import studioImage from '@assets/images/ahmet-yuksek-zSiqe6j9Aao-unsplash.jpg?responsive';
-import portraitImage from '@assets/images/toa-heftiba-IrpBb-5YGZw-unsplash.jpg?responsive';
-import { SEOHelmet } from '@components/common/SEOHelmet';
-import { Button } from '@components/ui/Button';
-import { Link } from '@components/ui/Link';
-import { ResponsiveImage } from '@components/ui/ResponsiveImage';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { FiArrowUpRight, FiMoreHorizontal } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
 
-import sty from './LandingPage.module.scss';
-
 import { authApi } from '@/features/auth/authApi';
 import { getApiStatus } from '@/services/api';
+import studioImage from '@assets/images/ahmet-yuksek-zSiqe6j9Aao-unsplash.jpg?responsive';
+import portraitImage from '@assets/images/toa-heftiba-IrpBb-5YGZw-unsplash.jpg?responsive';
+import { SEOHelmet } from '@components/common/SEOHelmet';
+import { Button } from '@components/ui/Button';
+import { Link } from '@components/ui/Link';
+import { ResponsiveImage } from '@components/ui/ResponsiveImage';
+
+import sty from './LandingPage.module.scss';
 
 gsap.registerPlugin(ScrollTrigger);
 

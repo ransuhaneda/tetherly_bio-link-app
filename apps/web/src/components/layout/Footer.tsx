@@ -1,10 +1,11 @@
-import { Link } from '@components/ui/Link';
 import {
   FiArrowUpRight,
   FiInstagram,
   FiTwitter,
   FiYoutube,
 } from 'react-icons/fi';
+
+import { Link } from '@components/ui/Link';
 
 import sty from './Footer.module.scss';
 

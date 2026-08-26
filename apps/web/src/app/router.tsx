@@ -1,16 +1,16 @@
-import { ErrorNotFound } from '@pages/NotFound';
 import {
   createBrowserRouter,
   Navigate,
   type RouteObject,
 } from 'react-router-dom';
 
-import App from './App';
-
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
 import { RouteErrorBoundary } from '@/components/ui/errorHandling/RouteErrorBoundary';
 import { ProtectedRoute } from '@/features/auth/ProtectedRoute';
 import { CreatorWorkspaceRoute } from '@/pages/dashboard/CreatorWorkspaceRoute';
+import { ErrorNotFound } from '@pages/NotFound';
+
+import App from './App';
 
 const withHydrateFallback = (route: RouteObject): RouteObject => ({
   hydrateFallbackElement: <LoadingSpinner />,

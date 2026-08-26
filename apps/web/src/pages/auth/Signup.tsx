@@ -1,16 +1,16 @@
-import { Button } from '@components/ui/Button';
-import { Link } from '@components/ui/Link';
 import { useEffect, useState, type FormEvent } from 'react';
 import { FcGoogle } from 'react-icons/fc';
 import { FiArrowRight, FiEye, FiEyeOff } from 'react-icons/fi';
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 
-import sty from './Signup.module.scss';
-
 import { authApi } from '@/features/auth/authApi';
 import { getAuthRedirect } from '@/features/auth/authRedirect';
 import { useAuth } from '@/features/auth/useAuth';
 import { getApiError } from '@/services/api';
+import { Button } from '@components/ui/Button';
+import { Link } from '@components/ui/Link';
+
+import sty from './Signup.module.scss';
 
 export const Signup = () => {
   const navigate = useNavigate();

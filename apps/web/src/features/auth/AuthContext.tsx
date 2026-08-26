@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useState, type ReactNode } from 'react';
 
+import type { User } from '@/types/api';
+
 import { authApi } from './authApi';
 import { AuthContext } from './authContextValue';
-
-import type { User } from '@/types/api';
 
 export interface AuthContextValue {
   user: User | null;

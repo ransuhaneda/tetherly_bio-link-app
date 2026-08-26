@@ -1,7 +1,8 @@
-import { Button } from '@components/ui/Button';
-import { Link } from '@components/ui/Link';
 import { useState, type FormEvent } from 'react';
 import { FiArrowLeft, FiArrowRight, FiMail } from 'react-icons/fi';
+
+import { Button } from '@components/ui/Button';
+import { Link } from '@components/ui/Link';
 
 import sty from './ForgotPassword.module.scss';
 

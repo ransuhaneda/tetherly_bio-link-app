@@ -1,5 +1,6 @@
-import { ErrorNotFound, ErrorServer } from '@pages/NotFound';
 import { isRouteErrorResponse, useRouteError } from 'react-router-dom';
+
+import { ErrorNotFound, ErrorServer } from '@pages/NotFound';
 
 import { Button } from '../Button';
 import { Link } from '../Link';

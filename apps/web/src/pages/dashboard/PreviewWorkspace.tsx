@@ -1,6 +1,6 @@
-import sty from './WorkspacePage.module.scss';
-
 import { useCreatorWorkspace } from '@/features/creator-workspace/useCreatorWorkspace';
+
+import sty from './WorkspacePage.module.scss';
 
 export function PreviewWorkspace() {
   const { profile, links } = useCreatorWorkspace();

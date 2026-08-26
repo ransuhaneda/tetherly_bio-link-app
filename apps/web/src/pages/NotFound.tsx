@@ -1,6 +1,7 @@
+import { Link } from 'react-router-dom';
+
 import { SEOHelmet } from '@components/common/SEOHelmet';
 import { Button } from '@components/ui/Button';
-import { Link } from 'react-router-dom';
 
 import sty from './NotFound.module.scss';
 

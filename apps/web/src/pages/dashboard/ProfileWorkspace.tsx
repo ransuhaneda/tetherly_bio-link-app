@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 
-import sty from './WorkspacePage.module.scss';
-
 import { profileApi } from '@/features/creator-workspace/profileApi';
 import { useCreatorWorkspace } from '@/features/creator-workspace/useCreatorWorkspace';
+
+import sty from './WorkspacePage.module.scss';
 
 export function ProfileWorkspace() {
   const { profile, runMutation } = useCreatorWorkspace();
