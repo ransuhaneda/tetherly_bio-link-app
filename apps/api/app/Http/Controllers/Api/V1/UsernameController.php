@@ -7,16 +7,20 @@ use App\Http\Requests\UsernameAvailabilityRequest;
 use App\Models\Profile;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\RateLimiter;
-use Illuminate\Validation\ValidationException;
 
 class UsernameController extends Controller
 {
-    public function availability(UsernameAvailabilityRequest $request, string $username): JsonResponse
+    public function availability(UsernameAvailabilityRequest $request): JsonResponse
     {
-        $username = strtolower(trim($username));
+        $username = $request->validated('username');
         $key = 'username-availability|'.$request->ip();
         if (RateLimiter::tooManyAttempts($key, 30)) {
-            throw ValidationException::withMessages(['username' => ['Too many availability checks. Please try again later.']]);
+            $retryAfter = RateLimiter::availableIn($key);
+
+            return response()->json([
+                'message' => 'Too many availability checks. Please try again later.',
+                'retry_after' => $retryAfter,
+            ], 429)->header('Retry-After', (string) $retryAfter);
         }
         RateLimiter::hit($key, 60);
 

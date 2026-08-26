@@ -21,12 +21,6 @@ class AuthController extends Controller
             return response()->json(['message' => 'You are already logged in.'], 409);
         }
 
-        if (Auth::check()) {
-            return response()->json([
-                'message' => 'You are already logged in.'
-            ], 409);
-        }
-
         $user = $registerUser->handle($request->validated());
         Auth::login($user);
         $request->session()->regenerate();
@@ -40,15 +34,14 @@ class AuthController extends Controller
             return response()->json(['message' => 'You are already logged in.'], 409);
         }
 
-        if (Auth::check()) {
-            return response()->json([
-                'message' => 'You are already logged in.'
-            ], 409);
-        }
-
         $key = strtolower((string) $request->input('email')).'|'.$request->ip();
         if (RateLimiter::tooManyAttempts($key, 5)) {
-            throw ValidationException::withMessages(['email' => ['Too many login attempts. Please try again later.']]);
+            $retryAfter = RateLimiter::availableIn($key);
+
+            return response()->json([
+                'message' => 'Too many login attempts. Please try again later.',
+                'retry_after' => $retryAfter,
+            ], 429)->header('Retry-After', (string) $retryAfter);
         }
 
         if (! Auth::attempt($request->validated())) {
@@ -70,7 +63,6 @@ class AuthController extends Controller
     public function logout(Request $request): JsonResponse
     {
         Auth::guard('web')->logout();
-        $request->session()->flush();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 

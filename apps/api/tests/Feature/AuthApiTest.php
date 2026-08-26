@@ -4,8 +4,9 @@ namespace Tests\Feature;
 
 use App\Models\Profile;
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Http\Middleware\ValidateCsrfToken;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\RateLimiter;
 use Tests\TestCase;
 
 class AuthApiTest extends TestCase
@@ -98,5 +99,42 @@ class AuthApiTest extends TestCase
 
         $this->assertAuthenticatedAs($currentUser);
         $this->assertDatabaseMissing('users', ['email' => 'another@example.com']);
+    }
+
+    public function test_login_rate_limit_returns_a_429_envelope(): void
+    {
+        $key = 'limited@example.com|127.0.0.1';
+        RateLimiter::hit($key, 60);
+        RateLimiter::hit($key, 60);
+        RateLimiter::hit($key, 60);
+        RateLimiter::hit($key, 60);
+        RateLimiter::hit($key, 60);
+
+        $response = $this->postJson('/api/v1/auth/login', [
+            'email' => 'limited@example.com',
+            'password' => 'password-password',
+        ]);
+
+        $response->assertStatus(429)->assertJsonStructure(['message', 'retry_after']);
+        $this->assertSame((string) $response->json('retry_after'), $response->headers->get('Retry-After'));
+    }
+
+    public function test_invalid_login_credentials_remain_a_safe_422_validation_error(): void
+    {
+        $this->postJson('/api/v1/auth/login', [
+            'email' => 'missing@example.com',
+            'password' => 'password-password',
+        ])->assertUnprocessable()->assertJsonValidationErrors('email');
+    }
+
+    public function test_registration_rejects_reserved_application_routes(): void
+    {
+        $this->postJson('/api/v1/auth/register', [
+            'name' => 'Reserved',
+            'email' => 'reserved@example.com',
+            'username' => 'Login',
+            'password' => 'password-password',
+            'password_confirmation' => 'password-password',
+        ])->assertUnprocessable()->assertJsonValidationErrors('username');
     }
 }

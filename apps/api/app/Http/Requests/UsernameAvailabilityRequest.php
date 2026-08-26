@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Support\Username;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UsernameAvailabilityRequest extends FormRequest
@@ -13,11 +14,11 @@ class UsernameAvailabilityRequest extends FormRequest
 
     protected function prepareForValidation(): void
     {
-        $this->merge(['username' => strtolower(trim((string) $this->route('username')))]);
+        $this->merge(['username' => Username::normalize($this->route('username'))]);
     }
 
     public function rules(): array
     {
-        return ['username' => ['required', 'string', 'regex:/^[a-z0-9](?:[a-z0-9_-]{1,28}[a-z0-9])?$/', 'min:3', 'max:30']];
+        return ['username' => Username::validationRules()];
     }
 }
