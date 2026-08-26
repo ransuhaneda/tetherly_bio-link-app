@@ -1,0 +1,99 @@
+.card {
+  border: 1px solid var(--color-border-default);
+  max-width: 760px;
+  padding: clamp(24px, 5vw, 48px);
+}
+
+.utility {
+  color: var(--color-action-secondary);
+  font:
+    600 0.75rem/1.2 Oswald,
+    sans-serif;
+  letter-spacing: 0.12em;
+  margin: 0 0 12px;
+  text-transform: uppercase;
+}
+
+.card h2 {
+  font:
+    600 clamp(2rem, 4vw, 3rem) / 1 Oswald,
+    sans-serif;
+  margin: 0 0 32px;
+}
+
+.details,
+.list,
+.checklist {
+  margin: 0;
+  padding: 0;
+}
+
+.details {
+  display: grid;
+  gap: 16px;
+}
+
+.details > div {
+  border-top: 1px solid var(--color-border-default);
+  display: flex;
+  gap: 24px;
+  justify-content: space-between;
+  padding-top: 16px;
+}
+
+.details dt {
+  color: var(--color-text-muted);
+}
+
+.details dd {
+  margin: 0;
+  text-align: right;
+}
+
+.list,
+.checklist {
+  display: grid;
+  gap: 12px;
+  list-style: none;
+}
+
+.list li {
+  border-top: 1px solid var(--color-border-default);
+  display: grid;
+  gap: 4px;
+  padding-top: 16px;
+}
+
+.list span,
+.note,
+.empty {
+  color: var(--color-text-muted);
+  line-height: 1.5;
+}
+
+.checklist li {
+  border-left: 3px solid var(--color-action-primary);
+  padding: 8px 0 8px 12px;
+}
+
+.note {
+  border-top: 1px solid var(--color-border-default);
+  margin: 32px 0 0;
+  padding-top: 20px;
+}
+
+.empty {
+  margin: 0;
+}
+
+@media (width <= 767px) {
+  .details > div {
+    align-items: start;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .details dd {
+    text-align: left;
+  }
+}

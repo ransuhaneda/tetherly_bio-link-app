@@ -3,16 +3,18 @@ import { Link } from '@components/ui/Link';
 import { useEffect, useState, type FormEvent } from 'react';
 import { FcGoogle } from 'react-icons/fc';
 import { FiArrowRight, FiEye, FiEyeOff } from 'react-icons/fi';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import sty from './Login.module.scss';
 
 import { authApi } from '@/features/auth/authApi';
+import { getAuthRedirect } from '@/features/auth/authRedirect';
 import { useAuth } from '@/features/auth/useAuth';
 import { getApiError } from '@/services/api';
 
 export const Login = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { user, isLoading, setUser } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [form, setForm] = useState({ email: '', password: '' });
@@ -20,20 +22,21 @@ export const Login = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
-    if (!isLoading && user) navigate('/');
-  }, [isLoading, navigate, user]);
+    if (!isLoading && user)
+      navigate(getAuthRedirect(location), { replace: true });
+  }, [isLoading, location, navigate, user]);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (isLoading || user) {
-      navigate('/');
+      navigate(getAuthRedirect(location), { replace: true });
       return;
     }
     setError('');
     setIsSubmitting(true);
     try {
       setUser(await authApi.login(form));
-      navigate('/');
+      navigate(getAuthRedirect(location), { replace: true });
     } catch (submissionError) {
       const payload = getApiError(submissionError);
       setError(

@@ -2,7 +2,7 @@ import sty from './LoadingSpinner.module.scss';
 
 export const LoadingSpinner = () => {
   return (
-    <div className={sty.wrapper}>
+    <div className={sty.wrapper} role="status" aria-label="Loading">
       {/* From Uiverse.io by Nawsome  */}
       <svg className={sty.pl} width="240" height="240" viewBox="0 0 240 240">
         <circle
