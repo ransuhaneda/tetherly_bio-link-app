@@ -20,7 +20,7 @@ class PublicationController extends Controller
         abort_unless($request->user()->can('publish', $profile), 403);
         $profile = DB::transaction(function () use ($profile): Profile {
             $profile->lockForUpdate()->refresh();
-            if (!is_string($profile->display_name) || trim($profile->display_name) === '') {
+            if (! is_string($profile->display_name) || trim($profile->display_name) === '') {
                 throw ValidationException::withMessages(['display_name' => 'A display name is required to publish.']);
             }
             $links = $profile->links()->where('enabled', true)->get();
@@ -37,8 +37,10 @@ class PublicationController extends Controller
                 ])->values()->all(), 'published_at' => now(),
             ]);
             $profile->update(['publication_state' => PublicationState::Published, 'published_at' => $snapshot->published_at, 'published_snapshot_id' => $snapshot->id]);
+
             return $profile->refresh();
         });
+
         return response()->json(['data' => new ProfileResource($profile), 'message' => 'Profile published.']);
     }
 
@@ -50,6 +52,7 @@ class PublicationController extends Controller
             $profile->lockForUpdate()->refresh();
             $profile->update(['publication_state' => PublicationState::Draft, 'published_at' => null, 'published_snapshot_id' => null]);
         });
+
         return response()->json(['data' => new ProfileResource($profile->refresh()), 'message' => 'Profile unpublished.']);
     }
 
@@ -63,6 +66,7 @@ class PublicationController extends Controller
         $data = ['username' => $snapshot->username, 'display_name' => $snapshot->display_name, 'bio' => $snapshot->bio,
             'avatar_url' => $snapshot->avatar_path ? asset('storage/'.$snapshot->avatar_path) : null,
             'theme' => $snapshot->theme?->value, 'published_at' => $snapshot->published_at?->toISOString(), 'links' => $snapshot->links];
+
         return response()->json(['data' => $data]);
     }
 }
