@@ -2,7 +2,7 @@
 
 Tetherly is an editorial creator bio-link product. This repository contains a React web application and a Laravel REST API backed by MySQL.
 
-> **Status:** private, actively developed foundation. Account authentication and username reservation are connected; profile editing, links, publishing, analytics, Google OAuth, and password reset are not implemented yet.
+> **Status:** private, actively developed foundation. Account authentication, profile persistence/API, link persistence/API, and the protected dashboard shell are connected; creator editing UI, publishing, public profiles, analytics, Google OAuth, and password reset remain unfinished.
 
 ## Architecture
 

@@ -12,7 +12,7 @@ The backend is the secure, versioned service behind Tetherly's creator accounts,
 - Laravel Sanctum provides first-party SPA cookie sessions with CSRF protection.
 - Controllers belong in `app/Http/Controllers/Api/V1`; FormRequests validate input; API Resources define response envelopes; domain actions hold substantial workflows.
 
-The current foundation covers username availability and basic register/login/session/logout contracts. Profile editing, link management, publishing, analytics, Suggestions, password reset, and Google OAuth are deferred capabilities and must be implemented as explicit contracts rather than inferred from frontend scaffolding.
+The current foundation covers username availability, register/login/session/logout, authenticated profile read/update/avatar operations, and authenticated link CRUD/order operations. Publishing, public profile lookup, analytics, Suggestions, password reset, and Google OAuth remain deferred capabilities and must be implemented as explicit contracts rather than inferred from frontend scaffolding.
 
 ## Product outcomes
 
@@ -46,11 +46,14 @@ The canonical contract is `docs/openapi.yaml`. Keep it synchronized with impleme
 - `POST /api/v1/auth/login` — authenticate email/password and establish the session.
 - `GET /api/v1/auth/me` — return the authenticated user and profile summary.
 - `POST /api/v1/auth/logout` — invalidate the current session.
+- `GET/PATCH /api/v1/profile` — read or update the authenticated draft profile.
+- `POST|PUT/DELETE /api/v1/profile/avatar` — replace or remove the authenticated avatar.
+- `GET/POST /api/v1/profile/links` — list or create authenticated draft links.
+- `PUT /api/v1/profile/links/order` — transactionally reorder owned links.
+- `PATCH|DELETE /api/v1/profile/links/{link}` — update or remove an owned draft link.
 
 ### Planned resource groups
 
-- Authenticated profile read/update and username change with conflict handling.
-- Authenticated link CRUD and deterministic ordering.
 - Draft preview and publish/unpublish actions with authorization checks.
 - Public `GET /api/v1/profiles/{username}` for published profile data only.
 - Authenticated analytics summary, time-series, acquisition, destination, and funnel endpoints with bounded date ranges and pagination where needed.
