@@ -29,3 +29,13 @@ dist-ssr
 
 todo.md
 docs/images
+
+# Laravel runtime files
+apps/api/.env
+apps/api/.env.*
+!apps/api/.env.example
+apps/api/vendor/
+apps/api/storage/*.key
+apps/api/storage/framework/
+apps/api/storage/logs/
+apps/api/bootstrap/cache/*.php

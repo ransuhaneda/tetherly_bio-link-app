@@ -8,17 +8,18 @@ The product thesis is simple: a bio-link page should feel like a small editorial
 
 ## Current project scope
 
-This repository is a private, actively developed Vite + React 19 + TypeScript frontend. It includes:
+This repository is a private, actively developed Vite + React 19 + TypeScript frontend plus a Laravel API foundation. It includes:
 
 - A responsive landing page with the approved headline, supporting copy, and `Create Your Tether` username form.
 - A profile/link preview that demonstrates the intended creator destination.
 - Lazy-loaded routes for `/`, `/login`, `/signup`, `/about`, and `/pricing`.
 - Shared layout and UI components, local responsive image handling, Sass design tokens, SEO metadata, and Vitest setup.
-- A development `/api` proxy boundary for a future service.
+- A development `/api` proxy boundary for the Laravel service.
+- Sanctum authentication, profile persistence, profile/avatar API operations, link CRUD/order APIs, and a protected dashboard shell.
 
 The product roadmap also includes a comprehensive, creator-facing analytics offer. Analytics should show where visitors came from, which links or destinations they used next, and the key audience and funnel patterns between those steps. It must be designed for quick comprehension: clear summary metrics first, skimmable charts and tables second, and deeper detail available without making the creator decode a dense reporting dashboard.
 
-Authentication, persistence, profile editing, publishing, and production API behavior are not implemented here yet. Login, signup, content, and API screens are frontend scaffolding rather than evidence of a finished backend.
+Publishing, public profile lookup, creator editing UI, analytics, and production deployment behavior are not implemented yet. Login, signup, dashboard, and API screens must be read according to their actual contract and state rather than treated as proof that deferred features are complete.
 
 ## Intended users and problem
 

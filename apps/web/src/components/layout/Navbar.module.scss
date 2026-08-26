@@ -1,0 +1,132 @@
+.navigation {
+  background: abst.get-color('background', 'dark');
+  box-shadow: 0 4px 16px 0 rgb(10 10 10 / 4%);
+  padding: 20px 0;
+  position: sticky;
+  top: 0;
+  z-index: 9998;
+}
+
+.wrapper {
+  @include abst.flex(row, space-between, center);
+}
+
+.topRow {
+  display: contents;
+}
+
+.menuButton,
+.mobilePanel {
+  display: none;
+}
+
+.wrapper__auth {
+  @include abst.flex(row, null, null, 16px);
+}
+
+.navbar__main {
+  padding: 5px 0;
+  @include abst.flex(row, null, null, 16px, nowrap);
+
+  @media (width <= 768px) {
+    display: none;
+  }
+}
+
+.logo {
+  color: abst.get-color('text', 'accent');
+  font-size: abst.$text-2xl;
+
+  &:hover {
+    text-decoration: none;
+  }
+  @include abst.font('primary', 700, normal);
+  @include abst.font('primary', 700, normal);
+}
+
+.link__auth {
+  background: transparent;
+  border: 0;
+  color: abst.get-color('text', 'inverse');
+}
+
+.link {
+  color: abst.get-color('text', 'inverse');
+  font-size: abst.$text-md;
+
+  &:hover {
+    color: abst.get-color('text', 'accent');
+  }
+  @include abst.font('primary', 300, normal);
+}
+
+@media (width <= 767px) {
+  .navigation {
+    padding: 12px 0;
+  }
+
+  .wrapper {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .topRow {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .menuButton {
+    display: inline-flex;
+    min-height: 44px;
+    min-width: 44px;
+    padding: 0;
+  }
+
+  .menuButton svg {
+    height: 1.25rem;
+    width: 1.25rem;
+  }
+
+  .wrapper > .navbar__main,
+  .wrapper > .wrapper__auth {
+    display: none;
+  }
+
+  .mobilePanel {
+    border-top: 1px solid abst.get-color-brand('neutral', '300');
+    padding-top: 12px;
+  }
+
+  .mobilePanelOpen {
+    display: block;
+  }
+
+  .mobileLinks,
+  .mobileActions {
+    display: grid;
+    gap: 8px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .mobileLinks a,
+  .mobileActions a,
+  .mobileActions button {
+    justify-content: flex-start;
+    min-height: 44px;
+    width: 100%;
+  }
+
+  .mobileActions {
+    border-top: 1px solid abst.get-color-brand('neutral', '300');
+    margin-top: 12px;
+    padding-top: 12px;
+  }
+
+  .mobileActions .link__auth {
+    justify-content: flex-start;
+  }
+}
