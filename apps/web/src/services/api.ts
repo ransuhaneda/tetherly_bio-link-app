@@ -120,3 +120,8 @@ export const getApiError = (error: unknown): ApiError => {
   }
   return { message: 'Something went wrong. Please try again.' };
 };
+
+export const getApiStatus = (error: unknown): number | undefined => {
+  if (axios.isAxiosError(error)) return error.response?.status;
+  return undefined;
+};

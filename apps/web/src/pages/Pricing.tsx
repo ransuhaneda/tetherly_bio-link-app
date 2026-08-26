@@ -7,35 +7,32 @@ const plans = [
   {
     name: 'Starter',
     price: 'Free',
-    description: 'A polished, permanent home for your essential links.',
+    description: 'Create an account and reserve your Tetherly username.',
     features: [
-      'Unlimited links',
-      'Core themes and layouts',
-      'Social and contact buttons',
-      'Basic click insights',
+      'Username reservation',
+      'Account creation',
+      'Publishing tools in development',
     ],
   },
   {
     name: 'Studio',
-    price: '$8',
-    description: 'More room to tell the story and grow your audience.',
+    price: 'Coming later',
+    description: 'Planned tools for creators who want more control.',
     features: [
-      'Everything in Starter',
-      'Custom colors, fonts, and domains',
-      'Link scheduling and featured links',
-      'Email capture and analytics',
+      'Custom colors, fonts, and domains (planned)',
+      'Link scheduling and featured links (planned)',
+      'Email capture and analytics (planned)',
     ],
     featured: true,
   },
   {
     name: 'Collective',
-    price: '$24',
-    description: 'A shared toolkit for teams, brands, and client work.',
+    price: 'Coming later',
+    description: 'Planned collaboration tools for teams and client work.',
     features: [
-      'Everything in Studio',
-      'Up to 5 team profiles',
-      'Shared asset library',
-      'Priority support',
+      'Team profiles (planned)',
+      'Shared asset library (planned)',
+      'Priority support (planned)',
     ],
   },
 ];
@@ -43,28 +40,27 @@ const plans = [
 export const Pricing = () => (
   <div className={sty.page}>
     <SEOHelmet
-      title="Tetherly pricing — Simple plans for every kind of creator"
-      description="Start free with Tetherly or unlock more customization, analytics, and team tools with Studio and Collective."
+      title="Tetherly pricing — A clear starting point"
+      description="Create an account and reserve your Tetherly username. Paid plans are planned for a later release."
     />
     <div className={sty.shell}>
       <section className={sty.hero}>
         <div className={sty.heroCopy}>
-          <p className={sty.eyebrow}>Simple, transparent pricing</p>
+          <p className={sty.eyebrow}>A clear starting point</p>
           <h1>
             A better link
             <br />
             <em>at every stage.</em>
           </h1>
           <p className={sty.lede}>
-            Start free, make it yours, and upgrade when your page needs more
-            room. No surprise fees. Cancel whenever.
+            Create an account and reserve your username now. Paid plans are
+            planned, not available in this prototype.
           </p>
         </div>
         <aside className={sty.heroMeta}>
-          <strong>All plans include a permanent Tetherly URL.</strong>
+          <strong>Every account includes a Tetherly URL.</strong>
           <p>
-            Bring your audience to one reliable place, even as your projects and
-            platforms change.
+            Profile publishing and paid features will arrive in later releases.
           </p>
         </aside>
       </section>
@@ -76,12 +72,12 @@ export const Pricing = () => (
               className={`${sty.plan} ${plan.featured ? sty.featured : ''}`}
             >
               <span className={sty.planTag}>
-                {plan.featured ? 'Most popular' : 'For getting started'}
+                {plan.featured ? 'Planned paid plan' : 'Available now'}
               </span>
               <h3>{plan.name}</h3>
               <p className={sty.price}>
                 {plan.price}
-                {plan.price !== 'Free' && <small> / month</small>}
+                {plan.price !== 'Free' && <small> Not available yet</small>}
               </p>
               <p>{plan.description}</p>
               <ul className={sty.features}>
@@ -89,14 +85,13 @@ export const Pricing = () => (
                   <li key={feature}>{feature}</li>
                 ))}
               </ul>
-              <Link
-                to="/signup"
-                variant={plan.featured ? 'primary' : 'tertiary'}
-              >
-                {plan.price === 'Free'
-                  ? 'Start free ↗'
-                  : 'Choose ' + plan.name + ' ↗'}
-              </Link>
+              {plan.price === 'Free' ? (
+                <Link to="/signup" variant="tertiary">
+                  Create an account ↗
+                </Link>
+              ) : (
+                <span className={sty.deferredAction}>Planned for later</span>
+              )}
             </article>
           ))}
         </div>
@@ -106,30 +101,28 @@ export const Pricing = () => (
         <h2>Questions, answered.</h2>
         <div className={sty.faq}>
           <details>
-            <summary>Can I start without a credit card?</summary>
+            <summary>Can I create an account now?</summary>
             <p>
-              Yes. Starter is free forever and never asks for payment details.
+              Yes. Account creation and username reservation are available now;
+              profile publishing is still in development.
             </p>
           </details>
           <details>
-            <summary>Can I change plans later?</summary>
+            <summary>When will paid plans be available?</summary>
             <p>
-              Anytime. Your links and settings stay put when you move between
-              plans.
+              Studio and Collective are planned for a later release. No paid
+              features are enabled in this prototype.
             </p>
           </details>
           <details>
             <summary>Do I need a custom domain?</summary>
-            <p>
-              No. Your Tetherly URL is included. Studio adds the option to
-              connect a domain you already own.
-            </p>
+            <p>Custom domains are planned for a future paid plan.</p>
           </details>
           <details>
-            <summary>Is there a free trial for paid plans?</summary>
+            <summary>What can I do with Starter?</summary>
             <p>
-              Studio and Collective include a 14-day trial so you can try the
-              full toolkit before paying.
+              You can reserve a username and create an account. The profile
+              editor and publishing tools are being built next.
             </p>
           </details>
         </div>

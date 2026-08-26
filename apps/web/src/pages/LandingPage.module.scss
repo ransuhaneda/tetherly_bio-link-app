@@ -111,7 +111,7 @@
 
 .previewWrap::before {
   color: abst.get-color-brand('neutral', '400');
-  content: '01 — LIVE PROFILE';
+  content: 'PROFILE PREVIEW';
   font:
     600 0.7rem/1 Oswald,
     sans-serif;
@@ -156,10 +156,15 @@
 
 .avatar {
   display: block;
-  height: 88px;
   margin: 36px auto 16px;
-  object-fit: cover;
+  overflow: hidden;
   width: 88px;
+}
+
+.avatar img {
+  height: 100%;
+  object-fit: cover;
+  width: 100%;
 }
 
 .previewName {
@@ -302,9 +307,13 @@
   min-height: 360px;
 }
 
-.featureWide img {
-  height: 180px;
+.featureWide .featureImage {
   margin-top: auto;
+  width: 100%;
+}
+
+.featureWide .featureImage img {
+  height: 100%;
   object-fit: cover;
   width: 100%;
 }
@@ -498,7 +507,7 @@
 }
 
 .toolkitImage img {
-  height: 150px;
+  height: 100%;
   object-fit: cover;
   width: 100%;
 }
@@ -822,8 +831,8 @@
     min-height: 280px;
   }
 
-  .featureWide img {
-    height: 150px;
+  .featureWide .featureImage {
+    min-height: 150px;
   }
 
   .toolkitImage {

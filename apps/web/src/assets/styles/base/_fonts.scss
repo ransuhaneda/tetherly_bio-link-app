@@ -10,10 +10,7 @@
   font-family: Nunito;
   font-style: normal;
   font-weight: 300;
-  src:
-    local('Nunito Light'),
-    local('Nunito-Light'),
-    url('@assets/fonts/inter/inter-300.woff2') format('woff2');
+  src: url('@assets/fonts/nunito/nunito-300.ttf') format('truetype');
 }
 
 @font-face {
@@ -21,10 +18,7 @@
   font-family: Nunito;
   font-style: normal;
   font-weight: 400;
-  src:
-    local('Nunito Regular'),
-    local('Nunito-Regular'),
-    url('@assets/fonts/inter/inter-400.woff2') format('woff2');
+  src: url('@assets/fonts/nunito/nunito-400.ttf') format('truetype');
 }
 
 @font-face {
@@ -32,10 +26,7 @@
   font-family: Nunito;
   font-style: normal;
   font-weight: 600;
-  src:
-    local('Nunito SemiBold'),
-    local('Nunito-SemiBold'),
-    url('@assets/fonts/inter/inter-600.woff2') format('woff2');
+  src: url('@assets/fonts/nunito/nunito-600.ttf') format('truetype');
 }
 
 @font-face {
@@ -43,10 +34,7 @@
   font-family: Nunito;
   font-style: normal;
   font-weight: 700;
-  src:
-    local('Nunito Bold'),
-    local('Nunito-Bold'),
-    url('@assets/fonts/inter/inter-700.woff2') format('woff2');
+  src: url('@assets/fonts/nunito/nunito-700.ttf') format('truetype');
 }
 
 // Oswald

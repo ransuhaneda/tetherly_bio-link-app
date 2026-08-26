@@ -1,17 +1,19 @@
-import studioImage from '@assets/images/ahmet-yuksek-zSiqe6j9Aao-unsplash.jpg';
-import portraitImage from '@assets/images/toa-heftiba-IrpBb-5YGZw-unsplash.jpg';
+import studioImage from '@assets/images/ahmet-yuksek-zSiqe6j9Aao-unsplash.jpg?responsive';
+import portraitImage from '@assets/images/toa-heftiba-IrpBb-5YGZw-unsplash.jpg?responsive';
 import { SEOHelmet } from '@components/common/SEOHelmet';
 import { Button } from '@components/ui/Button';
 import { Link } from '@components/ui/Link';
+import { ResponsiveImage } from '@components/ui/ResponsiveImage';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { useLayoutEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { FiArrowUpRight, FiMoreHorizontal } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
 
 import sty from './LandingPage.module.scss';
 
 import { authApi } from '@/features/auth/authApi';
+import { getApiStatus } from '@/services/api';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -25,101 +27,146 @@ const steps = [
   [
     '01',
     'Claim your corner',
-    'Pick a handle people can remember and make it yours in under a minute.',
+    'Pick a handle people can remember and reserve it for your Tetherly account.',
   ],
   [
     '02',
     'Add what matters',
-    'Bring in your work, shop, newsletter, socials, and next big thing.',
+    'The profile editor and publishing tools are being built around your work.',
   ],
   [
     '03',
     'Send people somewhere good',
-    'Share one clean URL everywhere and keep your audience moving.',
+    'Share one clean URL everywhere once your profile is ready to publish.',
   ],
 ];
 
 const faqs = [
   [
     'Can I start for free?',
-    'Yes. You can create a Starter page with your essential links at no cost. Upgrade only when you need more customization or team tools.',
+    'Yes. Account creation and username reservation are free while publishing tools are in development.',
   ],
   [
     'Can I change my links later?',
-    'Absolutely. Update, reorder, schedule, or remove links whenever your work changes. Your Tetherly URL stays the same.',
+    'Profile editing and publishing are planned next. Your reserved Tetherly URL will stay the same.',
   ],
   [
     'What can I add to my page?',
-    'Add links to your work, shop, newsletter, social profiles, playlists, community spaces, and anywhere else you want your audience to go.',
+    'The planned editor will support links to your work, shop, newsletter, social profiles, playlists, and community spaces.',
   ],
   [
     'Do I need a custom domain?',
-    'No. Every account includes a Tetherly URL. Paid plans also let you connect a custom domain you already own.',
+    'No. Every account includes a Tetherly URL. Custom domains are planned for a future paid plan.',
   ],
 ];
+
+type UsernameFormState =
+  | 'idle'
+  | 'validating'
+  | 'loading'
+  | 'success'
+  | 'unavailable'
+  | 'invalid'
+  | 'rateLimited'
+  | 'serverError';
+
+const FORM_MESSAGES: Record<Exclude<UsernameFormState, 'idle'>, string> = {
+  validating: 'Validating that handle…',
+  loading: 'Checking that handle…',
+  success: 'That handle is available. Taking you to account creation…',
+  unavailable: 'That handle is already taken. Try another one.',
+  invalid: 'Use 3–30 letters, numbers, hyphens, or underscores.',
+  rateLimited: 'Too many checks right now. Please wait and try again.',
+  serverError: 'We could not check that handle. Please try again.',
+};
 
 export const LandingPage = () => {
   const navigate = useNavigate();
   const [username, setUsername] = useState('');
-  const [status, setStatus] = useState('');
-  const [isChecking, setIsChecking] = useState(false);
+  const [formState, setFormState] = useState<UsernameFormState>('idle');
   const pageRef = useRef<HTMLElement>(null);
+  const redirectTimer = useRef<number | null>(null);
+
+  useEffect(
+    () => () => {
+      if (redirectTimer.current) window.clearTimeout(redirectTimer.current);
+    },
+    []
+  );
 
   useLayoutEffect(() => {
-    const context = gsap.context(() => {
-      gsap.from(`.${sty.heroCopy}`, {
-        opacity: 0,
-        y: 28,
-        duration: 0.8,
-        ease: 'power3.out',
-      });
-      gsap.from(`.${sty.previewWrap}`, {
-        opacity: 0,
-        y: 34,
-        duration: 0.9,
-        delay: 0.12,
-        ease: 'power3.out',
-      });
-      gsap.utils
-        .toArray<HTMLElement>(
-          `.${sty.featureCard}, .${sty.toolkitCard}, .${sty.step}`
-        )
-        .forEach(element => {
-          gsap.from(element, {
-            opacity: 0,
-            y: 30,
-            duration: 0.65,
-            ease: 'power2.out',
-            scrollTrigger: { trigger: element, start: 'top 86%', once: true },
-          });
+    const motion = gsap.matchMedia();
+    motion.add('(prefers-reduced-motion: no-preference)', () => {
+      const context = gsap.context(() => {
+        gsap.from(`.${sty.heroCopy}`, {
+          opacity: 0,
+          y: 28,
+          duration: 0.8,
+          ease: 'power3.out',
         });
-    }, pageRef);
-
-    return () => context.revert();
+        gsap.from(`.${sty.previewWrap}`, {
+          opacity: 0,
+          y: 34,
+          duration: 0.9,
+          delay: 0.12,
+          ease: 'power3.out',
+        });
+        gsap.utils
+          .toArray<HTMLElement>(
+            `.${sty.featureCard}, .${sty.toolkitCard}, .${sty.step}`
+          )
+          .forEach(element => {
+            gsap.from(element, {
+              opacity: 0,
+              y: 30,
+              duration: 0.65,
+              ease: 'power2.out',
+              scrollTrigger: { trigger: element, start: 'top 86%', once: true },
+            });
+          });
+      }, pageRef);
+      return () => context.revert();
+    });
+    return () => motion.revert();
   }, []);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const normalizedUsername = username.trim().toLowerCase();
-    if (!normalizedUsername) {
-      setStatus('Choose a username to get started.');
+    setFormState('validating');
+    await new Promise(resolve => window.setTimeout(resolve, 0));
+    if (!/^[a-z0-9](?:[a-z0-9_-]{1,28}[a-z0-9])?$/.test(normalizedUsername)) {
+      setFormState('invalid');
       return;
     }
-    setIsChecking(true);
-    setStatus('Checking that handle…');
+    setFormState('loading');
     try {
       const available = await authApi.usernameAvailability(normalizedUsername);
       if (!available) {
-        setStatus('That handle is already taken. Try another one.');
+        setFormState('unavailable');
         return;
       }
-      navigate(`/signup?username=${encodeURIComponent(normalizedUsername)}`);
-    } catch {
-      setStatus('Use 3–30 letters, numbers, hyphens, or underscores.');
-    } finally {
-      setIsChecking(false);
+      setFormState('success');
+      redirectTimer.current = window.setTimeout(() => {
+        navigate(`/signup?username=${encodeURIComponent(normalizedUsername)}`);
+      }, 450);
+    } catch (error) {
+      const apiStatus = getApiStatus(error);
+      setFormState(
+        apiStatus === 422
+          ? 'invalid'
+          : apiStatus === 429
+            ? 'rateLimited'
+            : 'serverError'
+      );
     }
   };
+
+  const isSubmitting =
+    formState === 'validating' ||
+    formState === 'loading' ||
+    formState === 'success';
+  const formMessage = formState === 'idle' ? '' : FORM_MESSAGES[formState];
 
   return (
     <>
@@ -151,20 +198,37 @@ export const LandingPage = () => {
                 <input
                   id="username"
                   value={username}
-                  onChange={event => setUsername(event.target.value)}
+                  onChange={event => {
+                    setUsername(event.target.value.toLowerCase());
+                    setFormState('idle');
+                  }}
                   placeholder="username"
+                  autoComplete="off"
+                  aria-invalid={formState === 'invalid'}
+                  aria-describedby="username-status"
                 />
               </div>
               <Button
                 type="submit"
                 variant="primary"
                 customClass={sty.submitButton}
+                disabled={isSubmitting}
+                aria-busy={isSubmitting}
               >
-                {isChecking ? 'Checking…' : 'Create Your Tether'}
+                {formState === 'loading' || formState === 'validating'
+                  ? 'Checking…'
+                  : formState === 'success'
+                    ? 'Handle available'
+                    : 'Create Your Tether'}
               </Button>
             </form>
-            <p className={sty.formStatus} role="status">
-              {status}
+            <p
+              id="username-status"
+              className={sty.formStatus}
+              role="status"
+              aria-live="polite"
+            >
+              {formMessage}
             </p>
           </div>
 
@@ -177,10 +241,13 @@ export const LandingPage = () => {
                   aria-hidden="true"
                 />
               </div>
-              <img
+              <ResponsiveImage
                 src={portraitImage}
                 alt="Creator portrait"
                 className={sty.avatar}
+                aspectRatio="1:1"
+                sizes="144px"
+                priority
               />
               <p className={sty.previewName}>Sol / visual notes</p>
               <p className={sty.previewBio}>
@@ -223,9 +290,12 @@ export const LandingPage = () => {
                 Share your latest project, shop, playlist, newsletter, and
                 social channels without sending people on a scavenger hunt.
               </p>
-              <img
+              <ResponsiveImage
                 src={studioImage}
                 alt="Desk and creative tools"
+                className={sty.featureImage}
+                aspectRatio="16:9"
+                sizes="(max-width: 767px) 100vw, 50vw"
                 loading="lazy"
               />
             </article>
@@ -237,7 +307,7 @@ export const LandingPage = () => {
                 profile, not a directory.
               </p>
               <div className={sty.stat}>
-                01 <span>authored page</span>
+                <span>Focused, authored page</span>
               </div>
             </article>
             <article className={`${sty.featureCard} ${sty.featureAccent}`}>
@@ -271,8 +341,8 @@ export const LandingPage = () => {
                 current, and easy to trust.
               </p>
               <div className={sty.signalValue}>
-                <strong>24%</strong>
-                <span>click-through lift</span>
+                <strong>Planned</strong>
+                <span>click insights</span>
               </div>
             </article>
           </div>
@@ -303,9 +373,11 @@ export const LandingPage = () => {
               <p>Short descriptions turn a link into an invitation.</p>
             </article>
             <article className={`${sty.toolkitCard} ${sty.toolkitImage}`}>
-              <img
+              <ResponsiveImage
                 src={studioImage}
                 alt="Creative workspace with notes and tools"
+                aspectRatio="16:9"
+                sizes="(max-width: 767px) 100vw, 40vw"
                 loading="lazy"
               />
               <div>
@@ -314,8 +386,8 @@ export const LandingPage = () => {
               </div>
             </article>
             <article className={`${sty.toolkitCard} ${sty.toolkitQuote}`}>
-              <p>“Finally, a link page that feels like part of my practice.”</p>
-              <span>— Jo, photographer</span>
+              <p>Publishing tools are still in development.</p>
+              <span>Account creation and username reservation come first.</span>
             </article>
           </div>
         </section>
@@ -348,7 +420,7 @@ export const LandingPage = () => {
             “It feels less like a link list and more like a tiny, living studio
             door.”
           </p>
-          <p className={sty.quoteByline}>— Mina, independent designer</p>
+          <p className={sty.quoteByline}>Prototype direction</p>
         </section>
 
         <section className={`lg-wrapper ${sty.audienceSection}`}>
