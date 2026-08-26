@@ -1,0 +1,157 @@
+.page {
+  background: var(--color-background-page);
+  color: var(--color-text-inverse);
+  min-height: 72vh;
+  padding: clamp(48px, 8vw, 96px) 0;
+}
+
+.shell {
+  margin: 0 auto;
+  width: min(calc(100% - 48px), 1312px);
+}
+
+.header {
+  align-items: end;
+  border-bottom: 1px solid var(--color-border-default);
+  display: flex;
+  gap: 24px;
+  justify-content: space-between;
+  padding-bottom: 32px;
+}
+
+.utility {
+  color: var(--color-action-secondary);
+  font:
+    600 0.75rem/1.2 Oswald,
+    sans-serif;
+  letter-spacing: 0.12em;
+  margin: 0 0 12px;
+  text-transform: uppercase;
+}
+
+.header h1 {
+  font:
+    600 clamp(2.5rem, 6vw, 5rem) / 0.98 Oswald,
+    sans-serif;
+  margin: 0;
+}
+
+.account {
+  color: var(--color-text-muted);
+  font-weight: 600;
+}
+
+.layout {
+  display: grid;
+  gap: 48px;
+  grid-template-columns: 200px minmax(0, 1fr);
+  padding-top: 40px;
+}
+
+.nav {
+  align-content: start;
+  display: grid;
+  gap: 8px;
+}
+
+.navLink {
+  border-left: 2px solid transparent;
+  color: var(--color-text-muted);
+  min-height: var(--target-min-size);
+  padding: 12px 16px;
+  text-decoration: none;
+  transition:
+    border-color var(--motion-fast) var(--motion-ease-standard),
+    color var(--motion-fast) var(--motion-ease-standard);
+}
+
+.navLink:hover,
+.navLink:focus-visible,
+.navLinkActive {
+  border-color: var(--color-action-secondary);
+  color: var(--color-text-inverse);
+}
+
+.content {
+  min-width: 0;
+}
+
+.state {
+  border: 1px solid var(--color-border-default);
+  display: grid;
+  gap: 12px;
+  max-width: 680px;
+  padding: 32px;
+}
+
+.state strong {
+  font:
+    600 clamp(1.75rem, 4vw, 2.5rem) / 1 Oswald,
+    sans-serif;
+}
+
+.state span {
+  color: var(--color-text-muted);
+  line-height: 1.5;
+}
+
+.state button {
+  background: var(--color-action-secondary);
+  border: 0;
+  color: var(--color-text-inverse);
+  cursor: pointer;
+  font: inherit;
+  min-height: var(--target-min-size);
+  padding: 12px 20px;
+  width: fit-content;
+}
+
+.navLink:focus-visible,
+.state button:focus-visible {
+  outline: 2px solid var(--color-action-secondary);
+  outline-offset: 3px;
+}
+
+.mutation,
+.mutationError {
+  border-left: 3px solid var(--color-action-secondary);
+  margin: 0 0 20px;
+  padding: 8px 12px;
+}
+
+.mutationError {
+  border-color: var(--color-action-primary);
+}
+
+@media (width <= 767px) {
+  .shell {
+    width: calc(100% - 32px);
+  }
+
+  .header {
+    align-items: start;
+    flex-direction: column;
+  }
+
+  .layout {
+    gap: 32px;
+    grid-template-columns: 1fr;
+  }
+
+  .nav {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .navLink {
+    border-bottom: 2px solid transparent;
+    border-left: 0;
+    padding-inline: 8px;
+    text-align: center;
+  }
+
+  .navLink:hover,
+  .navLink:focus-visible,
+  .navLinkActive {
+    border-bottom-color: var(--color-action-secondary);
+  }
+}

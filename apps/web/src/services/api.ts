@@ -4,7 +4,7 @@ import axios, {
   type AxiosRequestConfig,
 } from 'axios';
 
-import type { ApiErrorPayload } from '@/types/api';
+import type { ApiError, ApiErrorPayload, ApiErrorStatus } from '@/types/api';
 
 class ApiService {
   private readonly api: AxiosInstance;
@@ -15,7 +15,6 @@ class ApiService {
       timeout: 10000,
       withCredentials: true,
       headers: {
-        'Content-Type': 'application/json',
         Accept: 'application/json',
       },
     });
@@ -37,6 +36,46 @@ class ApiService {
     return (await this.api.post<T>(url, data, config)).data;
   }
 
+  async postMultipart<T>(
+    url: string,
+    data: FormData,
+    config?: AxiosRequestConfig
+  ): Promise<T> {
+    return (
+      await this.api.post<T>(url, data, {
+        ...config,
+        headers: {
+          ...config?.headers,
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+    ).data;
+  }
+
+  async putMultipart<T>(
+    url: string,
+    data: FormData,
+    config?: AxiosRequestConfig
+  ): Promise<T> {
+    return (
+      await this.api.put<T>(url, data, {
+        ...config,
+        headers: {
+          ...config?.headers,
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+    ).data;
+  }
+
+  async patch<T>(
+    url: string,
+    data?: unknown,
+    config?: AxiosRequestConfig
+  ): Promise<T> {
+    return (await this.api.patch<T>(url, data, config)).data;
+  }
+
   async put<T>(
     url: string,
     data?: unknown,
@@ -52,13 +91,32 @@ class ApiService {
 
 export const apiService = new ApiService();
 
-export const getApiError = (error: unknown): ApiErrorPayload => {
+const STATUS_MESSAGES: Record<ApiErrorStatus, string> = {
+  401: 'Your session has expired. Log in to continue.',
+  403: 'You do not have permission to make that change.',
+  404: "We couldn't find what you requested.",
+  409: 'That change conflicts with the current workspace data.',
+  422: 'Check the highlighted fields and try again.',
+  429: 'Too many requests. Wait a moment and try again.',
+};
+
+export const getApiError = (error: unknown): ApiError => {
   if (axios.isAxiosError(error)) {
-    return (
-      (error as AxiosError<ApiErrorPayload>).response?.data ?? {
-        message: 'Something went wrong.',
-      }
-    );
+    const response = (error as AxiosError<ApiErrorPayload>).response;
+    const status = response?.status;
+    const mappedStatus = Object.keys(STATUS_MESSAGES).includes(String(status))
+      ? (status as ApiErrorStatus)
+      : undefined;
+    const payload = response?.data;
+
+    return {
+      ...(payload ?? {}),
+      status: mappedStatus,
+      message:
+        (mappedStatus && STATUS_MESSAGES[mappedStatus]) ??
+        payload?.message ??
+        'Something went wrong. Please try again.',
+    };
   }
   return { message: 'Something went wrong. Please try again.' };
 };
