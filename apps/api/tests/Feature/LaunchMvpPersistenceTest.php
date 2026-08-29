@@ -29,6 +29,32 @@ class LaunchMvpPersistenceTest extends TestCase
         $this->assertSame(['First', 'Second'], $profile->links->pluck('label')->all());
     }
 
+    public function test_profile_revision_advances_for_profile_and_link_content_changes(): void
+    {
+        $profile = Profile::factory()->create(['draft_revision' => 1]);
+        $this->assertSame(1, $profile->draft_revision);
+
+        $profile->update(['display_name' => 'Changed']);
+        $this->assertSame(2, $profile->fresh()->draft_revision);
+
+        $link = Link::factory()->for($profile)->create(['position' => 0]);
+        $this->assertSame(3, $profile->fresh()->draft_revision);
+
+        $link->update(['enabled' => false]);
+        $this->assertSame(4, $profile->fresh()->draft_revision);
+    }
+
+    public function test_publication_snapshot_records_source_revision_and_status_distinguishes_unpublished_changes(): void
+    {
+        $profile = Profile::factory()->create(['draft_revision' => 4, 'published_snapshot_id' => null]);
+        $snapshot = PublicationSnapshot::factory()->for($profile)->create(['source_revision' => 4]);
+        $profile->update(['published_snapshot_id' => $snapshot->id]);
+
+        $this->assertSame('published', $profile->fresh()->publication_status);
+        $profile->update(['bio' => 'A newer draft']);
+        $this->assertSame('changes_not_published', $profile->fresh()->publication_status);
+    }
+
     public function test_profile_link_position_is_unique_per_profile(): void
     {
         $profile = Profile::factory()->create();

@@ -496,6 +496,9 @@ components:
         - publication_state
         - published_at
         - published_version
+        - draft_revision
+        - publication_revision
+        - publication_status
         - created_at
         - updated_at
       properties:
@@ -529,6 +532,16 @@ components:
           type: integer
           minimum: 1
           nullable: true
+        draft_revision:
+          type: integer
+          minimum: 1
+        publication_revision:
+          type: integer
+          minimum: 1
+          nullable: true
+        publication_status:
+          type: string
+          enum: [draft, published, changes_not_published]
         created_at:
           type: string
           format: date-time

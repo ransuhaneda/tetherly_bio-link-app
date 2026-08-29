@@ -20,6 +20,9 @@ class PublicationController extends Controller
         abort_unless($request->user()->can('publish', $profile), 403);
         $profile = DB::transaction(function () use ($profile): Profile {
             $profile->lockForUpdate()->refresh();
+            if ($profile->published_snapshot_id && $profile->publication_status === 'published') {
+                throw ValidationException::withMessages(['publication' => 'There are no unpublished changes to publish.']);
+            }
             if (! is_string($profile->display_name) || trim($profile->display_name) === '') {
                 throw ValidationException::withMessages(['display_name' => 'A display name is required to publish.']);
             }
@@ -29,7 +32,7 @@ class PublicationController extends Controller
             }
             $version = ((int) $profile->publicationSnapshots()->max('version')) + 1;
             $snapshot = PublicationSnapshot::create([
-                'profile_id' => $profile->id, 'version' => $version, 'username' => $profile->username,
+                'profile_id' => $profile->id, 'version' => $version, 'source_revision' => $profile->draft_revision, 'username' => $profile->username,
                 'display_name' => $profile->display_name, 'bio' => $profile->bio, 'avatar_path' => $profile->avatar_path,
                 'theme' => $profile->theme, 'links' => $links->map(fn ($link) => [
                     'id' => $link->id, 'label' => $link->label, 'url' => $link->url, 'icon' => $link->icon,
