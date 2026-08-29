@@ -12,7 +12,7 @@ The backend is the secure, versioned service behind Tetherly's creator accounts,
 - Laravel Sanctum provides first-party SPA cookie sessions with CSRF protection.
 - Controllers belong in `app/Http/Controllers/Api/V1`; FormRequests validate input; API Resources define response envelopes; domain actions hold substantial workflows.
 
-The current foundation covers username availability, register/login/session/logout, authenticated profile read/update/avatar operations, and authenticated link CRUD/order operations. Publishing, public profile lookup, analytics, Suggestions, password reset, and Google OAuth remain deferred capabilities and must be implemented as explicit contracts rather than inferred from frontend scaffolding.
+The current foundation covers username availability, register/login/session/logout, authenticated profile read/update/avatar operations, authenticated link CRUD/order operations, immutable publication snapshots, publish/unpublish actions, and public profile lookup. Analytics, Suggestions, password reset, and Google OAuth remain deferred capabilities and must be implemented as explicit contracts rather than inferred from frontend scaffolding.
 
 ## Product outcomes
 
@@ -51,11 +51,13 @@ The canonical contract is `docs/openapi.yaml`. Keep it synchronized with impleme
 - `GET/POST /api/v1/profile/links` — list or create authenticated draft links.
 - `PUT /api/v1/profile/links/order` — transactionally reorder owned links.
 - `PATCH|DELETE /api/v1/profile/links/{link}` — update or remove an owned draft link.
+- `POST /api/v1/profile/publish` — validate the draft and transactionally create and select the next immutable publication snapshot.
+- `POST /api/v1/profile/unpublish` — stop public lookup without deleting draft data or historical snapshots.
+- `GET /api/v1/profiles/{username}` — return only the selected published snapshot and its enabled links; unknown and unpublished profiles return `404`.
 
 ### Planned resource groups
 
-- Draft preview and publish/unpublish actions with authorization checks.
-- Public `GET /api/v1/profiles/{username}` for published profile data only.
+- Authenticated draft preview beyond the existing profile and link resources.
 - Authenticated analytics summary, time-series, acquisition, destination, and funnel endpoints with bounded date ranges and pagination where needed.
 - Suggestions endpoint that returns evidence-backed recommendations and marks whether each item is informational or an experiment.
 

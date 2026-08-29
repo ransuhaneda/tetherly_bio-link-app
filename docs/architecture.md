@@ -27,6 +27,10 @@ The first-party SPA uses Laravel Sanctum's cookie-based session flow. The fronte
 
 Public endpoints are versioned under `/api/v1`. Controllers live in `apps/api/app/Http/Controllers/Api/V1`, validation uses FormRequests, response shape uses API Resources, and substantial registration work is handled by `RegisterUser`. Add new endpoints to `routes/api.php`, then update `docs/openapi.yaml` and the relevant feature tests.
 
+## Publishing
+
+The authenticated profile and links are always the editable draft. Publishing runs transactionally and stores the next immutable `publication_snapshots` version, then points the profile at that selected snapshot. Public `GET /api/v1/profiles/{username}` reads only the selected snapshot and never reads live draft fields. Later edits remain private until another publish; unpublishing clears the selected snapshot pointer without deleting draft data or snapshot history.
+
 ## Environments
 
 - Root `.env.example` documents shared development values.

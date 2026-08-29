@@ -11,7 +11,7 @@ The frontend is the public, responsive React experience for Tetherly: a creator 
 - Typed HTTP client boundary for the Laravel API; the browser never accesses MySQL directly.
 - Responsive, keyboard-accessible UI for 320px through large desktop widths.
 
-Authentication, persistence, typed profile/link APIs, and the protected dashboard shell now exist. Profile/link editing UI, publishing, public profile rendering, analytics, and production deployment behavior remain incomplete. Frontend screens must not imply unfinished capabilities are live.
+Authentication, persistence, typed profile/link/publication APIs, and the protected dashboard shell now exist. Profile/link editing UI, creator publish/unpublish controls, public profile rendering, analytics, and production deployment behavior remain incomplete. Frontend screens must not imply unfinished capabilities are live.
 
 ## Product outcomes
 
@@ -79,6 +79,11 @@ The frontend must consume and handle:
 - `GET/POST /api/v1/profile/links`
 - `PATCH|DELETE /api/v1/profile/links/{link}`
 - `PUT /api/v1/profile/links/order`
+- `POST /api/v1/profile/publish`
+- `POST /api/v1/profile/unpublish`
+- `GET /api/v1/profiles/{username}`
+
+Publishing creates an immutable snapshot. Draft edits made afterward must not appear publicly until the creator publishes again. Unpublished profiles and unknown usernames both resolve as `404` through the public lookup contract.
 
 Map `422`, `401`, and `429` responses into local, readable UI states without leaking raw implementation details. Keep the OpenAPI document and frontend domain types synchronized when contracts change.
 
