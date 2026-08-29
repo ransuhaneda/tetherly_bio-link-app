@@ -3,6 +3,7 @@ import { NavLink, Outlet } from 'react-router-dom';
 import { useCreatorWorkspace } from '@/features/creator-workspace/useCreatorWorkspace';
 
 import sty from './DashboardLayout.module.scss';
+import { PublicationControls } from './PublicationControls';
 
 const DASHBOARD_LINKS = [
   { label: 'Profile', to: '/dashboard/profile' },
@@ -50,6 +51,7 @@ export function DashboardLayout() {
           <div className={sty.account}>
             {profile ? `@${profile.username}` : 'Workspace'}
           </div>
+          <PublicationControls compact />
         </header>
         <div className={sty.layout}>
           <nav className={sty.nav} aria-label="Creator workspace">

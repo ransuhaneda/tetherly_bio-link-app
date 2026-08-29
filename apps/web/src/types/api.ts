@@ -15,6 +15,9 @@ export interface CreatorProfile {
   avatar_url: string | null;
   theme: CreatorProfileTheme;
   publication_state: 'draft' | 'published';
+  publication_status?: 'draft' | 'published' | 'changes_not_published';
+  draft_revision?: number;
+  publication_revision?: number | null;
   published_at: string | null;
   published_version: number | null;
   created_at: string;
