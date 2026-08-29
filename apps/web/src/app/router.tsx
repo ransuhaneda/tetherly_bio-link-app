@@ -25,6 +25,13 @@ export const router = createBrowserRouter([
     children: [
       { path: '*', element: <ErrorNotFound /> },
       withHydrateFallback({
+        path: '@:username',
+        lazy: async () => {
+          const module = await import('@/pages/PublicProfilePage');
+          return { Component: module.PublicProfilePage };
+        },
+      }),
+      withHydrateFallback({
         index: true,
         lazy: async () => {
           const module = await import('@/pages/LandingPage');

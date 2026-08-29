@@ -20,7 +20,9 @@ const ScrollToTop = () => {
 
 const App = () => {
   const navigation = useNavigation();
+  const { pathname } = useLocation();
   const isLoading = navigation.state === 'loading';
+  const isPublicProfile = /^\/@[^/]+$/.test(pathname);
 
   if (isLoading) {
     document.body.style.overflow = 'hidden';
@@ -33,14 +35,14 @@ const App = () => {
       <ScrollToTop />
       <ErrorBoundary>
         <Suspense fallback={<LoadingSpinner />}>
-          <Navbar />
+          {!isPublicProfile && <Navbar />}
 
           <main>
             {isLoading && <LoadingSpinner />}
             <Outlet />
           </main>
 
-          <Footer />
+          {!isPublicProfile && <Footer />}
         </Suspense>
       </ErrorBoundary>
     </>
