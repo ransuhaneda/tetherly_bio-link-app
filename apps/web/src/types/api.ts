@@ -20,6 +20,7 @@ export interface CreatorProfile {
   publication_revision?: number | null;
   published_at: string | null;
   published_version: number | null;
+  has_published?: boolean;
   created_at: string;
   updated_at: string;
 }

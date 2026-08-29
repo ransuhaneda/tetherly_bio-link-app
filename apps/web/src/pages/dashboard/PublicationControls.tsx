@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import { publicationApi } from '@/features/creator-workspace/publicationApi';
@@ -22,11 +22,12 @@ export function PublicationControls({
   const { profile, links, runMutation } = useCreatorWorkspace();
   const [modal, setModal] = useState<'publish' | 'unpublish' | null>(null);
   const [error, setError] = useState('');
-  if (!profile) return null;
+  const modalRef = useRef<HTMLElement>(null);
+  const restoreFocusRef = useRef<HTMLElement | null>(null);
   const status =
-    profile.publication_status ??
-    (profile.publication_state === 'published' ? 'published' : 'draft');
-  const readyName = Boolean(profile.display_name?.trim());
+    profile?.publication_status ??
+    (profile?.publication_state === 'published' ? 'published' : 'draft');
+  const readyName = Boolean(profile?.display_name?.trim());
   const readyLink = links.some(link => {
     try {
       const url = new URL(link.url);
@@ -36,6 +37,44 @@ export function PublicationControls({
     }
   });
   const ready = readyName && readyLink;
+  useEffect(() => {
+    if (!modal) return;
+    restoreFocusRef.current = document.activeElement as HTMLElement;
+    const getFocusable = () => [
+      ...(modalRef.current?.querySelectorAll<HTMLElement>(
+        'button, a[href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+      ) ?? []),
+    ];
+    getFocusable()[0]?.focus();
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setModal(null);
+        return;
+      }
+      if (event.key !== 'Tab') return;
+      const elements = getFocusable();
+      if (elements.length < 1) return;
+      const first = elements[0];
+      const last = elements[elements.length - 1];
+      if (!first || !last) return;
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    };
+    document.addEventListener('keydown', onKeyDown);
+    return () => {
+      document.removeEventListener('keydown', onKeyDown);
+      restoreFocusRef.current?.focus();
+      restoreFocusRef.current = null;
+    };
+  }, [modal]);
+  if (!profile) return null;
+  const hasPublished =
+    profile.has_published ?? Boolean(profile.published_version);
   const publicUrl = `${window.location.origin}/@${profile.username}`;
   const publish = async () => {
     setError('');
@@ -107,6 +146,8 @@ export function PublicationControls({
         <div className={sty.actions}>
           <span
             className={`${sty.status} ${status === 'published' ? sty.live : ''}`}
+            role="status"
+            aria-live="polite"
           >
             <span aria-hidden="true">●</span>{' '}
             {status === 'published'
@@ -119,15 +160,18 @@ export function PublicationControls({
             <button
               className={sty.primary}
               type="button"
-              disabled={!ready}
               onClick={() =>
-                profile.published_version ? void publish() : setModal('publish')
+                !ready
+                  ? setModal('publish')
+                  : hasPublished
+                    ? void publish()
+                    : setModal('publish')
               }
             >
-              {profile.published_version ? 'Publish' : 'Publish your Tether'}
+              {hasPublished ? 'Publish' : 'Publish your Tether'}
             </button>
           )}
-          {status === 'published' && (
+          {status !== 'draft' && (
             <button type="button" onClick={() => setModal('unpublish')}>
               Unpublish
             </button>
@@ -146,6 +190,7 @@ export function PublicationControls({
             role="dialog"
             aria-modal="true"
             aria-labelledby="publication-title"
+            ref={modalRef}
           >
             <p className={sty.utility}>
               {modal === 'publish' ? 'Make it public' : 'Publication controls'}
@@ -157,6 +202,25 @@ export function PublicationControls({
             </h2>
             {modal === 'publish' ? (
               <>
+                {!ready && (
+                  <div className={sty.requirements}>
+                    <p>Complete these requirements before publishing:</p>
+                    <ul>
+                      {!readyName && (
+                        <li>
+                          Add a display name{' '}
+                          <Link to="/dashboard/profile">Go to Profile</Link>
+                        </li>
+                      )}
+                      {!readyLink && (
+                        <li>
+                          Add an enabled HTTP(S) destination{' '}
+                          <Link to="/dashboard/links">Go to Links</Link>
+                        </li>
+                      )}
+                    </ul>
+                  </div>
+                )}
                 <p>
                   Your profile will be available at <strong>{publicUrl}</strong>
                   .
@@ -179,6 +243,7 @@ export function PublicationControls({
               <button
                 className={sty.primary}
                 type="button"
+                disabled={modal === 'publish' && !ready}
                 onClick={() =>
                   void (modal === 'publish' ? publish() : unpublish())
                 }
