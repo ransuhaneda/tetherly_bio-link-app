@@ -45,6 +45,11 @@ class User extends Authenticatable
         return $this->hasOne(Profile::class);
     }
 
+    public function accountDeletion(): HasOne
+    {
+        return $this->hasOne(AccountDeletion::class);
+    }
+
     protected function casts(): array
     {
         return [

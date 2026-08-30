@@ -7,6 +7,8 @@ use App\Enums\PublicationState;
 use App\Models\Link;
 use App\Models\Profile;
 use App\Models\PublicationSnapshot;
+use App\Enums\AccountDeletionState;
+use App\Models\AccountDeletion;
 use App\Models\User;
 use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -99,6 +101,38 @@ class LaunchMvpPersistenceTest extends TestCase
         $this->assertFalse($stranger->can('update', $profile));
         $this->assertTrue($owner->can('update', $link));
         $this->assertFalse($stranger->can('update', $link));
+    }
+
+    public function test_account_deletion_casts_dates_and_scopes_expired_records(): void
+    {
+        $user = User::factory()->create();
+        $deletion = AccountDeletion::create([
+            'user_id' => $user->id,
+            'state' => AccountDeletionState::Pending,
+            'requested_at' => now()->subDays(31),
+            'recovery_deadline' => now()->subDay(),
+            'email' => $user->email,
+        ]);
+
+        $this->assertSame(AccountDeletionState::Pending, $deletion->fresh()->state);
+        $this->assertTrue($deletion->fresh()->recovery_deadline->isPast());
+        $this->assertTrue(AccountDeletion::purgeEligible()->whereKey($deletion)->exists());
+        $this->assertSame($user->id, $deletion->user->id);
+    }
+
+    public function test_deleting_user_cascades_account_deletion(): void
+    {
+        $user = User::factory()->create();
+        $deletion = AccountDeletion::create([
+            'user_id' => $user->id,
+            'state' => AccountDeletionState::Pending,
+            'requested_at' => now(),
+            'recovery_deadline' => now()->addDays(30),
+            'email' => $user->email,
+        ]);
+
+        $user->delete();
+        $this->assertDatabaseMissing('account_deletions', ['id' => $deletion->id]);
     }
 
     public function test_deleting_user_cascades_profile_links_and_snapshots(): void
