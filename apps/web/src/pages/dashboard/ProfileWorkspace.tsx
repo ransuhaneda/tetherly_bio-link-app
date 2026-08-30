@@ -49,6 +49,7 @@ export function ProfileWorkspace() {
     }
   };
   const remove = async () => {
+    if (!window.confirm('Remove this avatar?')) return;
     setError('');
     try {
       await runMutation(() => profileApi.deleteAvatar());

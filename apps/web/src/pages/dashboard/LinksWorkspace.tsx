@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { MdDragIndicator } from 'react-icons/md';
 
 import { linksApi } from '@/features/creator-workspace/linksApi';
 import { useCreatorWorkspace } from '@/features/creator-workspace/useCreatorWorkspace';
@@ -6,18 +7,36 @@ import type { CreatorLink } from '@/types/api';
 
 import sty from './WorkspacePage.module.scss';
 
+const orderLinks = (links: CreatorLink[]) =>
+  [...links].sort((a, b) => a.position - b.position);
+
 export function LinksWorkspace() {
   const { links, runMutation } = useCreatorWorkspace();
   const [editing, setEditing] = useState<number | null>(null);
   const [label, setLabel] = useState('');
   const [url, setUrl] = useState('');
   const [error, setError] = useState('');
+  const [orderedLinks, setOrderedLinks] = useState<CreatorLink[]>(() =>
+    orderLinks(links)
+  );
+  const [draggedId, setDraggedId] = useState<number | null>(null);
+  const [failedOrder, setFailedOrder] = useState<number[] | null>(null);
+  const [announcement, setAnnouncement] = useState('');
+  const [isPersistingOrder, setIsPersistingOrder] = useState(false);
+  const lastDragOverTargetId = useRef<number | null>(null);
+
+  useEffect(() => {
+    if (draggedId === null && !isPersistingOrder)
+      setOrderedLinks(orderLinks(links));
+  }, [draggedId, isPersistingOrder, links]);
+
   const begin = (link?: CreatorLink) => {
     setEditing(link?.id ?? 0);
     setLabel(link?.label ?? '');
     setUrl(link?.url ?? '');
     setError('');
   };
+
   const save = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!label.trim() || !/^https?:\/\//i.test(url)) {
@@ -42,31 +61,117 @@ export function LinksWorkspace() {
       setError('Link could not be saved.');
     }
   };
-  const change = async (
-    link: CreatorLink,
-    action: 'toggle' | 'delete' | 'up' | 'down'
+
+  const move = async (link: CreatorLink, direction: 'up' | 'down') => {
+    const current = orderLinks(orderedLinks);
+    const index = current.findIndex(item => item.id === link.id);
+    const target = direction === 'up' ? index - 1 : index + 1;
+    if (target < 0 || target >= current.length) return;
+    const next = [...current];
+    const source = next[index];
+    const destination = next[target];
+    if (!source || !destination) return;
+    next[index] = destination;
+    next[target] = source;
+    await persistOrder(next, current, link.label);
+  };
+
+  const persistOrder = async (
+    next: CreatorLink[],
+    previous: CreatorLink[],
+    movedLabel?: string
   ) => {
+    setOrderedLinks(next);
+    setFailedOrder(null);
+    setIsPersistingOrder(true);
     try {
-      if (action === 'toggle')
-        await runMutation(() =>
-          linksApi.update(link.id, { enabled: !link.enabled })
-        );
-      else if (action === 'delete')
-        await runMutation(() => linksApi.remove(link.id));
-      else {
-        const ordered = [...links].sort((a, b) => a.position - b.position);
-        const i = ordered.findIndex(x => x.id === link.id);
-        const j = action === 'up' ? i - 1 : i + 1;
-        if (j < 0 || j >= ordered.length) return;
-        [ordered[i], ordered[j]] = [ordered[j], ordered[i]];
-        await runMutation(() =>
-          linksApi.reorder({ ordered_link_ids: ordered.map(x => x.id) })
-        );
-      }
+      await runMutation(() =>
+        linksApi.reorder({ ordered_link_ids: next.map(item => item.id) })
+      );
+      const index = movedLabel
+        ? next.findIndex(item => item.label === movedLabel)
+        : next.findIndex(item => item.id === draggedId);
+      setAnnouncement(
+        `${movedLabel ?? 'Destination'} moved to position ${index + 1} of ${next.length}`
+      );
     } catch {
-      setError('Link change could not be saved.');
+      setOrderedLinks(previous);
+      setFailedOrder(next.map(item => item.id));
+      setError('Order could not be saved.');
+    } finally {
+      setIsPersistingOrder(false);
     }
   };
+
+  const onDragStart = (event: React.DragEvent, link: CreatorLink) => {
+    if (editing !== null) {
+      event.preventDefault();
+      return;
+    }
+    setDraggedId(link.id);
+    lastDragOverTargetId.current = null;
+    event.dataTransfer.effectAllowed = 'move';
+    event.dataTransfer.setData('text/plain', String(link.id));
+  };
+
+  const onDragOver = (event: React.DragEvent, targetId: number) => {
+    event.preventDefault();
+    if (draggedId === null || draggedId === targetId || editing === targetId)
+      return;
+    if (lastDragOverTargetId.current === targetId) return;
+    const current = orderLinks(orderedLinks);
+    const from = current.findIndex(item => item.id === draggedId);
+    const to = current.findIndex(item => item.id === targetId);
+    if (from < 0 || to < 0) return;
+    const next = [...current];
+    const [dragged] = next.splice(from, 1);
+    if (!dragged) return;
+    next.splice(to, 0, dragged);
+    setOrderedLinks(next);
+    lastDragOverTargetId.current = targetId;
+    setAnnouncement(
+      `${dragged.label} moved to position ${to + 1} of ${next.length}`
+    );
+  };
+
+  const onDrop = (event: React.DragEvent) => {
+    event.preventDefault();
+    if (draggedId === null) return;
+    const previous = orderLinks(links);
+    const next = orderLinks(orderedLinks);
+    lastDragOverTargetId.current = null;
+    if (
+      next.map(item => item.id).join() !== previous.map(item => item.id).join()
+    ) {
+      const moved = next.find(item => item.id === draggedId);
+      void persistOrder(next, previous, moved?.label);
+    }
+    setDraggedId(null);
+  };
+
+  const change = async (link: CreatorLink, action: 'toggle' | 'delete') => {
+    if (action === 'delete' && !window.confirm('Remove this destination?'))
+      return;
+    try {
+      await runMutation(() =>
+        action === 'toggle'
+          ? linksApi.update(link.id, { enabled: !link.enabled })
+          : linksApi.remove(link.id)
+      );
+    } catch {
+      setError('Destination change could not be saved.');
+    }
+  };
+
+  const retry = () => {
+    if (!failedOrder) return;
+    const previous = orderLinks(links);
+    const next = failedOrder
+      .map(id => previous.find(link => link.id === id))
+      .filter((link): link is CreatorLink => Boolean(link));
+    void persistOrder(next, previous);
+  };
+
   return (
     <article className={sty.card}>
       <p className={sty.utility}>Destinations</p>
@@ -99,52 +204,79 @@ export function LinksWorkspace() {
           </div>
         </form>
       )}
-      <ul className={sty.linkList}>
-        {[...links]
-          .sort((a, b) => a.position - b.position)
-          .map((link, i) => (
-            <li key={link.id}>
-              <div>
-                <strong>{link.label}</strong>
-                <span>{link.url}</span>
-              </div>
-              <div className={sty.actions}>
-                <button
-                  type="button"
-                  onClick={() => void change(link, 'up')}
-                  disabled={i === 0}
-                  aria-label={`Move ${link.label} up`}
-                >
-                  ↑
-                </button>
-                <button
-                  type="button"
-                  onClick={() => void change(link, 'down')}
-                  disabled={i === links.length - 1}
-                  aria-label={`Move ${link.label} down`}
-                >
-                  ↓
-                </button>
-                <button
-                  type="button"
-                  onClick={() => void change(link, 'toggle')}
-                >
-                  {link.enabled ? 'Disable' : 'Enable'}
-                </button>
-                <button type="button" onClick={() => begin(link)}>
-                  Edit
-                </button>
-                <button
-                  type="button"
-                  onClick={() => void change(link, 'delete')}
-                >
-                  Delete
-                </button>
-              </div>
-            </li>
-          ))}
+      <p className={sty.srOnly} aria-live="polite">
+        {announcement}
+      </p>
+      <ul
+        className={sty.linkList}
+        onDragOver={event => event.preventDefault()}
+        onDrop={onDrop}
+      >
+        {orderedLinks.map((link, i) => (
+          <li
+            key={link.id}
+            onDragOver={event => onDragOver(event, link.id)}
+            onDrop={onDrop}
+            className={draggedId === link.id ? sty.dragging : ''}
+          >
+            <div className={sty.linkDetails}>
+              <strong>{link.label}</strong>
+              <span>{link.url}</span>
+              {!link.enabled && <span className={sty.hiddenBadge}>Hidden</span>}
+            </div>
+            <div className={sty.actions}>
+              <button
+                className={sty.dragHandle}
+                type="button"
+                draggable={editing === null}
+                onDragStart={event => onDragStart(event, link)}
+                onDragEnd={() => {
+                  lastDragOverTargetId.current = null;
+                  setDraggedId(null);
+                }}
+                aria-label={`Reorder ${link.label}`}
+                disabled={editing !== null}
+              >
+                <MdDragIndicator aria-hidden="true" />
+              </button>
+              <button
+                type="button"
+                onClick={() => void move(link, 'up')}
+                disabled={i === 0}
+                aria-label={`Move ${link.label} up`}
+              >
+                Move up
+              </button>
+              <button
+                type="button"
+                onClick={() => void move(link, 'down')}
+                disabled={i === orderedLinks.length - 1}
+                aria-label={`Move ${link.label} down`}
+              >
+                Move down
+              </button>
+              <button type="button" onClick={() => void change(link, 'toggle')}>
+                {link.enabled ? 'Disable' : 'Enable'}
+              </button>
+              <button type="button" onClick={() => begin(link)}>
+                Edit
+              </button>
+              <button type="button" onClick={() => void change(link, 'delete')}>
+                Delete
+              </button>
+            </div>
+          </li>
+        ))}
       </ul>
-      {error && (
+      {failedOrder && (
+        <p className={sty.error}>
+          Order could not be saved.{' '}
+          <button type="button" onClick={retry}>
+            Retry
+          </button>
+        </p>
+      )}
+      {error && !failedOrder && (
         <p role="alert" className={sty.error}>
           {error}
         </p>

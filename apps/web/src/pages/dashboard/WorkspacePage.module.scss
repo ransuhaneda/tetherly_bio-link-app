@@ -205,6 +205,18 @@
   min-width: 0;
 }
 
+.linkDetails {
+  align-items: start;
+}
+
+.hiddenBadge {
+  color: var(--color-action-primary);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
 .linkList span {
   color: var(--color-text-muted);
   overflow-wrap: anywhere;
@@ -220,6 +232,28 @@
 .actions button:disabled {
   cursor: not-allowed;
   opacity: 0.4;
+}
+
+.dragHandle {
+  align-items: center;
+  display: inline-flex;
+  justify-content: center;
+}
+
+.dragHandle:not(:disabled) {
+  cursor: grab;
+}
+
+.dragging {
+  opacity: 0.55;
+}
+
+.srOnly {
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  position: absolute;
+  width: 1px;
 }
 
 @media (width <= 767px) {
