@@ -21,12 +21,14 @@ import { SEOHelmet } from '@components/common/SEOHelmet';
 import { ErrorNotFound } from './NotFound';
 import sty from './PublicProfilePage.module.scss';
 
+/* eslint-disable react-refresh/only-export-components */
+
 const UNAVAILABLE = 'This Tether isn’t available.';
 const UNAVAILABLE_DETAIL =
   'The link may be incorrect, unpublished, or no longer active.';
 const DEFAULT_DESCRIPTION = 'A Tetherly creator profile.';
 
-const safeDestination = (value: string) => {
+export const safeDestination = (value: string) => {
   try {
     const url = new URL(value);
     return url.protocol === 'http:' || url.protocol === 'https:' ? url : null;
@@ -48,7 +50,7 @@ const categories = ['social', 'work', 'contact', 'content'] as const;
 type Category = (typeof categories)[number];
 const getCategory = (value: string | null): Category | null =>
   categories.includes(value as Category) ? (value as Category) : null;
-const copyText = async (value: string): Promise<boolean> => {
+export const copyText = async (value: string): Promise<boolean> => {
   if (!navigator.clipboard?.writeText) return false;
   try {
     await navigator.clipboard.writeText(value);
