@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: Tetherly API
-  version: 1.1.0
+  version: 1.2.0
   description:
     First-party API. Public web profiles use `/@username`; API lookup paths
     omit `@`. JSON success uses `data` (and mutation `message`); errors use `message`
@@ -68,11 +68,13 @@ paths:
               $ref: '#/components/schemas/LoginRequest'
       responses:
         '200':
-          description: Authenticated
+          description: Authenticated or explicit account restoration required
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserResponse'
+                $ref: '#/components/schemas/LoginResponse'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         '409':
           $ref: '#/components/responses/Conflict'
         '422':
@@ -98,15 +100,79 @@ paths:
       operationId: getApiV1AuthMe
   /api/v1/auth/logout:
     post:
-      security:
-        - sanctumCookie: []
+      description:
+        Invalidates either an authenticated session or a limited account
+        restoration session.
       responses:
         '204':
           description: Session invalidated
-        '401':
-          $ref: '#/components/responses/Unauthenticated'
       summary: POST /api/v1/auth/logout
       operationId: postApiV1AuthLogout
+  /api/v1/auth/recovery:
+    get:
+      description:
+        Returns pending-deletion details only after valid credentials have
+        established a limited restoration session. It never grants workspace access.
+      responses:
+        '200':
+          description: Explicit restoration is available
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestorationRequiredResponse'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+      summary: GET /api/v1/auth/recovery
+      operationId: getApiV1AuthRecovery
+  /api/v1/auth/restore:
+    post:
+      description:
+        Explicitly restores the account represented by the limited restoration
+        session, authenticates it, and leaves its profile unpublished.
+      responses:
+        '200':
+          description: Account restored and authenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthenticatedLoginMutationResponse'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+      summary: POST /api/v1/auth/restore
+      operationId: postApiV1AuthRestore
+  /api/v1/account/deletion:
+    post:
+      security:
+        - sanctumCookie: []
+      description:
+        Requires the current password, immediately unpublishes the profile,
+        invalidates account sessions, and starts one authoritative 30-day
+        recovery window. Repeated requests return the original deadline.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestAccountDeletionRequest'
+      responses:
+        '200':
+          description: Account deletion is pending
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountDeletionMutationResponse'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+      summary: POST /api/v1/account/deletion
+      operationId: postApiV1AccountDeletion
   /api/v1/profile:
     get:
       security:
@@ -455,6 +521,75 @@ components:
         password:
           type: string
           format: password
+    RequestAccountDeletionRequest:
+      type: object
+      required:
+        - current_password
+      properties:
+        current_password:
+          type: string
+          format: password
+    AccountDeletionState:
+      type: string
+      enum:
+        - pending
+        - restored
+        - purge_eligible
+        - purging
+        - completed
+        - failed
+    AccountDeletion:
+      type: object
+      required:
+        - state
+        - requested_at
+        - recovery_deadline
+        - deletion_date
+        - username
+      properties:
+        state:
+          $ref: '#/components/schemas/AccountDeletionState'
+        requested_at:
+          type: string
+          format: date-time
+        recovery_deadline:
+          type: string
+          format: date-time
+          description: Authoritative cutoff; restoration is unavailable at or after this instant.
+        deletion_date:
+          type: string
+          format: date
+          description: UTC calendar date shown in product copy.
+        username:
+          $ref: '#/components/schemas/Username'
+    AuthenticatedLoginResult:
+      type: object
+      required:
+        - status
+        - user
+      properties:
+        status:
+          type: string
+          enum: [authenticated]
+        user:
+          $ref: '#/components/schemas/User'
+    RestorationRequiredLoginResult:
+      type: object
+      required:
+        - status
+        - deletion
+      properties:
+        status:
+          type: string
+          enum: [restoration_required]
+        deletion:
+          $ref: '#/components/schemas/AccountDeletion'
+    LoginResult:
+      oneOf:
+        - $ref: '#/components/schemas/AuthenticatedLoginResult'
+        - $ref: '#/components/schemas/RestorationRequiredLoginResult'
+      discriminator:
+        propertyName: status
     User:
       type: object
       required:
@@ -759,6 +894,40 @@ components:
       properties:
         data:
           $ref: '#/components/schemas/User'
+    LoginResponse:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          $ref: '#/components/schemas/LoginResult'
+    RestorationRequiredResponse:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          $ref: '#/components/schemas/RestorationRequiredLoginResult'
+    AuthenticatedLoginMutationResponse:
+      type: object
+      required:
+        - data
+        - message
+      properties:
+        data:
+          $ref: '#/components/schemas/AuthenticatedLoginResult'
+        message:
+          type: string
+    AccountDeletionMutationResponse:
+      type: object
+      required:
+        - data
+        - message
+      properties:
+        data:
+          $ref: '#/components/schemas/AccountDeletion'
+        message:
+          type: string
     AvailabilityResponse:
       type: object
       required:
@@ -852,6 +1021,16 @@ components:
             type: array
             items:
               type: string
+    RateLimitErrorResponse:
+      allOf:
+        - $ref: '#/components/schemas/ErrorResponse'
+        - type: object
+          required:
+            - retry_after
+          properties:
+            retry_after:
+              type: integer
+              minimum: 1
   responses:
     Unauthenticated:
       description: Unauthenticated
@@ -885,10 +1064,16 @@ components:
             $ref: '#/components/schemas/ErrorResponse'
     RateLimited:
       description: Rate limited
+      headers:
+        Retry-After:
+          description: Seconds until another request may be attempted.
+          schema:
+            type: integer
+            minimum: 1
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/ErrorResponse'
+            $ref: '#/components/schemas/RateLimitErrorResponse'
     PayloadTooLarge:
       description: Avatar exceeds 5 MiB
       content:

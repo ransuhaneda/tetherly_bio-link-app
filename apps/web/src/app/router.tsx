@@ -54,6 +54,14 @@ export const router = createBrowserRouter([
       }),
 
       withHydrateFallback({
+        path: 'restore-account',
+        lazy: async () => {
+          const module = await import('@/pages/auth/RestoreAccount');
+          return { Component: module.RestoreAccount };
+        },
+      }),
+
+      withHydrateFallback({
         path: 'signup',
         lazy: async () => {
           const module = await import('@/pages/auth/Signup');

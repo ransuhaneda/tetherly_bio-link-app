@@ -1,8 +1,17 @@
 /* stylelint-disable no-descending-specificity */
+.stack {
+  display: grid;
+  gap: 48px;
+  grid-template-columns: minmax(0, 1fr);
+  min-width: 0;
+}
+
 .card {
   border: 1px solid var(--color-border-default);
+  box-sizing: border-box;
   max-width: 760px;
   padding: clamp(24px, 5vw, 48px);
+  width: 100%;
 }
 
 .utility {

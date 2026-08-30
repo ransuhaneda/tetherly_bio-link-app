@@ -14,6 +14,7 @@ final class Username
         'mockapi',
         'pricing',
         'privacy',
+        'restore-account',
         'samplepage',
         'sanctum',
         'signup',

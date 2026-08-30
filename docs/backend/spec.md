@@ -12,7 +12,7 @@ The backend is the secure, versioned service behind Tetherly's creator accounts,
 - Laravel Sanctum provides first-party SPA cookie sessions with CSRF protection.
 - Controllers belong in `app/Http/Controllers/Api/V1`; FormRequests validate input; API Resources define response envelopes; domain actions hold substantial workflows.
 
-The current foundation covers username availability, register/login/session/logout, authenticated profile read/update/avatar operations, authenticated link CRUD/order operations, immutable publication snapshots, publish/unpublish actions, and public profile lookup. Analytics, Suggestions, password reset, and Google OAuth remain deferred capabilities and must be implemented as explicit contracts rather than inferred from frontend scaffolding.
+The current foundation covers username availability, register/login/session/logout, authenticated profile read/update/avatar operations, authenticated link CRUD/order operations, immutable publication snapshots, publish/unpublish actions, public profile lookup, and recoverable account deletion with scheduled purge. Analytics, Suggestions, password reset, and Google OAuth remain deferred capabilities and must be implemented as explicit contracts rather than inferred from frontend scaffolding.
 
 ## Product outcomes
 
@@ -29,6 +29,7 @@ Minimum persisted entities:
 - **User:** name, email, password hash, timestamps, verified status as required by product policy.
 - **Profile:** one-to-one with user; unique username, display name, bio, avatar/theme settings, publication status, timestamps.
 - **Link:** belongs to profile; label, URL, optional icon/category, display order, enabled status, timestamps.
+- **Account deletion:** one lifecycle record per account; state, request-time email, request timestamp, authoritative recovery deadline, bounded purge attempts, retry timestamp, and safe operational error.
 - **Analytics event:** profile/page view, referrer/source, destination click, timestamp, anonymized technical metadata subject to privacy policy.
 - **Suggestion (later):** evidence references, recommendation, expected action, informational/experiment classification, status, timestamps.
 
@@ -43,9 +44,12 @@ The canonical contract is `docs/openapi.yaml`. Keep it synchronized with impleme
 - `GET /sanctum/csrf-cookie` — establish the CSRF cookie.
 - `GET /api/v1/usernames/{username}/availability` — validate and report availability; rate-limit abuse.
 - `POST /api/v1/auth/register` — validate name, email, username, password confirmation; create user and profile atomically; authenticate the session.
-- `POST /api/v1/auth/login` — authenticate email/password and establish the session.
+- `POST /api/v1/auth/login` — authenticate an active account or establish a limited restoration session for a recoverable pending account.
 - `GET /api/v1/auth/me` — return the authenticated user and profile summary.
-- `POST /api/v1/auth/logout` — invalidate the current session.
+- `POST /api/v1/auth/logout` — invalidate an authenticated or limited restoration session.
+- `GET /api/v1/auth/recovery` — return the pending deletion state associated with a credential-verified limited restoration session.
+- `POST /api/v1/auth/restore` — explicitly restore the account as an authenticated, unpublished draft before its stored deadline.
+- `POST /api/v1/account/deletion` — confirm the current password, unpublish, reserve the username, capture the recovery deadline, sign out, and queue confirmation email.
 - `GET/PATCH /api/v1/profile` — read or update the authenticated draft profile.
 - `POST|PUT/DELETE /api/v1/profile/avatar` — replace or remove the authenticated avatar.
 - `GET/POST /api/v1/profile/links` — list or create authenticated draft links.
@@ -68,16 +72,21 @@ The canonical contract is `docs/openapi.yaml`. Keep it synchronized with impleme
 - Apply FormRequest validation, authorization policies, mass-assignment protection, and rate limits to availability and authentication endpoints.
 - Normalize usernames consistently and prevent reserved/system names.
 - Hash passwords with Laravel's configured driver; do not log credentials, session identifiers, or raw sensitive payloads.
+- Limit failed deletion password confirmation to five attempts per minute per account and IP, and return both `Retry-After` and `retry_after` on `429`.
+- Never grant workspace access to a pending, expired, purging, or failed-deletion account. A successful pending-account login may establish only the limited restoration session.
 - Validate and safely render destination URLs; prevent open redirects and unsafe schemes.
 - Minimize analytics data, document retention and consent requirements, and avoid storing unnecessary identifying data.
 
 ## Reliability and operations
 
 - Use transactions for registration, username changes, link ordering updates, and publishing.
+- Use a transaction for deletion request and restoration state changes. Keep required external-file purge separate from database deletion so a storage failure preserves access restrictions and username reservation.
 - Return stable JSON envelopes (`data`, `message`, and field-level `errors`) with appropriate HTTP status codes.
 - Keep API error messages safe for clients while logging actionable server context without secrets.
 - Add feature tests for authorization boundaries, validation, uniqueness races, session behavior, public/private visibility, analytics aggregation, and rate limiting.
 - Run migrations and seeders deterministically across development, CI, and deployment environments.
+- Run the queue worker for deletion-request email and invoke Laravel's scheduler every minute. The bounded account purge runs without overlap at 03:00 UTC daily and retries eligible failures without exposing sensitive payloads in logs.
+- Any future account-owned analytics table must cascade from the owning user or profile, or register explicit purge cleanup, and extend the purge feature tests before shipping.
 - Configure queueable analytics aggregation when event volume requires it; public profile reads should remain fast through indexed queries and cacheable responses.
 
 ## Definition of done

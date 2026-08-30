@@ -3,6 +3,7 @@ import { FcGoogle } from 'react-icons/fc';
 import { FiArrowRight, FiEye, FiEyeOff } from 'react-icons/fi';
 import { useLocation, useNavigate } from 'react-router-dom';
 
+import { formatDeletionDate } from '@/features/account-deletion/formatDeletionDate';
 import { authApi } from '@/features/auth/authApi';
 import { getAuthRedirect } from '@/features/auth/authRedirect';
 import { useAuth } from '@/features/auth/useAuth';
@@ -20,6 +21,16 @@ export const Login = () => {
   const [form, setForm] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const deletionDate = (
+    location.state as
+      | { accountDeletion?: { deletionDate?: unknown } }
+      | null
+      | undefined
+  )?.accountDeletion?.deletionDate;
+  const confirmedDeletionDate =
+    typeof deletionDate === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(deletionDate)
+      ? deletionDate
+      : null;
 
   useEffect(() => {
     if (!isLoading && user)
@@ -35,17 +46,27 @@ export const Login = () => {
     setError('');
     setIsSubmitting(true);
     try {
-      setUser(await authApi.login(form));
-      navigate(getAuthRedirect(location), { replace: true });
+      const result = await authApi.login(form);
+      if (result.status === 'restoration_required') {
+        setUser(null);
+        navigate('/restore-account', { replace: true });
+      } else {
+        setUser(result.user);
+        navigate(getAuthRedirect(location), { replace: true });
+      }
     } catch (submissionError) {
       const payload = getApiError(submissionError);
-      setError(
-        payload.errors
-          ? (Object.values(payload.errors).flat()[0] ??
-              payload.message ??
-              'Unable to log in.')
-          : (payload.message ?? 'Unable to log in.')
-      );
+      if (payload.status === 403) {
+        setError('This account is unavailable.');
+      } else {
+        setError(
+          payload.errors
+            ? (Object.values(payload.errors).flat()[0] ??
+                payload.message ??
+                'Unable to log in.')
+            : (payload.message ?? 'Unable to log in.')
+        );
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -67,6 +88,16 @@ export const Login = () => {
           </div>
         </div>
         <div className={sty.card}>
+          {confirmedDeletionDate && (
+            <div className={sty.deletionNotice} role="status">
+              <strong>Account deletion requested.</strong>
+              <span>
+                Your account is scheduled for permanent deletion on{' '}
+                {formatDeletionDate(confirmedDeletionDate)}. Sign in before then
+                to review account restoration.
+              </span>
+            </div>
+          )}
           <div className={sty.cardHeader}>
             <p className={sty.cardKicker}>Your Tether</p>
             <h2>Log in</h2>

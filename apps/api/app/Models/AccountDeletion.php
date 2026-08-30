@@ -32,6 +32,36 @@ class AccountDeletion extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function restrictsAccountAccess(): bool
+    {
+        return $this->state !== AccountDeletionState::Restored;
+    }
+
+    public function isRestorable(): bool
+    {
+        return $this->state === AccountDeletionState::Pending
+            && $this->recovery_deadline->isFuture();
+    }
+
+    public function isPurgeEligible(): bool
+    {
+        if ($this->recovery_deadline->isFuture()) {
+            return false;
+        }
+
+        if (in_array($this->state, [
+            AccountDeletionState::Pending,
+            AccountDeletionState::PurgeEligible,
+        ], true)) {
+            return true;
+        }
+
+        return in_array($this->state, [
+            AccountDeletionState::Failed,
+            AccountDeletionState::Purging,
+        ], true) && (! $this->next_retry_at || $this->next_retry_at->lessThanOrEqualTo(now()));
+    }
+
     public function scopePending($query)
     {
         return $query->where('state', AccountDeletionState::Pending);
@@ -39,9 +69,21 @@ class AccountDeletion extends Model
 
     public function scopePurgeEligible($query)
     {
-        return $query->whereIn('state', [
-            AccountDeletionState::Pending,
-            AccountDeletionState::Failed,
-        ])->where('recovery_deadline', '<=', now());
+        return $query
+            ->where('recovery_deadline', '<=', now())
+            ->where(function ($query): void {
+                $query->whereIn('state', [
+                    AccountDeletionState::Pending,
+                    AccountDeletionState::PurgeEligible,
+                ])->orWhere(function ($query): void {
+                    $query->whereIn('state', [
+                        AccountDeletionState::Failed,
+                        AccountDeletionState::Purging,
+                    ])->where(function ($query): void {
+                        $query->whereNull('next_retry_at')
+                            ->orWhere('next_retry_at', '<=', now());
+                    });
+                });
+            });
     }
 }

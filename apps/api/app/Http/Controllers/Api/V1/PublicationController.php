@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Enums\AccountDeletionState;
 use App\Enums\PublicationState;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ProfileResource;
@@ -64,6 +65,9 @@ class PublicationController extends Controller
         $username = strtolower(trim($username));
         $snapshot = PublicationSnapshot::query()->where('username', $username)
             ->whereHas('profile', fn ($q) => $q->where('publication_state', PublicationState::Published)->whereColumn('published_snapshot_id', 'publication_snapshots.id'))
+            ->whereHas('profile.user', fn ($query) => $query
+                ->whereDoesntHave('accountDeletion')
+                ->orWhereHas('accountDeletion', fn ($deletionQuery) => $deletionQuery->where('state', AccountDeletionState::Restored)))
             ->latest('version')->first();
         abort_unless($snapshot, 404);
         $data = ['username' => $snapshot->username, 'display_name' => $snapshot->display_name, 'bio' => $snapshot->bio,

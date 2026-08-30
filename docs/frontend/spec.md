@@ -11,7 +11,7 @@ The frontend is the public, responsive React experience for Tetherly: a creator 
 - Typed HTTP client boundary for the Laravel API; the browser never accesses MySQL directly.
 - Responsive, keyboard-accessible UI for 320px through large desktop widths.
 
-Authentication, persistence, typed profile/link/publication APIs, and the protected dashboard shell now exist. Profile/link editing UI, creator publish/unpublish controls, public profile rendering, analytics, and production deployment behavior remain incomplete. Frontend screens must not imply unfinished capabilities are live.
+Authentication, persistence, typed profile/link/publication APIs, the protected dashboard shell, creator editing and publishing, public profile rendering, and recoverable account deletion now exist. Analytics and production deployment behavior remain incomplete. Frontend screens must not imply unfinished capabilities are live.
 
 ## Product outcomes
 
@@ -47,6 +47,8 @@ Maintain this reading order: identity, headline, supporting copy, username form,
 - Every interactive element is keyboard reachable with a visible `:focus-visible` state.
 - Username submission works with Enter and preserves entered text after errors.
 - Form states are explicit: idle, validating, loading, success, unavailable, invalid, and server error.
+- The Profile workspace ends with a focused Danger Zone. Account deletion requires the current password in an accessible confirmation dialog, keeps Cancel available during API rate-limit countdowns, and shows the API's exact UTC calendar deletion date after success.
+- Pending-account login never restores silently. It routes to an explicit restoration screen that explains the unpublished-draft result and offers Restore Account or Log Out.
 - Maintain 4.5:1 text contrast and 44px touch targets.
 - Honor `prefers-reduced-motion`: remove rise, stagger, parallax, and scroll-scrub while keeping content and feedback immediate.
 - Use semantic landmarks, labels, status messaging, and route-level document metadata.
@@ -74,6 +76,9 @@ The frontend must consume and handle:
 - `POST /api/v1/auth/login`
 - `GET /api/v1/auth/me`
 - `POST /api/v1/auth/logout`
+- `GET /api/v1/auth/recovery`
+- `POST /api/v1/auth/restore`
+- `POST /api/v1/account/deletion`
 - `GET/PATCH /api/v1/profile`
 - `POST|PUT/DELETE /api/v1/profile/avatar`
 - `GET/POST /api/v1/profile/links`
@@ -85,7 +90,7 @@ The frontend must consume and handle:
 
 Publishing creates an immutable snapshot. Draft edits made afterward must not appear publicly until the creator publishes again. Unpublished profiles and unknown usernames both resolve as `404` through the public lookup contract.
 
-Map `422`, `401`, and `429` responses into local, readable UI states without leaking raw implementation details. Keep the OpenAPI document and frontend domain types synchronized when contracts change.
+Map `422`, `401`, `403`, and `429` responses into local, readable UI states without leaking raw implementation details. Account-deletion rate limits use the API's machine-readable `retry_after`; do not invent a client timer. Keep the OpenAPI document and frontend domain types synchronized when contracts change.
 
 ## Definition of done
 
