@@ -1,5 +1,16 @@
 import { useEffect, useMemo, useState } from 'react';
-import { FiCopy, FiExternalLink, FiShare2 } from 'react-icons/fi';
+import {
+  FiCopy,
+  FiExternalLink,
+  FiGithub,
+  FiGlobe,
+  FiInstagram,
+  FiLinkedin,
+  FiMail,
+  FiShare2,
+  FiTwitter,
+  FiYoutube,
+} from 'react-icons/fi';
 import { Navigate, useParams } from 'react-router-dom';
 
 import { publicationApi } from '@/features/creator-workspace/publicationApi';
@@ -7,6 +18,7 @@ import { getApiStatus } from '@/services/api';
 import type { PublicProfile } from '@/types/api';
 import { SEOHelmet } from '@components/common/SEOHelmet';
 
+import { ErrorNotFound } from './NotFound';
 import sty from './PublicProfilePage.module.scss';
 
 const UNAVAILABLE = 'This Tether isn’t available.';
@@ -20,6 +32,29 @@ const safeDestination = (value: string) => {
     return url.protocol === 'http:' || url.protocol === 'https:' ? url : null;
   } catch {
     return null;
+  }
+};
+
+const ICONS = {
+  github: FiGithub,
+  globe: FiGlobe,
+  instagram: FiInstagram,
+  linkedin: FiLinkedin,
+  mail: FiMail,
+  twitter: FiTwitter,
+  youtube: FiYoutube,
+} as const;
+const categories = ['social', 'work', 'contact', 'content'] as const;
+type Category = (typeof categories)[number];
+const getCategory = (value: string | null): Category | null =>
+  categories.includes(value as Category) ? (value as Category) : null;
+const copyText = async (value: string): Promise<boolean> => {
+  if (!navigator.clipboard?.writeText) return false;
+  try {
+    await navigator.clipboard.writeText(value);
+    return true;
+  } catch {
+    return false;
   }
 };
 
@@ -43,7 +78,8 @@ function Unavailable() {
 }
 
 export function PublicProfilePage() {
-  const { username = '' } = useParams();
+  const { username: routeUsername } = useParams();
+  const username = routeUsername || window.location.pathname.slice(2);
   const canonical = username.toLowerCase();
   const [profile, setProfile] = useState<PublicProfile | null>(null);
   const [failed, setFailed] = useState(false);
@@ -78,14 +114,18 @@ export function PublicProfilePage() {
     );
 
   const share = async () => {
-    if (navigator.share)
-      await navigator
-        .share({ title: `${profile.display_name} | Tetherly`, url: publicUrl })
-        .catch(() => undefined);
-    else if (navigator.clipboard) {
-      await navigator.clipboard.writeText(publicUrl);
-      setCopied(true);
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: `${profile.display_name} | Tetherly`,
+          url: publicUrl,
+        });
+        return;
+      } catch {
+        /* clipboard fallback */
+      }
     }
+    if (await copyText(publicUrl)) setCopied(true);
   };
 
   return (
@@ -123,6 +163,11 @@ export function PublicProfilePage() {
               .map(link => {
                 const destination = safeDestination(link.url);
                 if (!destination) return null;
+                const previewRegionId = `preview-${link.id}`;
+                const category = getCategory(link.category);
+                const Icon =
+                  (link.icon && ICONS[link.icon as keyof typeof ICONS]) ||
+                  FiExternalLink;
                 const open = () =>
                   window.open(
                     destination.href,
@@ -130,19 +175,25 @@ export function PublicProfilePage() {
                     'noopener,noreferrer'
                   );
                 return (
-                  <article className={sty.destination} key={link.id}>
+                  <article
+                    className={`${sty.destination} ${category ? sty[`category-${category}`] : ''}`}
+                    key={link.id}
+                  >
                     <a
+                      id={`destination-${link.id}`}
                       href={destination.href}
                       target="_blank"
                       rel="noopener noreferrer"
                       className={sty.destinationLink}
                     >
-                      {link.label}
-                      <FiExternalLink aria-hidden="true" />
+                      <span>{link.label}</span>
+                      <Icon aria-hidden="true" />
                     </a>
                     <button
                       type="button"
                       className={sty.previewButton}
+                      aria-label={`Preview ${link.label}`}
+                      aria-controls={previewRegionId}
                       aria-expanded={previewId === link.id}
                       onClick={() =>
                         setPreviewId(previewId === link.id ? null : link.id)
@@ -153,16 +204,17 @@ export function PublicProfilePage() {
                     {previewId === link.id && (
                       <div
                         className={sty.preview}
+                        id={previewRegionId}
                         role="region"
-                        aria-label={`Destination preview for ${link.label}`}
+                        aria-labelledby={`destination-${link.id}`}
                       >
                         <strong>{destination.hostname}</strong>
                         <span>{destination.href}</span>
                         <button
                           type="button"
-                          onClick={() => {
-                            navigator.clipboard?.writeText(destination.href);
-                            setCopied(true);
+                          onClick={async () => {
+                            if (await copyText(destination.href))
+                              setCopied(true);
                           }}
                         >
                           <FiCopy aria-hidden="true" /> Copy URL
@@ -199,3 +251,11 @@ export function PublicProfilePage() {
 }
 
 export default PublicProfilePage;
+
+export function PublicProfileOrNotFound() {
+  return /^\/@[^/]+$/.test(window.location.pathname) ? (
+    <PublicProfilePage />
+  ) : (
+    <ErrorNotFound />
+  );
+}

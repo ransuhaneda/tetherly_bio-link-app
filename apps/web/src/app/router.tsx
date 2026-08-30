@@ -8,7 +8,6 @@ import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
 import { RouteErrorBoundary } from '@/components/ui/errorHandling/RouteErrorBoundary';
 import { ProtectedRoute } from '@/features/auth/ProtectedRoute';
 import { CreatorWorkspaceRoute } from '@/pages/dashboard/CreatorWorkspaceRoute';
-import { ErrorNotFound } from '@pages/NotFound';
 
 import App from './App';
 
@@ -23,12 +22,11 @@ export const router = createBrowserRouter([
     element: <App />,
     errorElement: <RouteErrorBoundary />,
     children: [
-      { path: '*', element: <ErrorNotFound /> },
       withHydrateFallback({
-        path: '@:username',
+        path: '*',
         lazy: async () => {
           const module = await import('@/pages/PublicProfilePage');
-          return { Component: module.PublicProfilePage };
+          return { Component: module.PublicProfileOrNotFound };
         },
       }),
       withHydrateFallback({

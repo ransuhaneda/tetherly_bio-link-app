@@ -93,6 +93,22 @@
   border: 1px solid var(--color-border-default);
 }
 
+.category-social {
+  border-inline-start: 3px solid var(--color-action-secondary);
+}
+
+.category-work {
+  border-inline-start: 3px solid var(--color-action-primary);
+}
+
+.category-contact {
+  border-inline-start: 3px solid var(--color-text-muted);
+}
+
+.category-content {
+  border-inline-start: 3px solid var(--color-action-secondary);
+}
+
 .previewButton,
 .preview button,
 .readonlyUrl input {
@@ -161,7 +177,8 @@
   font-size: 0.875rem;
   gap: var(--space-md);
   justify-content: center;
-  padding: var(--space-2xl) 0 var(--space-lg);
+  padding: var(--space-2xl) 0
+    calc(var(--space-lg) + env(safe-area-inset-bottom));
   text-align: center;
 }
 
