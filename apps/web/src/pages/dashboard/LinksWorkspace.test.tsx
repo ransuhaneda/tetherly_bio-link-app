@@ -90,6 +90,34 @@ describe('LinksWorkspace ordering', () => {
     expect(linksApi.reorder).not.toHaveBeenCalled();
   });
 
+  it('persists exactly once after repeated dragover events and a drop', async () => {
+    vi.mocked(linksApi.reorder).mockResolvedValue(links);
+    renderLinks();
+    const firstHandle = screen.getByRole('button', { name: 'Reorder First' });
+    const secondRow = screen.getByText('Second').closest('li');
+    expect(secondRow).not.toBeNull();
+
+    fireEvent.dragStart(firstHandle, {
+      dataTransfer: {
+        effectAllowed: '',
+        setData: vi.fn(),
+      },
+    });
+    await act(async () => {
+      fireEvent.dragOver(secondRow!, { preventDefault: vi.fn() });
+      fireEvent.dragOver(secondRow!, { preventDefault: vi.fn() });
+    });
+    fireEvent.drop(secondRow!, {
+      preventDefault: vi.fn(),
+      dataTransfer: { dropEffect: 'move', getData: () => '1' },
+    });
+
+    await waitFor(() => expect(linksApi.reorder).toHaveBeenCalledTimes(1));
+    expect(linksApi.reorder).toHaveBeenCalledWith({
+      ordered_link_ids: [2, 1],
+    });
+  });
+
   it('rolls back a failed reorder and retries the requested order', async () => {
     vi.mocked(linksApi.reorder)
       .mockRejectedValueOnce(new Error('offline'))
@@ -107,6 +135,9 @@ describe('LinksWorkspace ordering', () => {
     expect(linksApi.reorder).toHaveBeenLastCalledWith({
       ordered_link_ids: [2, 1],
     });
+    expect(
+      screen.getByText('Second moved to position 1 of 2')
+    ).toBeInTheDocument();
   });
 
   it('announces keyboard move actions', async () => {

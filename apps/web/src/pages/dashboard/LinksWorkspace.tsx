@@ -10,6 +10,12 @@ import sty from './WorkspacePage.module.scss';
 const orderLinks = (links: CreatorLink[]) =>
   [...links].sort((a, b) => a.position - b.position);
 
+type FailedOrder = {
+  ids: number[];
+  movedId: number;
+  movedLabel: string;
+};
+
 export function LinksWorkspace() {
   const { links, runMutation } = useCreatorWorkspace();
   const [editing, setEditing] = useState<number | null>(null);
@@ -20,14 +26,19 @@ export function LinksWorkspace() {
     orderLinks(links)
   );
   const [draggedId, setDraggedId] = useState<number | null>(null);
-  const [failedOrder, setFailedOrder] = useState<number[] | null>(null);
+  const [failedOrder, setFailedOrder] = useState<FailedOrder | null>(null);
   const [announcement, setAnnouncement] = useState('');
   const [isPersistingOrder, setIsPersistingOrder] = useState(false);
   const lastDragOverTargetId = useRef<number | null>(null);
+  const draggedIdRef = useRef<number | null>(null);
+  const orderedLinksRef = useRef(orderedLinks);
 
   useEffect(() => {
-    if (draggedId === null && !isPersistingOrder)
-      setOrderedLinks(orderLinks(links));
+    if (draggedIdRef.current === null && !isPersistingOrder) {
+      const next = orderLinks(links);
+      orderedLinksRef.current = next;
+      setOrderedLinks(next);
+    }
   }, [draggedId, isPersistingOrder, links]);
 
   const begin = (link?: CreatorLink) => {
@@ -73,14 +84,15 @@ export function LinksWorkspace() {
     if (!source || !destination) return;
     next[index] = destination;
     next[target] = source;
-    await persistOrder(next, current, link.label);
+    await persistOrder(next, current, link);
   };
 
   const persistOrder = async (
     next: CreatorLink[],
     previous: CreatorLink[],
-    movedLabel?: string
+    movedLink?: Pick<CreatorLink, 'id' | 'label'>
   ) => {
+    orderedLinksRef.current = next;
     setOrderedLinks(next);
     setFailedOrder(null);
     setIsPersistingOrder(true);
@@ -88,15 +100,22 @@ export function LinksWorkspace() {
       await runMutation(() =>
         linksApi.reorder({ ordered_link_ids: next.map(item => item.id) })
       );
-      const index = movedLabel
-        ? next.findIndex(item => item.label === movedLabel)
+      const index = movedLink
+        ? next.findIndex(item => item.id === movedLink.id)
         : next.findIndex(item => item.id === draggedId);
       setAnnouncement(
-        `${movedLabel ?? 'Destination'} moved to position ${index + 1} of ${next.length}`
+        `${movedLink?.label ?? 'Destination'} moved to position ${index + 1} of ${next.length}`
       );
     } catch {
+      orderedLinksRef.current = previous;
       setOrderedLinks(previous);
-      setFailedOrder(next.map(item => item.id));
+      if (movedLink) {
+        setFailedOrder({
+          ids: next.map(item => item.id),
+          movedId: movedLink.id,
+          movedLabel: movedLink.label,
+        });
+      }
       setError('Order could not be saved.');
     } finally {
       setIsPersistingOrder(false);
@@ -109,6 +128,7 @@ export function LinksWorkspace() {
       return;
     }
     setDraggedId(link.id);
+    draggedIdRef.current = link.id;
     lastDragOverTargetId.current = null;
     event.dataTransfer.effectAllowed = 'move';
     event.dataTransfer.setData('text/plain', String(link.id));
@@ -116,17 +136,23 @@ export function LinksWorkspace() {
 
   const onDragOver = (event: React.DragEvent, targetId: number) => {
     event.preventDefault();
-    if (draggedId === null || draggedId === targetId || editing === targetId)
+    const activeDraggedId = draggedIdRef.current ?? draggedId;
+    if (
+      activeDraggedId === null ||
+      activeDraggedId === targetId ||
+      editing === targetId
+    )
       return;
     if (lastDragOverTargetId.current === targetId) return;
-    const current = orderLinks(orderedLinks);
-    const from = current.findIndex(item => item.id === draggedId);
+    const current = orderLinks(orderedLinksRef.current);
+    const from = current.findIndex(item => item.id === activeDraggedId);
     const to = current.findIndex(item => item.id === targetId);
     if (from < 0 || to < 0) return;
     const next = [...current];
     const [dragged] = next.splice(from, 1);
     if (!dragged) return;
     next.splice(to, 0, dragged);
+    orderedLinksRef.current = next;
     setOrderedLinks(next);
     lastDragOverTargetId.current = targetId;
     setAnnouncement(
@@ -136,16 +162,18 @@ export function LinksWorkspace() {
 
   const onDrop = (event: React.DragEvent) => {
     event.preventDefault();
-    if (draggedId === null) return;
+    const activeDraggedId = draggedIdRef.current ?? draggedId;
+    if (activeDraggedId === null) return;
     const previous = orderLinks(links);
-    const next = orderLinks(orderedLinks);
+    const next = [...orderedLinksRef.current];
     lastDragOverTargetId.current = null;
     if (
       next.map(item => item.id).join() !== previous.map(item => item.id).join()
     ) {
-      const moved = next.find(item => item.id === draggedId);
-      void persistOrder(next, previous, moved?.label);
+      const moved = next.find(item => item.id === activeDraggedId);
+      if (moved) void persistOrder(next, previous, moved);
     }
+    draggedIdRef.current = null;
     setDraggedId(null);
   };
 
@@ -166,10 +194,13 @@ export function LinksWorkspace() {
   const retry = () => {
     if (!failedOrder) return;
     const previous = orderLinks(links);
-    const next = failedOrder
+    const next = failedOrder.ids
       .map(id => previous.find(link => link.id === id))
       .filter((link): link is CreatorLink => Boolean(link));
-    void persistOrder(next, previous);
+    void persistOrder(next, previous, {
+      id: failedOrder.movedId,
+      label: failedOrder.movedLabel,
+    });
   };
 
   return (
@@ -207,16 +238,15 @@ export function LinksWorkspace() {
       <p className={sty.srOnly} aria-live="polite">
         {announcement}
       </p>
-      <ul
-        className={sty.linkList}
-        onDragOver={event => event.preventDefault()}
-        onDrop={onDrop}
-      >
+      <ul className={sty.linkList} onDragOver={event => event.preventDefault()}>
         {orderedLinks.map((link, i) => (
           <li
             key={link.id}
             onDragOver={event => onDragOver(event, link.id)}
-            onDrop={onDrop}
+            onDrop={event => {
+              event.stopPropagation();
+              onDrop(event);
+            }}
             className={draggedId === link.id ? sty.dragging : ''}
           >
             <div className={sty.linkDetails}>
@@ -232,6 +262,7 @@ export function LinksWorkspace() {
                 onDragStart={event => onDragStart(event, link)}
                 onDragEnd={() => {
                   lastDragOverTargetId.current = null;
+                  draggedIdRef.current = null;
                   setDraggedId(null);
                 }}
                 aria-label={`Reorder ${link.label}`}
