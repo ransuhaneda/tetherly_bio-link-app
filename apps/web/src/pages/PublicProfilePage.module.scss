@@ -1,7 +1,7 @@
 /* stylelint-disable no-descending-specificity */
 .page {
   background: var(--color-background-page);
-  color: var(--color-text-primary);
+  color: var(--color-text-inverse);
   min-height: 100vh;
   padding: var(--space-lg) var(--space-md);
 }
@@ -73,11 +73,12 @@
 }
 
 .username {
-  color: var(--color-text-muted);
+  color: var(--color-text-inverse);
   margin: var(--space-xs) 0;
 }
 
 .bio {
+  color: var(--color-text-inverse);
   margin: var(--space-md) auto 0;
   max-width: 34rem;
   text-wrap: pretty;
@@ -207,6 +208,7 @@
 }
 
 .unavailable h1 {
+  color: var(--color-text-inverse);
   font:
     700 clamp(2rem, 6vw, 3rem) Oswald,
     sans-serif;
@@ -214,7 +216,7 @@
 }
 
 .unavailable p:last-child {
-  color: var(--color-text-muted);
+  color: var(--color-text-inverse);
 }
 @media (width >= 768px) {
   .page {
