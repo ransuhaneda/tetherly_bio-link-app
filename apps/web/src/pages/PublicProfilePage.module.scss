@@ -115,7 +115,7 @@
 .readonlyUrl input {
   background: transparent;
   border: 1px solid var(--color-border-default);
-  color: inherit;
+  color: var(--color-text-inverse);
   cursor: pointer;
   font: inherit;
   min-height: 44px;
@@ -144,7 +144,7 @@
 }
 
 .previewButton {
-  color: var(--color-text-muted);
+  color: var(--color-text-inverse);
   font-size: 0.875rem;
   margin: 0 var(--space-md) var(--space-sm);
 }
