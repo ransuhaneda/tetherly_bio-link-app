@@ -56,7 +56,8 @@
 }
 
 .error {
-  border-left: 3px solid var(--color-action-primary);
+  border-left: 3px solid var(--color-status-error);
+  color: var(--color-status-error);
   padding-left: 12px;
 }
 

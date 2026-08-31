@@ -14,7 +14,7 @@
   border: 1px solid var(--color-border-default);
   border-radius: 0.5rem;
   box-shadow: 0 0.5rem 1.5rem rgb(0 0 0 / 20%);
-  color: var(--color-text-primary);
+  color: var(--color-text-inverse);
   display: flex;
   gap: var(--space-sm);
   justify-content: space-between;
@@ -23,11 +23,11 @@
 }
 
 .success {
-  border-color: var(--color-action-primary);
+  border-color: var(--color-status-success);
 }
 
 .error {
-  border-color: var(--color-action-secondary);
+  border-color: var(--color-status-error);
 }
 
 .toast button {

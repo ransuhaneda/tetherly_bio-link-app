@@ -48,6 +48,15 @@
   background: transparent;
   border: 0;
   color: abst.get-color('text', 'inverse');
+
+  &:hover {
+    color: abst.get-color('text', 'accent');
+  }
+
+  &:focus-visible {
+    outline: 2px solid abst.get-color('text', 'accent');
+    outline-offset: 2px;
+  }
 }
 
 .link {

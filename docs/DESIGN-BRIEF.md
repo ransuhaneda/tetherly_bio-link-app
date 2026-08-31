@@ -23,7 +23,7 @@ This brief uses the 2026-08-23 UI inspiration capture as **directional research 
 
 **Composition:** identity → headline → supporting copy → username form → profile/link preview → proof/content cards → final CTA → footer. Desktop hero uses copy in columns 1–7 and preview in 8–12; mobile stacks in that DOM order.
 
-**Material:** near-black matte surfaces, warm-white type, thin neutral borders, one restrained shadow, subtle grain only. No gradients, glassmorphism, generic blobs, or ornamental bento tiles.
+**Material:** near-black matte marketing surfaces, with warm-white public creator profiles and dashboard surfaces for maximum reading clarity. Use thin neutral borders, one restrained shadow, and subtle grain only. No gradients, glassmorphism, generic blobs, or ornamental bento tiles.
 
 **Type:** Oswald for display and utility labels; Nunito for body, controls, and links. Keep the headline short enough for a deliberate line break on wide screens and natural wrapping below 768px.
 
@@ -39,7 +39,7 @@ This brief uses the 2026-08-23 UI inspiration capture as **directional research 
 
 ## Primary design system: Editorial Bento Profile
 
-The primary system is **UI/UX Pro Max — Bento Grids**, adapted to Tetherly's existing dark, warm, high-contrast palette. The database's “Vibrant & Block-based” guidance is used only for controlled accent moments; its sample blue/pink palette is intentionally rejected in favor of the approved brand tokens. The reference capture's editorial layouts inform pacing, not a template.
+The primary system is **UI/UX Pro Max — Bento Grids**, adapted to Tetherly's existing warm, high-contrast palette. Marketing surfaces remain dark; public creator profiles and creator dashboard surfaces use the approved warm white with dark text and darker brand-token accents. The database's “Vibrant & Block-based” guidance is used only for controlled accent moments; its sample blue/pink palette is intentionally rejected in favor of the approved brand tokens. The reference capture's editorial layouts inform pacing, not a template.
 
 ### Layout system
 

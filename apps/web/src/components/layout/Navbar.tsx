@@ -69,10 +69,16 @@ export const Navbar = () => {
         <div className={sty.wrapper__auth}>
           {!isLoading && user ? (
             <>
-              <span className={sty.link__auth}>@{user.profile?.username}</span>
+              <Link
+                to="/dashboard/profile"
+                size="md"
+                customClass={sty.link__auth!}
+                aria-label="Edit your profile"
+              >
+                @{user.profile?.username}
+              </Link>
               <Button
                 type="button"
-                variant="tertiary"
                 size="md"
                 customClass={sty.link__auth}
                 onClick={handleLogout}
@@ -114,12 +120,15 @@ export const Navbar = () => {
           <div className={sty.mobileActions}>
             {!isLoading && user ? (
               <>
-                <span className={sty.link__auth}>
+                <Link
+                  to="/dashboard/profile"
+                  customClass={sty.link__auth!}
+                  aria-label="Edit your profile"
+                >
                   @{user.profile?.username}
-                </span>
+                </Link>
                 <Button
                   type="button"
-                  variant="tertiary"
                   customClass={sty.link__auth}
                   onClick={handleLogout}
                   disabled={isLoggingOut}
