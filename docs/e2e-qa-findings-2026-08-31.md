@@ -32,7 +32,7 @@ Automated tests currently pass, but they do not exercise the browser's cookie/he
 - **Relevant source:** `apps/web/src/services/api.ts`, `apps/web/src/features/creator-workspace/*Api.ts`, `apps/web/src/features/account-deletion/accountDeletionApi.ts`
 - **Expected:** After authentication, each credentialed state-changing request should carry a valid Sanctum CSRF token. If the token expires or becomes stale, the client should refresh `/sanctum/csrf-cookie` and retry once, without losing the user's edit.
 - **Actual implementation:** `apiService.csrf()` is called by `authApi.register()` and `authApi.login()` only. The shared Axios instance has `withCredentials: true`, but there is no request interceptor, mutation wrapper, or 419 retry handler that refreshes the CSRF cookie. All workspace mutation APIs call `apiService.post/patch/put/delete` directly.
-- **Reproduction status:** User-reported on localhost; direct browser reproduction blocked by unavailable Chrome/display in this WSL session. The code path is confirmed by inspection.
+- **Reproduction status:** Reproduced against the running Laravel stack with a disposable account: profile PATCH succeeded with the captured token, then a link POST using the stale pre-mutation token returned HTTP 419 `CSRF token mismatch`. The browser harness remained unavailable, so automatic cookie/header refresh was not directly observed in Chrome.
 - **Evidence:**
   - `apps/web/src/services/api.ts:23-25`: CSRF bootstrap is a standalone call.
   - `apps/web/src/features/auth/authApi.ts:26` and `:34`: bootstrap occurs only before register/login.
