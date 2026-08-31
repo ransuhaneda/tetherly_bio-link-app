@@ -8,6 +8,7 @@ import type { ApiError, ApiErrorPayload, ApiErrorStatus } from '@/types/api';
 
 class ApiService {
   private readonly api: AxiosInstance;
+  private csrfRefresh: Promise<void> | null = null;
 
   constructor() {
     this.api = axios.create({
@@ -19,7 +20,15 @@ class ApiService {
   }
 
   async csrf(): Promise<void> {
-    await axios.get('/sanctum/csrf-cookie', { withCredentials: true });
+    if (!this.csrfRefresh) {
+      this.csrfRefresh = axios
+        .get('/sanctum/csrf-cookie', { withCredentials: true })
+        .then(() => undefined)
+        .finally(() => {
+          this.csrfRefresh = null;
+        });
+    }
+    await this.csrfRefresh;
   }
 
   private async mutation<T>(
