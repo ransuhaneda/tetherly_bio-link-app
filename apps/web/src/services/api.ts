@@ -113,6 +113,7 @@ const STATUS_MESSAGES: Record<ApiErrorStatus, string> = {
   403: 'You do not have permission to make that change.',
   404: "We couldn't find what you requested.",
   409: 'That change conflicts with the current workspace data.',
+  419: 'Your security session expired. Please try the change again.',
   422: 'Check the highlighted fields and try again.',
   429: 'Too many requests. Wait a moment and try again.',
 };
