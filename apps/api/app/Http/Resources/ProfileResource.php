@@ -21,6 +21,10 @@ class ProfileResource extends JsonResource
             'published_version' => $this->published_snapshot_id
                 ? $this->publishedSnapshot?->version
                 : null,
+            'has_published' => $this->publicationSnapshots()->exists(),
+            'draft_revision' => $this->draft_revision,
+            'publication_revision' => $this->publishedSnapshot?->source_revision,
+            'publication_status' => $this->publication_status,
             'created_at' => $this->created_at?->toISOString(),
             'updated_at' => $this->updated_at?->toISOString(),
         ];

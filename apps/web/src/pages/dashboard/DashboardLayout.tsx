@@ -1,8 +1,48 @@
+import { useEffect, useRef } from 'react';
 import { NavLink, Outlet } from 'react-router-dom';
 
 import { useCreatorWorkspace } from '@/features/creator-workspace/useCreatorWorkspace';
 
 import sty from './DashboardLayout.module.scss';
+import { PublicationControls } from './PublicationControls';
+
+function OwnershipNotice() {
+  const { isReadOnly, ownershipModal, dismissOwnershipModal, takeOver } =
+    useCreatorWorkspace();
+  const dialogRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (!ownershipModal) return;
+    dialogRef.current?.focus();
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') dismissOwnershipModal();
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [dismissOwnershipModal, ownershipModal]);
+  if (!isReadOnly) return null;
+  return (
+    <>
+      <div role="status" className={sty.mutation}>
+        Read only: another tab owns editing.{' '}
+        <button type="button" onClick={takeOver}>
+          Take Over Here
+        </button>
+      </div>
+      {ownershipModal && (
+        <div role="dialog">
+          <h2>This workspace is open in another tab</h2>
+          <p>Continue here in read-only mode or take ownership.</p>
+          <button type="button" onClick={takeOver}>
+            Take Over Here
+          </button>
+          <button type="button" onClick={dismissOwnershipModal}>
+            Continue Read Only
+          </button>
+        </div>
+      )}
+    </>
+  );
+}
 
 const DASHBOARD_LINKS = [
   { label: 'Profile', to: '/dashboard/profile' },
@@ -42,6 +82,7 @@ export function DashboardLayout() {
 
   return (
     <section className={sty.page}>
+      <OwnershipNotice />
       <div className={sty.shell}>
         <header className={sty.header}>
           <div>
@@ -50,6 +91,7 @@ export function DashboardLayout() {
           <div className={sty.account}>
             {profile ? `@${profile.username}` : 'Workspace'}
           </div>
+          <PublicationControls compact />
         </header>
         <div className={sty.layout}>
           <nav className={sty.nav} aria-label="Creator workspace">

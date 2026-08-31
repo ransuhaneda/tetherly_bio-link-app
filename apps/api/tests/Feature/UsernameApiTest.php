@@ -3,7 +3,9 @@
 namespace Tests\Feature;
 
 use App\Models\Profile;
+use App\Models\PublicationSnapshot;
 use App\Models\User;
+use App\Enums\PublicationState;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\RateLimiter;
 use Tests\TestCase;
@@ -50,5 +52,19 @@ class UsernameApiTest extends TestCase
 
         $response->assertStatus(429)->assertJsonStructure(['message', 'retry_after']);
         $this->assertSame((string) $response->json('retry_after'), $response->headers->get('Retry-After'));
+    }
+
+    public function test_selected_publication_username_remains_reserved_after_draft_username_changes(): void
+    {
+        $user = User::factory()->create();
+        $profile = Profile::factory()->for($user)->create([
+            'username' => 'new-name',
+            'publication_state' => PublicationState::Published,
+        ]);
+        $snapshot = PublicationSnapshot::factory()->for($profile)->create(['username' => 'old-name']);
+        $profile->update(['published_snapshot_id' => $snapshot->id]);
+
+        $this->getJson('/api/v1/usernames/old-name/availability')->assertJsonPath('data.available', false);
+        $this->getJson('/api/v1/usernames/new-name/availability')->assertJsonPath('data.available', false);
     }
 }

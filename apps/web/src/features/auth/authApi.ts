@@ -1,5 +1,12 @@
 import { apiService } from '@/services/api';
-import type { ApiResponse, User } from '@/types/api';
+import type {
+  ApiMutationResponse,
+  ApiResponse,
+  AuthenticatedLoginResult,
+  LoginResult,
+  RestorationRequiredLoginResult,
+  User,
+} from '@/types/api';
 
 export interface RegisterInput {
   name: string;
@@ -23,12 +30,26 @@ export const authApi = {
     );
     return response.data;
   },
-  async login(input: LoginInput): Promise<User> {
+  async login(input: LoginInput): Promise<LoginResult> {
     await apiService.csrf();
-    const response = await apiService.post<ApiResponse<User>>(
+    const response = await apiService.post<ApiResponse<LoginResult>>(
       '/auth/login',
       input
     );
+    return response.data;
+  },
+  async recovery(): Promise<RestorationRequiredLoginResult> {
+    const response =
+      await apiService.get<ApiResponse<RestorationRequiredLoginResult>>(
+        '/auth/recovery'
+      );
+    return response.data;
+  },
+  async restore(): Promise<AuthenticatedLoginResult> {
+    const response =
+      await apiService.post<ApiMutationResponse<AuthenticatedLoginResult>>(
+        '/auth/restore'
+      );
     return response.data;
   },
   async me(): Promise<User> {

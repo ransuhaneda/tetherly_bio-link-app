@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Enums\AccountDeletionState;
 use App\Enums\PublicationState;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ProfileResource;
@@ -20,6 +21,9 @@ class PublicationController extends Controller
         abort_unless($request->user()->can('publish', $profile), 403);
         $profile = DB::transaction(function () use ($profile): Profile {
             $profile->lockForUpdate()->refresh();
+            if ($profile->published_snapshot_id && $profile->publication_status === 'published') {
+                throw ValidationException::withMessages(['publication' => 'There are no unpublished changes to publish.']);
+            }
             if (! is_string($profile->display_name) || trim($profile->display_name) === '') {
                 throw ValidationException::withMessages(['display_name' => 'A display name is required to publish.']);
             }
@@ -29,7 +33,7 @@ class PublicationController extends Controller
             }
             $version = ((int) $profile->publicationSnapshots()->max('version')) + 1;
             $snapshot = PublicationSnapshot::create([
-                'profile_id' => $profile->id, 'version' => $version, 'username' => $profile->username,
+                'profile_id' => $profile->id, 'version' => $version, 'source_revision' => $profile->draft_revision, 'username' => $profile->username,
                 'display_name' => $profile->display_name, 'bio' => $profile->bio, 'avatar_path' => $profile->avatar_path,
                 'theme' => $profile->theme, 'links' => $links->map(fn ($link) => [
                     'id' => $link->id, 'label' => $link->label, 'url' => $link->url, 'icon' => $link->icon,
@@ -61,6 +65,9 @@ class PublicationController extends Controller
         $username = strtolower(trim($username));
         $snapshot = PublicationSnapshot::query()->where('username', $username)
             ->whereHas('profile', fn ($q) => $q->where('publication_state', PublicationState::Published)->whereColumn('published_snapshot_id', 'publication_snapshots.id'))
+            ->whereHas('profile.user', fn ($query) => $query
+                ->whereDoesntHave('accountDeletion')
+                ->orWhereHas('accountDeletion', fn ($deletionQuery) => $deletionQuery->where('state', AccountDeletionState::Restored)))
             ->latest('version')->first();
         abort_unless($snapshot, 404);
         $data = ['username' => $snapshot->username, 'display_name' => $snapshot->display_name, 'bio' => $snapshot->bio,

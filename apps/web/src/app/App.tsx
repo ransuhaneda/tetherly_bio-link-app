@@ -6,6 +6,7 @@ import { Outlet, useLocation, useNavigation } from 'react-router-dom';
 import { Footer } from '@components/layout/Footer';
 import { Navbar } from '@components/layout/Navbar';
 import { LoadingSpinner } from '@components/ui/LoadingSpinner';
+import { ToastProvider } from '@components/ui/Toast';
 import { ErrorBoundary } from '@components/ui/errorHandling/ErrorBoundary';
 
 const ScrollToTop = () => {
@@ -20,7 +21,9 @@ const ScrollToTop = () => {
 
 const App = () => {
   const navigation = useNavigation();
+  const { pathname } = useLocation();
   const isLoading = navigation.state === 'loading';
+  const isPublicProfile = /^\/@[^/]+$/.test(pathname);
 
   if (isLoading) {
     document.body.style.overflow = 'hidden';
@@ -29,21 +32,21 @@ const App = () => {
   }
 
   return (
-    <>
+    <ToastProvider>
       <ScrollToTop />
       <ErrorBoundary>
         <Suspense fallback={<LoadingSpinner />}>
-          <Navbar />
+          {!isPublicProfile && <Navbar />}
 
           <main>
             {isLoading && <LoadingSpinner />}
             <Outlet />
           </main>
 
-          <Footer />
+          {!isPublicProfile && <Footer />}
         </Suspense>
       </ErrorBoundary>
-    </>
+    </ToastProvider>
   );
 };
 export default App;

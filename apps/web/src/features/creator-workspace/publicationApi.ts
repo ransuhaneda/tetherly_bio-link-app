@@ -25,7 +25,7 @@ export const publicationApi = {
 
   getPublic: async (username: string): Promise<PublicProfile> => {
     const response = await apiService.get<ApiResponse<PublicProfile>>(
-      `/profiles/${encodeURIComponent(username)}`
+      `/profiles/${encodeURIComponent(username.toLowerCase())}`
     );
     return response.data;
   },

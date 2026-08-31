@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UsernameAvailabilityRequest;
 use App\Models\Profile;
+use App\Models\PublicationSnapshot;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\RateLimiter;
 
@@ -24,6 +25,10 @@ class UsernameController extends Controller
         }
         RateLimiter::hit($key, 60);
 
-        return response()->json(['data' => ['username' => $username, 'available' => ! Profile::where('username', $username)->exists()]]);
+        $claimedByDraft = Profile::where('username', $username)->exists();
+        $claimedByPublication = PublicationSnapshot::where('username', $username)
+            ->whereHas('profile', fn ($query) => $query->where('publication_state', 'published')->whereColumn('published_snapshot_id', 'publication_snapshots.id'))
+            ->exists();
+        return response()->json(['data' => ['username' => $username, 'available' => ! $claimedByDraft && ! $claimedByPublication]]);
     }
 }

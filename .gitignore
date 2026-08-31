@@ -30,6 +30,11 @@ dist-ssr
 todo.md
 docs/images
 
+# Browser verification artifacts
+.playwright/
+.playwright-cli/
+.playwright-mcp/
+
 # Laravel runtime files
 apps/api/.env
 apps/api/.env.*

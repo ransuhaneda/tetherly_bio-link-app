@@ -77,6 +77,20 @@
   margin-bottom: 1.5rem;
 }
 
+.deletionNotice {
+  border-left: 3px solid abst.get-color-brand('orange', '600');
+  display: grid;
+  gap: 4px;
+  line-height: 1.5;
+  margin-bottom: 1.5rem;
+  padding: 10px 12px;
+}
+
+.deletionNotice span {
+  color: abst.get-color-brand('gray', '700');
+  font-size: 0.875rem;
+}
+
 .cardHeader h2 {
   font:
     600 2.5rem/1 Oswald,
