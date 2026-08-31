@@ -110,7 +110,7 @@ export interface ApiErrorPayload {
   retry_after?: number;
 }
 
-export type ApiErrorStatus = 401 | 403 | 404 | 409 | 422 | 429;
+export type ApiErrorStatus = 401 | 403 | 404 | 409 | 419 | 422 | 429;
 
 export interface ApiError extends ApiErrorPayload {
   message: string;

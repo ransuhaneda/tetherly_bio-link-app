@@ -20,7 +20,7 @@ class PublicationController extends Controller
         $profile = $request->user()->profile;
         abort_unless($request->user()->can('publish', $profile), 403);
         $profile = DB::transaction(function () use ($profile): Profile {
-            $profile->lockForUpdate()->refresh();
+            $profile = Profile::query()->lockForUpdate()->findOrFail($profile->getKey());
             if ($profile->published_snapshot_id && $profile->publication_status === 'published') {
                 throw ValidationException::withMessages(['publication' => 'There are no unpublished changes to publish.']);
             }
@@ -53,7 +53,7 @@ class PublicationController extends Controller
         $profile = $request->user()->profile;
         abort_unless($request->user()->can('unpublish', $profile), 403);
         DB::transaction(function () use ($profile): void {
-            $profile->lockForUpdate()->refresh();
+            $profile = Profile::query()->lockForUpdate()->findOrFail($profile->getKey());
             $profile->update(['publication_state' => PublicationState::Draft, 'published_at' => null, 'published_snapshot_id' => null]);
         });
 
