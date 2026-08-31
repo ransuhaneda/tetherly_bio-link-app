@@ -22,7 +22,8 @@ Automated tests currently pass, but they do not exercise the browser's cookie/he
 ### F-001 — Authenticated mutation requests have no CSRF recovery path
 
 - **Severity:** Critical
-- **Status:** Fixed and unit-regression-verified; full browser verification blocked by Playwright setup absence
+- **Status:** Fixed and unit-regression-verified; direct cookie-aware API reproduction confirmed the original 419; full browser verification blocked by Playwright setup absence
+- **Verification commits:** `bc2b706`, `928e1ed`
 - **Fix commits:** `ff356d2`, `75a1757`, `c0e1342`, `89cb92b`
 - **Category:** Functional / Security boundary
 - **Affected capabilities:**
