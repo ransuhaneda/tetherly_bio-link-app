@@ -12,6 +12,7 @@ import type { ApiError, CreatorLink, CreatorProfile } from '@/types/api';
 import { CreatorWorkspaceContext } from './creatorWorkspaceContextValue';
 import { linksApi } from './linksApi';
 import { profileApi } from './profileApi';
+import { useEditingLease } from './useEditingLease';
 
 export interface CreatorWorkspaceContextValue {
   profile: CreatorProfile | null;
@@ -22,6 +23,10 @@ export interface CreatorWorkspaceContextValue {
   mutationError: ApiError | null;
   refresh: () => Promise<void>;
   runMutation: <T>(operation: () => Promise<T>) => Promise<T>;
+  isReadOnly: boolean;
+  ownershipModal: boolean;
+  dismissOwnershipModal: () => void;
+  takeOver: () => void;
 }
 
 export function CreatorWorkspaceProvider({
@@ -35,6 +40,7 @@ export function CreatorWorkspaceProvider({
   const [error, setError] = useState<ApiError | null>(null);
   const [isMutating, setIsMutating] = useState(false);
   const [mutationError, setMutationError] = useState<ApiError | null>(null);
+  const lease = useEditingLease(profile?.id ?? null);
 
   const refresh = useCallback(async () => {
     setIsLoading(true);
@@ -59,6 +65,8 @@ export function CreatorWorkspaceProvider({
 
   const runMutation = useCallback(
     async <T,>(operation: () => Promise<T>): Promise<T> => {
+      if (lease.readOnly)
+        throw new Error('This workspace is read-only in this tab.');
       setIsMutating(true);
       setMutationError(null);
       try {
@@ -73,7 +81,7 @@ export function CreatorWorkspaceProvider({
         setIsMutating(false);
       }
     },
-    [refresh]
+    [lease.readOnly, refresh]
   );
 
   const value = useMemo<CreatorWorkspaceContextValue>(
@@ -86,6 +94,10 @@ export function CreatorWorkspaceProvider({
       mutationError,
       refresh,
       runMutation,
+      isReadOnly: lease.readOnly,
+      ownershipModal: lease.modal,
+      dismissOwnershipModal: lease.dismissModal,
+      takeOver: lease.takeOver,
     }),
     [
       error,
@@ -96,6 +108,10 @@ export function CreatorWorkspaceProvider({
       profile,
       refresh,
       runMutation,
+      lease.dismissModal,
+      lease.modal,
+      lease.readOnly,
+      lease.takeOver,
     ]
   );
 

@@ -1,0 +1,3 @@
+# Track publication state with monotonic revisions
+
+Each profile has a monotonic draft revision that advances when profile content, avatar, links, link order, or link visibility changes, and each immutable publication snapshot records its source revision. No selected snapshot means Draft, equal revisions mean Published, and a newer draft revision means Changes not published. Republishing unchanged content is disabled; failed publication leaves the previous snapshot live and the draft intact. Revisions determine publication status but are not used by the MVP as optimistic-concurrency preconditions. This avoids ambiguous timestamp and full-payload comparisons while keeping publication status deterministic.

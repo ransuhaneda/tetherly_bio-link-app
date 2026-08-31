@@ -11,12 +11,13 @@ class PublicationSnapshot extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['profile_id', 'version', 'username', 'display_name', 'bio', 'avatar_path', 'theme', 'links', 'published_at'];
+    protected $fillable = ['profile_id', 'version', 'source_revision', 'username', 'display_name', 'bio', 'avatar_path', 'theme', 'links', 'published_at'];
 
     protected function casts(): array
     {
         return [
             'version' => 'integer',
+            'source_revision' => 'integer',
             'theme' => ProfileTheme::class,
             'links' => 'array',
             'published_at' => 'datetime',

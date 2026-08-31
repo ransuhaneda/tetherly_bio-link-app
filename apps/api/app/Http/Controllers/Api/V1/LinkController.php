@@ -73,6 +73,7 @@ class LinkController extends Controller
                 $p->links()->whereKey($id)->update(['position' => $i]);
             }
         });
+        $p->increment('draft_revision');
 
         return LinkResource::collection($p->links()->get())->additional(['message' => 'Links reordered.']);
     }

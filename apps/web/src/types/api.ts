@@ -15,8 +15,12 @@ export interface CreatorProfile {
   avatar_url: string | null;
   theme: CreatorProfileTheme;
   publication_state: 'draft' | 'published';
+  publication_status?: 'draft' | 'published' | 'changes_not_published';
+  draft_revision?: number;
+  publication_revision?: number | null;
   published_at: string | null;
   published_version: number | null;
+  has_published?: boolean;
   created_at: string;
   updated_at: string;
 }
@@ -70,9 +74,40 @@ export interface User {
   profile: Profile;
 }
 
+export type AccountDeletionState =
+  | 'pending'
+  | 'restored'
+  | 'purge_eligible'
+  | 'purging'
+  | 'completed'
+  | 'failed';
+
+export interface AccountDeletion {
+  state: AccountDeletionState;
+  requested_at: string;
+  recovery_deadline: string;
+  deletion_date: string;
+  username: string;
+}
+
+export interface AuthenticatedLoginResult {
+  status: 'authenticated';
+  user: User;
+}
+
+export interface RestorationRequiredLoginResult {
+  status: 'restoration_required';
+  deletion: AccountDeletion;
+}
+
+export type LoginResult =
+  | AuthenticatedLoginResult
+  | RestorationRequiredLoginResult;
+
 export interface ApiErrorPayload {
   message?: string;
   errors?: Record<string, string[]>;
+  retry_after?: number;
 }
 
 export type ApiErrorStatus = 401 | 403 | 404 | 409 | 422 | 429;

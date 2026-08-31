@@ -1,8 +1,17 @@
 /* stylelint-disable no-descending-specificity */
+.stack {
+  display: grid;
+  gap: 48px;
+  grid-template-columns: minmax(0, 1fr);
+  min-width: 0;
+}
+
 .card {
   border: 1px solid var(--color-border-default);
+  box-sizing: border-box;
   max-width: 760px;
   padding: clamp(24px, 5vw, 48px);
+  width: 100%;
 }
 
 .utility {
@@ -205,6 +214,18 @@
   min-width: 0;
 }
 
+.linkDetails {
+  align-items: start;
+}
+
+.hiddenBadge {
+  color: var(--color-action-primary);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
 .linkList span {
   color: var(--color-text-muted);
   overflow-wrap: anywhere;
@@ -220,6 +241,28 @@
 .actions button:disabled {
   cursor: not-allowed;
   opacity: 0.4;
+}
+
+.dragHandle {
+  align-items: center;
+  display: inline-flex;
+  justify-content: center;
+}
+
+.dragHandle:not(:disabled) {
+  cursor: grab;
+}
+
+.dragging {
+  opacity: 0.55;
+}
+
+.srOnly {
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  position: absolute;
+  width: 1px;
 }
 
 @media (width <= 767px) {

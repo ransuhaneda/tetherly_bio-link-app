@@ -10,6 +10,20 @@ class Link extends Model
 {
     use HasFactory;
 
+    protected static function booted(): void
+    {
+        static::saved(function (self $link): void {
+            if ($link->wasRecentlyCreated || $link->wasChanged(['label', 'url', 'icon', 'category', 'position', 'enabled'])) {
+                $link->profile()->increment('draft_revision');
+            }
+        });
+        static::deleted(function (self $link): void {
+            if ($link->profile) {
+                $link->profile->increment('draft_revision');
+            }
+        });
+    }
+
     protected $fillable = ['profile_id', 'label', 'url', 'icon', 'category', 'position', 'enabled'];
 
     protected function casts(): array

@@ -8,7 +8,6 @@ import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
 import { RouteErrorBoundary } from '@/components/ui/errorHandling/RouteErrorBoundary';
 import { ProtectedRoute } from '@/features/auth/ProtectedRoute';
 import { CreatorWorkspaceRoute } from '@/pages/dashboard/CreatorWorkspaceRoute';
-import { ErrorNotFound } from '@pages/NotFound';
 
 import App from './App';
 
@@ -23,7 +22,13 @@ export const router = createBrowserRouter([
     element: <App />,
     errorElement: <RouteErrorBoundary />,
     children: [
-      { path: '*', element: <ErrorNotFound /> },
+      withHydrateFallback({
+        path: '*',
+        lazy: async () => {
+          const module = await import('@/pages/PublicProfilePage');
+          return { Component: module.PublicProfileOrNotFound };
+        },
+      }),
       withHydrateFallback({
         index: true,
         lazy: async () => {
@@ -45,6 +50,14 @@ export const router = createBrowserRouter([
         lazy: async () => {
           const module = await import('@/pages/auth/ForgotPassword');
           return { Component: module.ForgotPassword };
+        },
+      }),
+
+      withHydrateFallback({
+        path: 'restore-account',
+        lazy: async () => {
+          const module = await import('@/pages/auth/RestoreAccount');
+          return { Component: module.RestoreAccount };
         },
       }),
 
