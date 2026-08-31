@@ -60,6 +60,18 @@ class AuthApiTest extends TestCase
         $this->getJson('/api/v1/auth/me')->assertUnauthorized();
     }
 
+    public function test_stateful_api_routes_do_not_start_the_session_twice(): void
+    {
+        $request = \Illuminate\Http\Request::create('/api/v1/auth/me', 'GET');
+        $middleware = app('router')->getRoutes()->match($request)->gatherMiddleware();
+
+        $this->assertContains(
+            'api',
+            $middleware
+        );
+        $this->assertNotContains('web', $middleware);
+    }
+
     public function test_authenticated_user_cannot_login_as_another_user(): void
     {
         $currentUser = User::factory()->create([

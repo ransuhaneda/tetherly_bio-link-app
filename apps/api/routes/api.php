@@ -13,7 +13,7 @@ Route::prefix('v1')->group(function (): void {
     Route::get('/usernames/{username}/availability', [UsernameController::class, 'availability'])
         ->where('username', '[A-Za-z0-9_-]+');
 
-    Route::middleware('web')->prefix('auth')->group(function (): void {
+    Route::prefix('auth')->group(function (): void {
         Route::post('/register', [AuthController::class, 'register'])->middleware('throttle:10,1');
         Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:10,1');
         Route::get('/recovery', [AccountRecoveryController::class, 'show']);
@@ -25,11 +25,11 @@ Route::prefix('v1')->group(function (): void {
     });
     Route::get('/profiles/{username}', [PublicationController::class, 'showPublic'])->where('username', '[A-Za-z0-9_-]+');
 
-    Route::middleware(['web', 'auth:sanctum'])->group(function (): void {
+    Route::middleware('auth:sanctum')->group(function (): void {
         Route::post('/account/deletion', [AccountDeletionController::class, 'store']);
     });
 
-    Route::middleware(['web', 'auth:sanctum', 'account.active'])->group(function (): void {
+    Route::middleware(['auth:sanctum', 'account.active'])->group(function (): void {
         Route::get('/profile', [ProfileController::class, 'show']);
         Route::patch('/profile', [ProfileController::class, 'update']);
         Route::post('/profile/avatar', [ProfileController::class, 'avatar']);
@@ -39,7 +39,7 @@ Route::prefix('v1')->group(function (): void {
         Route::post('/profile/unpublish', [PublicationController::class, 'unpublish']);
     });
 
-    Route::middleware(['web', 'auth:sanctum', 'account.active'])->prefix('profile/links')->group(function (): void {
+    Route::middleware(['auth:sanctum', 'account.active'])->prefix('profile/links')->group(function (): void {
         Route::get('/', [LinkController::class, 'index']);
         Route::post('/', [LinkController::class, 'store']);
         Route::put('/order', [LinkController::class, 'reorder']);
