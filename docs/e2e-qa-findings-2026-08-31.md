@@ -4,7 +4,7 @@
 
 A local end-to-end QA pass was started against the running Tetherly services. The frontend is available at `http://localhost:3000` and the Laravel API is available at `http://localhost:8000`.
 
-The highest-risk finding is a likely systemic CSRF failure affecting authenticated mutations. The frontend explicitly obtains the Sanctum CSRF cookie during registration and login, but every later mutation (profile update, avatar changes, link CRUD/reorder, publish/unpublish, and account deletion) relies on the original cookie/session state and has no shared CSRF refresh/retry path. This matches the reported CSRF token mismatch behavior on editing capabilities. The implementation should be reproduced in a real authenticated browser session before applying a fix; this run could not create/use a browser session because the available browser harness reported that Chrome was not running and the WSL desktop has no reachable X11 display.
+The highest-risk finding was a systemic CSRF failure affecting authenticated mutations. It has now been fixed in the shared frontend API service and covered by regression tests. The frontend explicitly obtains the Sanctum CSRF cookie during registration and login, but every later mutation (profile update, avatar changes, link CRUD/reorder, publish/unpublish, and account deletion) relies on the original cookie/session state and has no shared CSRF refresh/retry path. This matches the reported CSRF token mismatch behavior on editing capabilities. The implementation should be reproduced in a real authenticated browser session before applying a fix; this run could not create/use a browser session because the available browser harness reported that Chrome was not running and the WSL desktop has no reachable X11 display.
 
 Automated tests currently pass, but they do not exercise the browser's cookie/header behavior against a running Laravel server.
 
@@ -21,7 +21,9 @@ Automated tests currently pass, but they do not exercise the browser's cookie/he
 
 ### F-001 — Authenticated mutation requests have no CSRF recovery path
 
-- **Severity:** Critical (reported production workflow blocker; final severity should be confirmed after authenticated reproduction)
+- **Severity:** Critical
+- **Status:** Fixed and unit-regression-verified; full browser verification blocked by Playwright setup absence
+- **Fix commits:** `ff356d2`, `75a1757`, `c0e1342`, `89cb92b`
 - **Category:** Functional / Security boundary
 - **Affected capabilities:**
   - Draft profile update (`PATCH /api/v1/profile`)
@@ -95,10 +97,10 @@ No application code was changed during this QA pass. This document is the only n
 
 ## Summary table
 
-| ID    | Severity   | Area                                   | Status                                            |
-| ----- | ---------- | -------------------------------------- | ------------------------------------------------- |
-| F-001 | Critical\* | CSRF for authenticated mutations       | Code-confirmed risk; browser reproduction blocked |
-| F-002 | High       | Missing browser-level Sanctum coverage | Confirmed                                         |
+| ID    | Severity | Area                                   | Status                                    |
+| ----- | -------- | -------------------------------------- | ----------------------------------------- |
+| F-001 | Critical | CSRF for authenticated mutations       | Fixed; unit verified; browser E2E blocked |
+| F-002 | High     | Missing browser-level Sanctum coverage | Confirmed                                 |
 
 `*` Critical reflects the user's report that all editing capabilities are blocked. Reclassify after a real authenticated request capture if the failure is narrower.
 
