@@ -10,6 +10,8 @@
     "preview": "pnpm --filter @tetherly/web preview",
     "test": "pnpm --filter @tetherly/web test",
     "test:run": "pnpm --filter @tetherly/web test:run",
+    "test:e2e": "pnpm --filter @tetherly/web test:e2e",
+    "test:e2e:list": "pnpm --filter @tetherly/web test:e2e:list",
     "type-check": "pnpm --filter @tetherly/web type-check",
     "lint": "pnpm --filter @tetherly/web lint",
     "lint:styles": "pnpm --filter @tetherly/web lint:styles",

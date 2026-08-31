@@ -40,6 +40,36 @@ describe('apiService', () => {
     );
   });
 
+  it('refreshes CSRF and retries a mutation once after a 419 response', async () => {
+    const csrfError = { response: { status: 419 } };
+    axiosInstance.patch
+      .mockRejectedValueOnce(csrfError)
+      .mockResolvedValueOnce({ data: { data: 'updated' } });
+    vi.mocked(axios.isAxiosError).mockReturnValue(true);
+    vi.mocked(axios.get).mockResolvedValue({ data: undefined });
+
+    await expect(
+      apiService.patch('/profile', { bio: 'Hello' })
+    ).resolves.toEqual({ data: 'updated' });
+    expect(axios.get).toHaveBeenCalledWith('/sanctum/csrf-cookie', {
+      withCredentials: true,
+    });
+    expect(axiosInstance.patch).toHaveBeenCalledTimes(2);
+  });
+
+  it('does not retry a mutation more than once after repeated 419 responses', async () => {
+    const csrfError = { response: { status: 419 } };
+    axiosInstance.patch.mockRejectedValue(csrfError);
+    vi.mocked(axios.isAxiosError).mockReturnValue(true);
+    vi.mocked(axios.get).mockResolvedValue({ data: undefined });
+
+    await expect(apiService.patch('/profile', { bio: 'Hello' })).rejects.toBe(
+      csrfError
+    );
+    expect(axios.get).toHaveBeenCalledTimes(1);
+    expect(axiosInstance.patch).toHaveBeenCalledTimes(2);
+  });
+
   it('supports multipart avatar requests without changing the payload', async () => {
     const formData = new FormData();
     formData.append(
