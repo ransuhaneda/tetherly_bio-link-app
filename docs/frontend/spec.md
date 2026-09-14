@@ -28,7 +28,7 @@ Maintain this reading order: identity, headline, supporting copy, username form,
 
 ### Visual system
 
-- Use the existing tokens and palette: near-black surfaces, warm white type, orange primary actions, restrained violet and lime accents.
+- Use the existing tokens and palette: near-black marketing surfaces, warm-white public creator profiles and creator dashboard surfaces with dark text, orange primary actions, and restrained violet and lime accents.
 - Use local Nunito for body/UI and Oswald for display/utility text. Do not add remote font dependencies.
 - Use a centered `lg-wrapper` (1312px maximum, 24px minimum gutter), an 8px spacing rhythm, and the established border/shadow language.
 - Keep the Editorial Bento Profile direction: asymmetry and crop variation provide hierarchy; avoid gradients, glassmorphism, generic blobs, ornamental tiles, and invented social proof.

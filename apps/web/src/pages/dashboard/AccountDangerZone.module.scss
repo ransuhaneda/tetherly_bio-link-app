@@ -44,7 +44,7 @@
 .modal .confirmButton {
   background: var(--color-action-secondary);
   border-color: var(--color-action-secondary);
-  color: var(--color-text-inverse);
+  color: var(--dashboard-on-action);
 }
 
 .modal button:disabled {
@@ -68,7 +68,7 @@
   background: var(--color-background-page);
   border: 1px solid var(--color-action-secondary);
   box-sizing: border-box;
-  color: var(--color-text-inverse);
+  color: inherit;
   display: grid;
   gap: 24px;
   max-height: calc(100vh - 48px);
@@ -95,7 +95,7 @@
 }
 
 .modal input {
-  background: transparent;
+  background: var(--color-background-surface);
   border: 1px solid var(--color-border-default);
   box-sizing: border-box;
   color: inherit;
@@ -113,8 +113,8 @@
 }
 
 .modal .error {
-  border-left: 3px solid var(--color-action-secondary);
-  color: var(--color-text-inverse);
+  border-left: 3px solid var(--color-status-error);
+  color: var(--color-status-error);
   margin: 0;
   padding-left: 12px;
 }
