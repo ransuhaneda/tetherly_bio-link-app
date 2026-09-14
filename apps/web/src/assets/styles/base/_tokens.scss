@@ -13,6 +13,10 @@
   --color-border-default: #{abst.get-color('border', 'primary')};
   --color-border-subtle: #{abst.get-color-brand('neutral', '300')};
   --color-action-secondary-hover: #{abst.get-color-brand('orange', '600')};
+  --color-status-error: #{abst.get-color-brand('red', '300')};
+  --color-status-error-on-light: #{abst.get-color-brand('red', '700')};
+  --color-status-success: #{abst.get-color-brand('green', '300')};
+  --color-status-success-on-light: #{abst.get-color-brand('green', '700')};
   --space-2xs: 0.25rem;
   --space-xs: 0.5rem;
   --space-sm: 0.75rem;

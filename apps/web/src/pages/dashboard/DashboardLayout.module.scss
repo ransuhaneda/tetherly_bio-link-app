@@ -1,4 +1,15 @@
 .page {
+  --color-action-primary: #{abst.get-color-brand('green', '700')};
+  --color-action-secondary: #{abst.get-color-brand('orange', '700')};
+  --color-background-page: #{abst.get-color('background', 'inverse')};
+  --color-background-surface: #{abst.get-color-brand('gray', '100')};
+  --color-border-default: #{abst.get-color-brand('gray', '500')};
+  --color-status-error: #{abst.get-color-brand('red', '700')};
+  --color-status-success: #{abst.get-color-brand('green', '700')};
+  --color-text-inverse: #{abst.get-color('text', 'primary')};
+  --color-text-muted: #{abst.get-color-brand('gray', '700')};
+  --dashboard-on-action: #{abst.get-color('text', 'inverse')};
+
   background: var(--color-background-page);
   color: var(--color-text-inverse);
   min-height: 72vh;
@@ -99,7 +110,7 @@
 .state button {
   background: var(--color-action-secondary);
   border: 0;
-  color: var(--color-text-inverse);
+  color: var(--dashboard-on-action);
   cursor: pointer;
   font: inherit;
   min-height: var(--target-min-size);
@@ -121,7 +132,8 @@
 }
 
 .mutationError {
-  border-color: var(--color-action-primary);
+  border-color: var(--color-status-error);
+  color: var(--color-status-error);
 }
 
 @media (width <= 767px) {

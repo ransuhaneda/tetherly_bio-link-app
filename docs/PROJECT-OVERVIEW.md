@@ -41,10 +41,10 @@ These are strategic reference points, not instructions to copy their interfaces,
 
 ## Design direction
 
-The approved direction is **Editorial Bento Profile**: a dark, warm, high-contrast profile system with disciplined asymmetry and restrained motion.
+The approved direction is **Editorial Bento Profile**: a warm, high-contrast system with disciplined asymmetry and restrained motion. Marketing surfaces are dark; public creator profiles and creator dashboard surfaces are light for reading clarity.
 
 - **Composition:** identity, headline, supporting copy, username form, profile/link preview, proof or content cards, final CTA, then footer. Desktop uses a 12-column composition; mobile preserves the same reading order in one column.
-- **Surfaces:** near-black matte backgrounds, warm-white type, thin neutral borders, one restrained shadow, and subtle grain only. No gradients, glassmorphism, generic blobs, or decorative bento tiles.
+- **Surfaces:** near-black matte marketing backgrounds, plus warm-white public creator profiles and dashboard surfaces with dark type. Use thin neutral borders, one restrained shadow, and subtle grain only. No gradients, glassmorphism, generic blobs, or decorative bento tiles.
 - **Typography:** Oswald for display and utility labels; Nunito for body copy, controls, and links. The headline should have an intentional wide-screen break and natural mobile wrapping.
 - **Color:** retain the existing brand tokens—near-black, warm white, orange action accents, violet and lime secondary accents. Orange signals primary actions; violet and lime are used sparingly for categories, status, and highlights.
 - **Layout:** a centered `lg-wrapper`, 24px minimum outer gutter, an 8px spacing rhythm, readable text measures, and asymmetric card spans that create editorial pacing without clutter.
