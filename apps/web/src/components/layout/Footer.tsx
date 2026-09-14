@@ -49,13 +49,22 @@ export const Footer = () => (
           <span className={sty.columnLabel}>The details</span>
           <Link to="/privacy">Privacy policy</Link>
           <Link to="/terms">Terms of service</Link>
+          <a
+            href="https://github.com/ransuhaneda/tetherly_bio-link-app"
+            target="_blank"
+            rel="noreferrer"
+          >
+            View source on GitHub
+          </a>
         </div>
       </div>
       <div className={sty.footerBottom}>
         <span>© {new Date().getFullYear()} Tetherly</span>
         <span className={sty.madeBy}>
           Made with intention by{' '}
-          <a href="https://linktr.ee/ransuhaneda">ransuhaneda</a>
+          <a href="https://384721.xyz" target="_blank" rel="noreferrer">
+            ransuhaneda
+          </a>
         </span>
         <span className={sty.backTop}>
           <a href="#top">Back to top ↑</a>
